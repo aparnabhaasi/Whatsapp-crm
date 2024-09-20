@@ -44,34 +44,7 @@
                     </div>
                 </div>
 
-                <style>
-                    .ticket-card{
-                        border: 1px solid #d8d8d8;
-                        border-radius: 10px;
-                        background: #fff;
-                        margin-bottom: 20px;
-                    }
-                    .profile-text{
-                        color: green;
-                        background: #aaff9a;
-                        font-weight: 600;
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 50%;
-                        font-size: 30px;
-                        text-align: center;
-                    }
-                </style>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="ticket-card p-3">
-                            <div class="d-flex align-items-center">
-                                <h2 class="profile-text mr-2">A</h2>
-                            </div>
-                           
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

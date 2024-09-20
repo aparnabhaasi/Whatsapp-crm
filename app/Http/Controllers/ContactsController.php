@@ -1,71 +1,78 @@
 <?php
 
-namespace App\Http\Controllers;
+    namespace App\Http\Controllers;
 
-use App\Models\Contacts;
-use Illuminate\Http\Request;
+    use App\Models\Contacts;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Log;
 
-class ContactsController extends Controller
-{
-    public function index(){
-        $contacts = Contacts::all();
-        return view('front-end.contacts', compact('contacts'));
-    }
-
-    public function store(Request $request)
+    class ContactsController extends Controller
     {
-        // Validate Data
-        $validateData = $request->validate([
-            'name' => 'string|required',
-            'mobile' => 'string|required',
-            'email' => 'string|required',
-            'tags' => 'string|required', 
-        ]);
+        // Index method for manual contact management
+        public function index()
+        {
+            $contacts = Contacts::all();
+            return view('front-end.contacts', compact('contacts'));
+        }
 
-        // Create new instance for contact
-        $contact = new Contacts();
-        $contact->name = $validateData['name'];
-        $contact->mobile = $validateData['mobile'];
-        $contact->email = $validateData['email'];
-        $contact->tags = $validateData['tags']; // encode the array as JSON
+        // Store manual contacts
+        public function store(Request $request)
+        {
+            // Validate Data
+            $validateData = $request->validate([
+                'name' => 'string|required',
+                'mobile' => 'string|required',
+                'email' => 'string|required',
+                'tags' => 'string|required',
+            ]);
 
-        $contact->save();
+            // Create new instance for contact
+            $contact = new Contacts();
+            $contact->name = $validateData['name'];
+            $contact->mobile = $validateData['mobile'];
+            $contact->email = $validateData['email'];
+            $contact->tags = $validateData['tags']; // encode the array as JSON
 
-        return redirect()->route('contacts.index')->with('Contact added successfully');
+            $contact->save();
+
+            return redirect()->route('contacts.index')->with('Contact added successfully');
+        }
+
+        // Update method for manual contact updates
+        public function update(Request $request, $id)
+        {
+            // Validate Data
+            $validateData = $request->validate([
+                'name' => 'string|required',
+                'mobile' => 'string|required',
+                'email' => 'string|required',
+                'tags' => 'string|required',
+            ]);
+
+            // Find contact by id
+            $contact = Contacts::findOrFail($id);
+
+            // Update contact details
+            $contact->name = $validateData['name'];
+            $contact->mobile = $validateData['mobile'];
+            $contact->email = $validateData['email'];
+            $contact->tags = $validateData['tags'];
+
+            $contact->save();
+
+            return redirect()->route('contacts.index')->with('success', 'Contact updated successfully');
+        }
+
+        // Destroy method for deleting contacts
+        public function destroy($id)
+        {
+            $contact = Contacts::findOrFail($id);
+
+            $contact->delete();
+
+            return redirect()->route('contacts.index')->with('success', 'Contact Deleted Successfully');
+        }
+
+
     }
 
-
-    public function update(Request $request, $id){
-
-        // validateData
-        $validateData = $request->validate([
-            'name' => 'string|required',
-            'mobile' => 'string|required',
-            'email' => 'string|required',
-            'tags' => 'string|required',
-        ]);
-
-        // find contact by id 
-        $contact = Contacts::findOrFail($id);
-
-        // update contact details
-        $contact -> name = $validateData['name'];
-        $contact -> mobile = $validateData['mobile'];
-        $contact -> email = $validateData['email'];
-        $contact -> tags = $validateData['tags'];
-
-        $contact -> save();
-
-        return redirect()->route('contacts.index')->with('success', 'Contact updated successfully');
-    }
-
-
-    public function destroy($id){
-        $contact = Contacts::findOrFail($id);
-
-        $contact-> delete();
-
-        return redirect()->route('contacts.index')->with('success', 'Contact Deleted Successfully');
-    }
-
-}

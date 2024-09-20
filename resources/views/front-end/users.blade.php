@@ -69,6 +69,9 @@
 		                                                    <span class="badge badge-light">Admin</span>
 		                                                </td>
 		                                                <td class="text-center">
+															<a href="" class="text-success" title="Assign Chats" data-toggle="modal" data-target=".assignChatModal">
+																<i class="fa-solid fa-comments bg-light border rounded-circle p-2"></i>
+		                                                    </a>
 		                                                    <a href="" class="text-info" title="Edit" data-toggle="modal" data-target=".updateUserModal">
 		                                                        <i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
 		                                                    </a>
@@ -87,6 +90,9 @@
 		                                                    <span class="badge badge-light">Contact Manager</span>
 		                                                </td>
 		                                                <td class="text-center">
+															<a href="" class="text-success" title="Assign Chats" data-toggle="modal" data-target=".assignChatModal">
+																<i class="fa-solid fa-comments bg-light border rounded-circle p-2"></i>
+		                                                    </a>
 		                                                    <a href="" class="text-info" title="Edit" data-toggle="modal" data-target=".updateUserModal">
 		                                                        <i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
 		                                                    </a>
@@ -105,6 +111,9 @@
 		                                                    <span class="badge badge-light">Template Manager</span>
 		                                                </td>
 		                                                <td class="text-center">
+															<a href="" class="text-success" title="Assign Chats" data-toggle="modal" data-target=".assignChatModal">
+																<i class="fa-solid fa-comments bg-light border rounded-circle p-2"></i>
+		                                                    </a>
 		                                                    <a href="" class="text-info" title="Edit" data-toggle="modal" data-target=".updateUserModal">
 		                                                        <i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
 		                                                    </a>
@@ -257,6 +266,160 @@
 			</div>
         </div>
     </div>
+
+	<!-- Chat asssign modal -->
+	<div class="modal fade assignChatModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+		  <div class="modal-content" style="border-radius: 20px !important;">
+			<div class="card mb-0" style="border-radius: 15px;">
+				<h5 class="text-center mt-3">Assign Chats</h5>
+				<div class="card-header d-md-flex justify-content-between">
+					<div class="d-md-flex align-items-center">
+						<form class="navbar-left navbar-form nav-search mr-md-3" action="">
+							<style>
+								.search-container {
+									border: .5px solid transparent;
+									border-radius: 30px;
+									transition: border-color 0.3s;
+								}
+								.search-container:hover,
+								.search-container:focus-within {
+									border-color: #25D366 !important;
+								}
+							</style>
+							<div class="input-group search-container">
+								<input type="text" placeholder="Search ..." class="form-control search-input">
+								<div class="input-group-append">
+									<span class="input-group-text">
+										<a href="" style="text-decoration: none;">
+											<i class="la la-search search-icon text-success"></i>
+										</a>
+									</span>
+								</div>
+							</div>
+						</form>
+						
+					</div>
+					<button class="btn btn-outline-success my-1" style="border-radius: 30px;">
+						<i class="fa-solid fa-filter"></i> <b>Filter</b>
+					</button>
+				</div>
+				<div class="card-body" style="height: 400px; overflow-y: auto;">
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr class="bg-light">
+									<th scope="col" style="width: 10px;">
+										<label class="form-check-label">
+											<input id="selectAll" class="form-check-input" type="checkbox" value="">
+											<span class="form-check-sign"></span>
+										</label>
+									</th>
+									<th scope="col">#</th>
+									<th scope="col">Name</th>
+									<th scope="col">Mobile</th>
+									<th scope="col" class="text-center">Tags</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<label class="form-check-label">
+											<input class="form-check-input row-checkbox" type="checkbox" value="" >
+											<span class="form-check-sign"></span>
+										</label>
+									</td>
+									<td>1</td>
+									<td>Mark</td>
+									<td>+91 9087654321</td>
+									<td class="text-center">
+										<span class="badge badge-count">Meta</span>
+										<span class="badge badge-count">Google</span>
+									</td>
+									
+								</tr>
+								<tr>
+									<td>
+										<label class="form-check-label">
+											<input class="form-check-input row-checkbox" type="checkbox" value="" >
+											<span class="form-check-sign"></span>
+										</label>
+									</td>
+									<td>2</td>
+									<td>Jacob</td>
+									<td>+91 8890652711</td>
+									<td class="text-center">
+										<span class="badge badge-count">Google</span>
+										<span class="badge badge-count">Social Media</span>
+									</td>
+									
+								</tr>
+								<tr>
+									<td>
+										<label class="form-check-label">
+											<input class="form-check-input row-checkbox" type="checkbox" value="">
+											<span class="form-check-sign"></span>
+										</label>
+									</td>
+									<td>3</td>
+									<td>Larry</td>
+									<td>+91 9986732453</td>
+									<td class="text-center">
+										<span class="badge badge-count">Social Media</span>
+										<span class="badge badge-count">Meta</span>
+										<span class="badge badge-count">Google</span>
+									</td>
+									
+								</tr>
+								<tr>
+									<td>
+										<label class="form-check-label">
+											<input class="form-check-input row-checkbox" type="checkbox" value="">
+											<span class="form-check-sign"></span>
+										</label>
+									</td>
+									<td>4</td>
+									<td>Larry</td>
+									<td>+91 9986732453</td>
+									<td class="text-center">
+										<span class="badge badge-count">Social Media</span>
+										<span class="badge badge-count">Meta</span>
+										<span class="badge badge-count">Google</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<style>
+				.cus-input:focus{
+					border: 2px solid green;
+				}
+			</style>
+			<div class="p-3 d-flex justify-content-end">
+				<button class="btn btn-success ml-3 px-5">Update</button>
+			</div>
+		  </div>
+		</div>
+	</div>
+	<script>
+		document.getElementById('selectAll').addEventListener('change', function() {
+			// Get the state of the header checkbox
+			const isChecked = this.checked;
+			
+			// Select all checkboxes with the class 'row-checkbox'
+			const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+			
+			// Set the checked state of all row checkboxes to match the header checkbox
+			rowCheckboxes.forEach(function(checkbox) {
+				checkbox.checked = isChecked;
+			});
+		});
+	</script>
+	<!-- Chat asssign modal -->
+
+
 	<script>
         document.getElementById('customPillSelect1').addEventListener('change', function() {
             var selectedValue = this.value;

@@ -26,6 +26,10 @@ Route::post('broadcast-message', [BroadcastController::class, 'broadcastMessage'
 
 Route::resource('chat', ChatController::class);
 
+Route::post('/send-whatsapp-message', [ChatController::class, 'sendMessage'])->name('send.whatsapp.message');
+
+Route::post('/mark-as-read/{contactId}', [ChatController::class, 'markAsRead']);
+
 Route::resource('contacts', ContactsController::class);
 
 Route::resource('template', TemplateController::class);

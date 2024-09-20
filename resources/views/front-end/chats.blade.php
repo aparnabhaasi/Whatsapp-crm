@@ -14,6 +14,11 @@
 	<!-- font awsome -->
 	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+	 <script>
+		document.getElementById("fullscreen-icon").addEventListener("click", function() {
+			document.getElementById("containerx").classList.toggle("fullscreen");
+		});
+	</script>
 	 <style>
 		.fullscreen {
 			position: fixed;
@@ -29,6 +34,21 @@
 		}
 		.message_p p{
 			margin-bottom: 0px;
+		}
+
+		.imgBox {
+			width: 40px;
+			height: 45px;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+		}
+		.profile-letters {
+			margin-bottom: 0px;
+			font-size: 17px;
+			font-weight: 600;
 		}
 	</style>
 </head>
@@ -46,14 +66,11 @@
 						<div class="leftSide">
 							<!-- Header -->
 							<div class="header">
-								<div class="userimg">
-									<img src="https://ictglobaltech.com/assets/img/logo.png" alt="" class="cover">
-								</div>
+								<h6 style="font-weight:700;">Chats</h6>
 								<ul class="nav_icons">
 									<li><i class="fa-solid fa-expand" id="fullscreen-icon"></i></li>
 									<li>
 										<i class="fa-solid fa-tags" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-										<!-- Ensure the `dropdown-toggle` class is added to activate dropdown functionality -->
 										<div class="dropdown-menu">
 											<a class="dropdown-item" href="#">Social Media</a>
 											<a class="dropdown-item" href="#">Meta</a>
@@ -78,112 +95,62 @@
 									<ion-icon name="search-outline"></ion-icon> 
 								</div>                
 							</div>
+
 							<!-- CHAT LIST -->
 							<div class="chatlist">
 
-								<div class="block active" id="chat1" onclick="activateChat('chat1')">
-									<div class="imgBox">
-										<img src="https://ictglobaltech.com/assets/img/logo.png" class="cover" alt="">
-									</div>
-									<div class="details">
-										<div class="listHead">
-											<h4>ICT Global Tech Pvt. Ltd.</h4>
-											<p class="time">10:56</p>
-										</div>
-										<div class="message_p">
-											<p>How are you doing?</p>
-										</div>
-									</div>
-								</div>
-				
-								<div class="block unread" id="chat2" onclick="activateChat('chat2')">
-									<div class="imgBox">
-										<img src="assets/img/chat/img2.jpg" class="cover" alt="">
-									</div>
-									<div class="details">
-										<div class="listHead">
-											<h4>Bimal</h4>
-											<p class="time">12:34</p>
-										</div>
-										<div class="message_p">
-											<p>Your web development service is good</p>
-											<b>1</b>
-										</div>
-									</div>
-								</div>
-				
-								<div class="block unread" id="chat3" onclick="activateChat('chat3')">
-									<div class="imgBox">
-										<img src="assets/img/chat/img3.jpg" class="cover" alt="">
-									</div>
-									<div class="details">
-										<div class="listHead">
-											<h4>Aparna</h4>
-											<p class="time">Yesterday</p>
-										</div>
-										<div class="message_p">
-											<p>Meeting scheduled on Jan 10th</p>
-											<b>2</b>
-										</div>
-									</div>
-								</div>
-								<div class="block" id="chat4" onclick="activateChat('chat4')">
-									<div class="imgBox">
-										<img src="assets/img/chat/img4.jpg" class="cover" alt="">
-									</div>
-									<div class="details">
-										<div class="listHead">
-											<h4>Angel</h4>
-											<p class="time">Yesterday</p>
-										</div>
-										<div class="message_p">
-											<p>Hey!</p>                            
-										</div>
-									</div>
-								</div>
-								<div class="block" id="chat5" onclick="activateChat('chat5')">
-									<div class="imgBox">
-										<img src="assets/img/chat/img7.jpg" class="cover" alt="">
-									</div>
-									<div class="details">
-										<div class="listHead">
-											<h4>Karthika</h4>
-											<p class="time">18/01/2022</p>
-										</div>
-										<div class="message_p">
-											<p>I'll get back to you</p>
-										</div>
-									</div>
-								</div>
-								<div class="block" id="chat6" onclick="activateChat('chat6')">
-									<div class="imgBox">
-										<img src="assets/img/chat/img8.jpg" class="cover" alt="">
-									</div>
-									<div class="details">
-										<div class="listHead">
-											<h4>Sajin</h4>
-											<p class="time">22/01/2022</p>
-										</div>
-										<div class="message_p">
-											<p>I'll get back to you</p>
-										</div>
-									</div>
-								</div>
+							@php
+								// Array of solid background colors
+								$colors = ['#FF5733', '#00951a', '#3357FF', '#FF33A1', '#003e9a', '#FFBD33', '#A133FF'];
 
-								<div class="block" id="chat6" onclick="activateChat('chat6')">
-									<div class="imgBox">
-										<img src="assets/img/chat/img8.jpg" class="cover" alt="">
+								// Function to assign a fixed color based on the contact ID
+								function getColorForContact($contactId, $colors) {
+									return $colors[$contactId % count($colors)];
+								}
+
+								// Group messages by contact_id and get the last message for each contact
+								$groupedMessages = $messages->groupBy('contact_id')->map(function ($group) {
+									return $group->last();
+								})->sortByDesc('created_at'); // Sort the grouped messages by the created_at in descending order
+
+								// Calculate the unread chats count for each contact
+								$unreadChatsCounts = \App\Models\Chats::select('contact_id', \DB::raw('COUNT(*) as unread_count'))
+									->where('is_read', false)
+									->groupBy('contact_id')
+									->pluck('unread_count', 'contact_id');
+							@endphp
+
+							@foreach ($groupedMessages as $contactId => $message)
+								@php
+									// Assign a fixed color for each contact based on their ID
+									$fixedColor = getColorForContact($message->contact->id, $colors);
+
+									// Get the number of unread chats for the current contact
+									$unreadChatsCount = $unreadChatsCounts[$contactId] ?? 0;
+								@endphp
+
+								<!-- Apply the 'unread' class only if there are unread chats -->
+								<div class="block {{ $unreadChatsCount > 0 ? 'unread' : '' }}" id="chat{{ $message->contact_id }}" onclick="activateChat('chat{{ $message->contact_id }}')">
+									<div class="imgBox" style="background: {{ $fixedColor }};">
+										<p class="profile-letters">{{ strtoupper(substr($message->contact->name, 0, 2)) }}</p>
 									</div>
 									<div class="details">
 										<div class="listHead">
-											<h4>Sajin</h4>
-											<p class="time">22/01/2022</p>
+											<h4>{{ $message->contact->name }}</h4>
+											<p class="time">{{ $message->created_at->format('h:i a') }}</p>
 										</div>
 										<div class="message_p">
-											<p>I'll get back to you</p>
+											<p>{{ $message->message }}</p>
+
+											<!-- Display the number of unread chats if there are any -->
+											@if ($unreadChatsCount > 0)
+												<b>{{ $unreadChatsCount }}</b>
+											@endif
 										</div>
 									</div>
 								</div>
+							@endforeach
+				
 							</div>
 						</div>
 
@@ -193,7 +160,7 @@
 							<div class="header">
 								<div class="imgText">
 									<div class="userimg">
-										<img src="https://ictglobaltech.com/assets/img/logo.png" alt="" class="cover">
+										
 									</div>
 									<h6 class="ml-3">ICT Global Tech Pvt. Ltd. <br><small>online</small></h6>
 								</div>
@@ -202,126 +169,87 @@
 									<li><ion-icon name="ellipsis-vertical"></ion-icon></li>
 								</ul>
 							</div>
-				
+
 							<!-- CHAT-BOX -->
 							<div class="chatbox">
-
-								<!-- chat 1 -->
-								<div id="chat1Content" class="chatContent">
-									<div class="message my_msg">
-										<p>Hi <br><span>12:18</span></p>
+								@foreach ($messages->groupBy('contact_id') as $contactId => $contactMessages)
+									<!-- Chat content for each contact -->
+									<div id="chat{{ $contactId }}Content" class="chatContent" style="display: none;">
+										@foreach ($contactMessages as $message)
+											@if ($message->sender === 'customer') <!-- If the sender is the customer -->
+												<div class="message friend_msg">
+													<p>{{ $message->message }} <br><span>{{ $message->created_at->format('h:i a') }}</span></p>
+												</div>
+											@elseif ($message->sender === 'business') <!-- If the sender is the business -->
+												<div class="message my_msg">
+													<p>{{ $message->message }} <span>{{ $message->created_at->format('h:i a') }}</span></p>
+												</div>
+											@endif
+										@endforeach
 									</div>
-									<div class="message friend_msg">
-										<p>Hey <br><span>12:18</span></p>
-									</div>
-									<div class="message my_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br><span>12:15</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br><span>12:15</span></p>
-									</div>
-									<div class="message my_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque aliquid fugiat accusamus dolore qui vitae ratione optio sunt <br><span>12:15</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br><span>12:15</span></p>
-									</div>
-									<div class="message my_msg">
-										<p>Lorem ipsum dolor sit amet consectetur <br><span>12:15</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br><span>12:15</span></p>
-									</div>
-									<div class="message my_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br><span>12:15</span></p>
-									</div>
-									
-								</div>
-
-
-								<!-- message from Aparna -->
-								<div id="chat2Content" class="chatContent" style="display: none;">
-									<div class="message my_msg">
-										<p>Hi <br><span>12:18</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Hey message from Bimal<br><span>12:18</span></p>
-									</div>
-									<div class="message my_msg">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, consequatur mollitia. Alias nam dignissimos dolores debitis saepe reiciendis vel accusamus architecto est dolore consequuntur odit, magnam voluptatum quae similique optio. <br><span>12:18</span></p>
-									</div>
-								</div>
-
-								<!-- chat 3 -->
-								<div id="chat3Content" class="chatContent" style="display: none;">
-									<div class="message my_msg">
-										<p>Hi <br><span>12:18</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Hey message from Aparna<br><span>12:18</span></p>
-									</div>
-									<div class="message my_msg">
-										<p>Hello Aparna <br><span>12:18</span></p>
-									</div>
-								</div>
-
-								<!-- chat 4 -->
-								<div id="chat4Content" class="chatContent" style="display: none;">
-									<div class="message my_msg">
-										<p>Hi <br><span>12:18</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Hey message from Angel<br><span>12:18</span></p>
-									</div>
-									
-								</div>
-
-								<!-- chat 5 -->
-								<div id="chat5Content" class="chatContent" style="display: none;">
-									<div class="message my_msg">
-										<p>Hi <br><span>12:18</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Hey message from Karthika<br><span>12:18</span></p>
-									</div>
-									<div class="message my_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br><span>12:15</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br><span>12:15</span></p>
-									</div>
-								</div>
-
-								<!-- chat 6 -->
-								<div id="chat6Content" class="chatContent" style="display: none;">
-									<div class="message my_msg">
-										<p>Hi <br><span>12:18</span></p>
-									</div>
-									<div class="message friend_msg">
-										<p>Hey message from Sajin<br><span>12:18</span></p>
-									</div>
-									
-								</div>
+								@endforeach
 							</div>
+
+
 							<!-- CHAT INPUT -->
 							<div class="chat_input">
 								<ion-icon name="happy-outline"></ion-icon>
-								<!-- <ion-icon name="happy-outline"></ion-icon> -->
-								<input type="text" placeholder="Type a message">
-								<div class="whatsapp-button-containr">
-									<a href="" target="_blank" class="whatsapp-button">
+								<input type="text" id="messageInput" placeholder="Type a message" >
+								<div class="whatsapp-button-container">
+									<button type="button" class="whatsapp-button" id="sendMessage" style="cursor:pointer;">
 										<i class="fa fa-paper-plane send-icon"></i>
-									</a>
+									</button>
 								</div>
-								<ion-icon name="mic"></ion-icon>
 							</div>
+
+							<script>
+								// Define activeChatId globally
+								let activeChatId = null;
+
+								document.addEventListener("DOMContentLoaded", function() {
+									// Get the send button and message input
+									const sendButton = document.getElementById('sendMessage');
+									const messageInput = document.getElementById('messageInput');
+
+									// Attach click event listener to the send button
+									sendButton.addEventListener('click', function() {
+										const messageContent = messageInput.value.trim();
+
+										// Check if there's an active chat and message content
+										if (messageContent !== '' && activeChatId) {
+											fetch('/send-whatsapp-message', {
+												method: 'POST',
+												headers: {
+													'X-CSRF-TOKEN': '{{ csrf_token() }}',
+													'Content-Type': 'application/json',
+												},
+												body: JSON.stringify({
+													message: messageContent,
+													contact_id: activeChatId // Use the activeChatId here
+												})
+											})
+											.then(response => response.json())
+											.then(data => {
+												if (data.success) {
+													console.log('Message sent successfully');
+													messageInput.value = '';
+												} else {
+													console.error('Message sending failed:', data.error);
+												}
+											})
+											.catch(error => console.error('Error:', error));
+										} else {
+											console.warn('Message content is empty or contact ID is missing');
+										}
+									});
+								});
+
+							</script>
+
+
 						</div>
 					</div>
 				
-				
-					<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-				<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
 				</div>
 				<!-- footer -->
 				@endsection
@@ -335,41 +263,60 @@
 <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 <script>
-	document.getElementById("fullscreen-icon").addEventListener("click", function() {
-		document.getElementById("containerx").classList.toggle("fullscreen");
-	});
-</script>
+	//Function to activate a chat and display its content
 
-<script>
-	// Function to activate a chat and display its content
-function activateChat(chatId) {
-  // Remove active class from all chat blocks
-  const chatBlocks = document.querySelectorAll('.chatlist .block');
-  chatBlocks.forEach(block => block.classList.remove('active'));
+	function activateChat(chatId) {
+    activeChatId = chatId.replace('chat', '');
 
-  // Add active class to the clicked chat block
-  const activeChat = document.getElementById(chatId);
-  activeChat.classList.add('active');
+    // Hide all chat content sections
+    document.querySelectorAll('.chatContent').forEach(content => content.style.display = 'none');
 
-  // Hide all chat content sections
-  const chatContents = document.querySelectorAll('.chatContent');
-  chatContents.forEach(content => content.style.display = 'none');
+    // Show the content of the active chat
+    const activeChatContent = document.getElementById(chatId + 'Content');
+    activeChatContent.style.display = 'block';
 
-  // Show the content of the active chat
-  const activeChatContent = document.getElementById(chatId + 'Content');
-  activeChatContent.style.display = 'block';
+    // Clear the message input
+    document.getElementById('messageInput').value = '';
 
-  // Update the header with chat details
-  const chatName = activeChat.querySelector('.listHead h4').innerText;
-  const chatImage = activeChat.querySelector('.imgBox img').getAttribute('src');
-  document.querySelector('.rightSide .header .imgText h6').innerHTML = `${chatName} <br><small>online</small>`;
-  document.querySelector('.rightSide .header .userimg img').setAttribute('src', chatImage);
+    // Enable the chat input
+    document.getElementById('messageInput').disabled = false;
+
+    // Call the backend to mark messages as read
+    fetch(`/mark-as-read/${activeChatId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Mark the chat as read in the frontend
+            document.getElementById(chatId).classList.remove('unread');
+            const unreadCountElement = document.getElementById(chatId).querySelector('.message_p b');
+            if (unreadCountElement) {
+                unreadCountElement.remove();
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+    // Update the header with chat details
+    const chatName = document.getElementById(chatId).querySelector('.listHead h4').innerText;
+    const chatImage = document.getElementById(chatId).querySelector('.imgBox').cloneNode(true);
+
+    // Update right-side chat header
+    const userImgContainer = document.querySelector('.rightSide .header .userimg');
+    userImgContainer.innerHTML = ''; // Clear previous image
+    userImgContainer.appendChild(chatImage);
+    document.querySelector('.rightSide .header .imgText h6').innerHTML = `${chatName} <br><small>online</small>`;
 }
 
-  </script>
+
+
+</script>
   
-
-
 <script src="assets/js/core/jquery.3.2.1.min.js"></script>
 <script src="assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script src="assets/js/core/popper.min.js"></script>

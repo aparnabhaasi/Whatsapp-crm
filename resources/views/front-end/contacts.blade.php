@@ -83,7 +83,7 @@
 		                                                </th>
 		                                                <th scope="col">#</th>
 		                                                <th scope="col">Name</th>
-		                                                <th scope="col">Mobile</th>
+		                                                <th scope="col">WhatApp Number</th>
 		                                                <th scope="col">Email</th>
 		                                                <th scope="col" class="text-center">Tags</th>
 		                                                <th scope="col" class="text-center">Action</th>
@@ -101,7 +101,7 @@
 		                                                </td>
 		                                                <td>{{$loop -> iteration}}</td>
 		                                                <td>{{$contact->name}}</td>
-		                                                <td>{{$contact->mobile}}</td>
+		                                                <td>+ {{$contact->mobile}}</td>
 		                                                <td>{{$contact->email}}</td>
 		                                                <td class="text-center">
 															@if (is_array(json_decode($contact->tags)))
@@ -240,7 +240,7 @@
 						</div>
 						<div class="form-group">
 							<label for="pillInput2">WhatsApp number</label>
-							<input type="text" name="mobile" class="form-control input-pill" id="pillInput2" placeholder="Eg: +91 999999999">
+							<input type="text" name="mobile" class="form-control input-pill" id="pillInput2" placeholder="Eg: 91 999999999">
 						</div>
 						<div class="form-group">
 							<label for="pillInput3">Email</label>
@@ -345,7 +345,7 @@
 						</div>
 						<div class="form-group">
 							<label for="editPillInput2{{$contact->id}}">WhatsApp number</label>
-							<input type="text" name="mobile" value="{{ $contact->mobile }}" class="form-control input-pill" id="editPillInput2{{$contact->id}}" placeholder="Eg: +91 999999999">
+							<input type="text" name="mobile" value="{{ $contact->mobile }}" class="form-control input-pill" id="editPillInput2{{$contact->id}}" placeholder="Eg: 91 999999999">
 						</div>
 						<div class="form-group">
 							<label for="editPillInput3{{$contact->id}}">Email</label>

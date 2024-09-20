@@ -204,11 +204,106 @@
                             </a>
                         </li>
                         <li class="nav-item update-pro mt-5 pt-5">
-                            <button data-toggle="modal" data-target="#modalUpdate" style="border-radius:50px;">
+                            <a href="" data-toggle="modal" data-target=".supportModal" class="btn btn-primary" style="border-radius:50px;">
                                 <i class="fa-solid fa-headset"></i>
                                 <p>Get Support</p>
-                            </button>
+                            </a>
                         </li>
                     </ul>
 				</div>
 			</div>
+
+
+			<!-- Supprot modal start -->
+			<style>
+				.upload-area {
+					border: 2px dashed #ccc;
+					border-radius: 20px;
+					background-color: #f9f9f9;
+					text-align: center;
+					padding: 0px;
+					cursor: pointer;
+					transition: background-color 0.3s ease;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					flex-direction: column;
+					position: relative;
+				}
+				.upload-area:hover {
+					background-color: #f1f1f1;
+				}
+				.upload-text {
+					color: #888;
+				}
+				.upload-icon {
+					font-size: 40px;
+					color: #888;
+					margin-bottom: 10px;
+				}
+				#fileInput {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					opacity: 0;
+					cursor: pointer;
+				}
+			</style>
+			<div class="modal fade supportModal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+					<div class="modal-content" style="border-radius:30px !important;">
+						<div class="modal-header bg-warning" style="border-radius:30px 30px 0 0 !important;">
+							<div>
+								<h5 class="modal-title" id="exampleModalLongTitle"><b>Report an Issue <i class="fa-solid fa-triangle-exclamation" style="color: #ff0000;"></i></b></h5>
+								<p class="text-light">Please provide the details of the problem</p>
+							</div>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body row p-5">
+							<div class="form-group col-md-6">
+								<label for="couponCode">Name<span class="text-danger">*</span></label>
+								<input type="text" class="form-control input-pill" id="couponCode" name="coupon_code" placeholder="Enter your name" required>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="couponCode">Mobile Number<span class="text-danger">*</span></label>
+								<input type="text" class="form-control input-pill" id="couponCode" name="coupon_code" placeholder="Enter your mobile number" required>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="couponCode">Email <span class="text-danger">*</span></label>
+								<input type="text" class="form-control input-pill" id="couponCode" name="coupon_code" placeholder="Enter your email address" required>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="message">Describe the problem<span class="text-danger">*</span></label>
+								<textarea class="form-control input-pill" id="message" name="message" rows="4" placeholder="Type here..." required></textarea>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="mediaUpload">Upload Screenshot</label>
+								<div class="upload-area" id="uploadfile">
+									<input type="file" id="fileInput" name="media" accept="image/*" required>
+									<div class="upload-text">
+										<i class="fa fa-cloud-upload upload-icon"></i>
+										<p id="fileName">Upload a File</p>
+									</div>
+								</div>
+							</div>
+							<script> 
+							document.getElementById('fileInput').addEventListener('change', function() {
+								// Get the file name
+								const fileName = this.files[0] ? this.files[0].name : "Upload a File";
+								
+								// Display the file name in the p tag
+								document.getElementById('fileName').textContent = fileName;
+							});
+							</script>
+							<div class="col-12 text-center mt-4">
+								<button class="btn btn-primary w-75 py-3" style="border-radius:50px;"><b>Submit</b>&nbsp; <i class="fa-solid fa-arrow-right-long"></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+						<!-- Support modal end -->
