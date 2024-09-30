@@ -6675,4 +6675,27 @@ body {
   }
 }
 
-/*# sourceMappingURL=ready.css.map */
+
+/* Total scrollbar width */
+::-webkit-scrollbar {
+  width: 6px; /* Set width for vertical scrollbar */
+}
+
+/* The scrollbar track (background) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Change the track color */
+  border-radius: 10px;
+}
+
+/* The scrollbar handle (thumb) */
+::-webkit-scrollbar-thumb {
+  background: #c5c5c5; /* Change the handle (thumb) color */
+  border-radius: 10px; /* Rounded corners for scrollbar handle */
+}
+
+/* On hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #929292; /* Darker on hover */
+}
+
+

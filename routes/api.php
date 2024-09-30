@@ -16,3 +16,6 @@ Route::post('/whatsapp/callback', [WhatsAppController::class, 'handleCallback'])
 Route::get('/whatsapp/callback', [WhatsAppController::class, 'handleCallback']);
 
 Route::post('/whatsapp/webhook', [ContactsController::class, 'handleWebhook']);
+
+// send message
+Route::post('/send-message', [ChatController::class, 'sendMessage']);

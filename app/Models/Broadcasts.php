@@ -16,6 +16,8 @@ class Broadcasts extends Model
     protected $casts = [
         'contact_id' => 'array',  // This will ensure it's treated as an array
     ];
+
+
 }
 
 

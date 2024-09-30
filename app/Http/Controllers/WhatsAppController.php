@@ -12,11 +12,11 @@ class WhatsAppController extends Controller
     public function handleCallback(Request $request)
     {
         // Log headers and basic information for debugging
-        Log::info('WhatsApp Callback Request', [
-            'headers' => $request->headers->all(),
-            'query' => $request->query(),
-            'post' => $request->post()
-        ]);
+        // Log::info('WhatsApp Callback Request', [
+        //     'headers' => $request->headers->all(),
+        //     'query' => $request->query(),
+        //     'post' => $request->post()
+        // ]);
 
         // Handle verification requests
         if ($request->query('hub_mode') === 'subscribe') {
@@ -42,10 +42,10 @@ class WhatsAppController extends Controller
         }
 
         // Log relevant data only
-        Log::info('WhatsApp Callback Event', [
-            'metadata' => $messageData['entry'][0]['changes'][0]['value']['metadata'] ?? null,
-            'message' => $messageData['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] ?? null
-        ]);
+        // Log::info('WhatsApp Callback Event', [
+        //     'metadata' => $messageData['entry'][0]['changes'][0]['value']['metadata'] ?? null,
+        //     'message' => $messageData['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] ?? null
+        // ]);
 
         // Extract contact information
         $contactData = $messageData['entry'][0]['changes'][0]['value']['contacts'][0] ?? null;
@@ -77,7 +77,7 @@ class WhatsAppController extends Controller
             // Store the message in the `chats` table
             $this->storeMessage($messageData, $existingContact ?? $newContact);
         } else {
-            Log::warning('No contact data found in webhook payload');
+            // Log::warning('No contact data found in webhook payload');
             return response()->json(['error' => 'No contact data found'], 400);
         }
 

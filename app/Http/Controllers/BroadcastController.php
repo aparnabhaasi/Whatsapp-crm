@@ -108,6 +108,14 @@ class BroadcastController extends Controller
         $broadcastMessage->broadcast_id = $validateData['broadcast_group'];
         $broadcastMessage->template_id = $validateData['message_template'];
         $broadcastMessage->media = $mediaPath;
+
+        // Store variables in the body content
+        $broadcastMessage->body_content = json_encode($variables); 
+
+        // Set the coupon code, safely handling its absence
+        $couponCode = $validateData['coupon_code'] ?? null;
+        $broadcastMessage->button_content = $couponCode ? json_encode([$couponCode]) : json_encode([]);
+
         $broadcastMessage->save();
 
         // Fetch the broadcast group details
@@ -132,7 +140,6 @@ class BroadcastController extends Controller
         $templateDetails = $templateResponse->json();
 
         // Iterate through contacts and send messages
-        $couponCode = $validateData['coupon_code'] ?? null; // Handle coupon code safely
         foreach ($contacts as $contact) {
             $this->sendWhatsAppMessage($whatsappApiToken, $whatsappPhoneNumberId, $contact->mobile, $templateDetails, asset("storage/{$mediaPath}"), $couponCode, $variables);
         }
@@ -144,6 +151,7 @@ class BroadcastController extends Controller
         return redirect()->back()->with('error', 'Error in storing broadcast. Contact support!');
     }
 }
+
 
 
 protected function sendWhatsAppMessage($whatsappApiToken, $whatsappPhoneNumberId, $mobile, $templateDetails, $mediaUrl, $couponCode = null, $variables = null)
@@ -163,8 +171,6 @@ protected function sendWhatsAppMessage($whatsappApiToken, $whatsappPhoneNumberId
         // Construct the message payload
         $components = [];
 
-        // Log components before sending
-        Log::info('Components being sent: ', $templateDetails['components']);
 
         // Iterate through components to construct message components based on type
         foreach ($templateDetails['components'] as $component) {
@@ -223,21 +229,27 @@ protected function sendWhatsAppMessage($whatsappApiToken, $whatsappPhoneNumberId
                 Log::info('Buttons component found');
                 foreach ($component['buttons'] as $index => $button) {
                     Log::info("Button type: {$button['type']}, index: {$index}");
-                    if ($button['type'] === 'COPY_CODE' && !empty($couponCode)) {
-                        $components[] = [
-                            'type' => 'button',
-                            'sub_type' => 'copy_code',
-                            'index' => $index,
-                            'parameters' => [
-                                [
-                                    'type' => 'text',
-                                    'text' => $couponCode,
+                    if ($button['type'] === 'COPY_CODE') {
+                        if (!empty($couponCode)) {
+                            $components[] = [
+                                'type' => 'button',
+                                'sub_type' => 'copy_code',
+                                'index' => $index,
+                                'parameters' => [
+                                    [
+                                        'type' => 'coupon_code',
+                                        'coupon_code' => $couponCode, // Set the coupon code
+                                    ],
                                 ],
-                            ],
-                        ];
+                            ];
+                        } else {
+                            Log::error("Coupon code is empty for COPY_CODE button.");
+                        }
                     }
                 }
             }
+
+            
         }
 
         // Send the message
@@ -266,8 +278,6 @@ protected function sendWhatsAppMessage($whatsappApiToken, $whatsappPhoneNumberId
         Log::error('Error sending WhatsApp message: ' . $e->getMessage());
     }
 }
-
-
 
 
 }

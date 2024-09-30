@@ -179,7 +179,9 @@
                             <a href="/chat">
                                 <i class="fa-regular fa-comment-dots"></i>
                                 <p>Chats</p>
-                                <span class="badge badge-success">14</span>
+								@if($unreadMessageCount > 0)
+									<span class="badge badge-success">{{ $unreadMessageCount }}</span>
+								@endif
                             </a>
                         </li>
                         <li class="nav-item {{ request()->is('contacts') ? 'active' : '' }}">

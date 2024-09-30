@@ -104,7 +104,7 @@
 		                                            <tr class="bg-light">
 		                                                <th scope="col">#</th>
 		                                                <th scope="col">Broadcast Name</th>
-		                                                <th scope="col">Scheduled at</th>
+		                                                <!-- <th scope="col">Scheduled at</th> -->
 		                                                <th scope="col" class="text-center">Recipients</th>
 		                                                <th scope="col" class="text-center">Sent</th>
 														<th scope="col" class="text-center">Failed</th>
@@ -117,18 +117,12 @@
 														<tr>
 															<td>{{ $loop -> iteration }}</td>
 															<td>{{ $broadcast -> broadcast_name }}</td>
-															<td>{{ $broadcast->scheduled_at ? $broadcast->scheduled_at : 'Not scheduled' }}</td>
+															<!-- <td>{{ $broadcast->scheduled_at ? $broadcast->scheduled_at : 'Not scheduled' }}</td> -->
 															<td class="text-center">{{ count($broadcast->contact_id) }}</td>
 															<td class="text-center">0</td>
 															<td class="text-center">0</td>
 															<td><span class="badge badge-primary">No messages</span></td>
 															<td class="text-center">
-																<a href="" class="text-primary" data-toggle="modal" data-target=".newBroadcastMessage" title="Send Broadcast Message Group">
-																	<i class="fa-solid fa-bullhorn bg-light border rounded-circle p-2"></i>
-																</a>
-																<a href="" class="text-info" data-toggle="modal" data-target=".broadcastHistory" title="View Broadcast Details Group">
-																	<i class="fa-solid fa-eye bg-light border rounded-circle p-2"></i>
-																</a>
 																<a href="" class="text-dark" data-toggle="modal" data-target=".updateBroadcast" title="Edit Broadcast Group">
 																	<i class="fa-solid fa-pen bg-light border rounded-circle p-2"></i>
 																</a>
@@ -153,425 +147,500 @@
 			</div>
 
 
-	<!--==== New Broadcast Mssage start ====-->
-	 <style>
-		.input-pill:focus{
-			border-color: #25D366;
-		}
-		
-	 </style>
-	 <!-- first step -->
-	<form method="post" action="{{ route('broadcast.message') }}" enctype="multipart/form-data">
-		@csrf
-		<div class="modal fade newBroadcastMessage" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h6 class="modal-title text-dark" id="exampleModalLongTitle" style="font-weight: 700;">New Broadcast Message <i class="fa-solid fa-bullhorn text-secondary"></i></h6>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<label for="pillSelect1">Select Broadcast Group</label>
-							<select class="form-control input-pill " id="pillSelect1" name="broadcast_group">
-								@foreach ($broadcasts as $broadcast)
-									<option  value="{{ $broadcast->id }}" data-contact-count="{{ count($broadcast->contact_id) }}">{{ $broadcast -> broadcast_name }}</option>
-								@endforeach
-							</select>
-						</div>
-	
-						<div class="form-group">
-							<label for="pillSelect2">Select Template</label>
-							<select class="form-control input-pill" id="pillSelect2">
-								<option value="" disabled selected>Select a pre-appoved template</option>
-								@foreach ($allTemplates as $template)
-									<option value="{{ json_encode($template) }}">{{ $template['name'] }}</option>
-								@endforeach
-							</select>
-						</div>
+	<!--==== New Broadcast Message start ====-->
+<style>
+    .input-pill:focus {
+        border-color: #25D366;
+    }
+</style>
+<!-- first step -->
+<form method="post" action="{{ route('broadcast.message') }}" enctype="multipart/form-data">
+    @csrf
+    <div class="modal fade newBroadcastMessage" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title text-dark" id="exampleModalLongTitle" style="font-weight: 700;">New Broadcast
+                        Message <i class="fa-solid fa-bullhorn text-secondary"></i></h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Broadcast Group Selection -->
+                    <div class="form-group">
+                        <label for="pillSelect1">Select Broadcast Group</label>
+                        <select class="form-control input-pill " id="pillSelect1" name="broadcast_group">
+                            @foreach ($broadcasts as $broadcast)
+                                <option value="{{ $broadcast->id }}"
+                                    data-contact-count="{{ count($broadcast->contact_id) }}">{{ $broadcast->broadcast_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-						<!-- Hidden input to store the template ID -->
-						<input type="hidden" id="templateId" name="message_template">
+                    <!-- Template Selection -->
+                    <div class="form-group">
+                        <label for="pillSelect2">Select Template</label>
+                        <select class="form-control input-pill" id="pillSelect2">
+                            <option value="" disabled selected>Select a pre-approved template</option>
+                            @foreach ($allTemplates as $template)
+                                <option value="{{ json_encode($template) }}">{{ $template['name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-						<script>
-							document.getElementById('pillSelect2').addEventListener('change', function() {
-								const selectedTemplate = JSON.parse(this.value); // Parse the JSON string
-								document.getElementById('templateId').value = selectedTemplate.id; // Update the hidden input with the template ID
-							});
-						</script>
+                    <!-- Hidden input to store the template ID -->
+                    <input type="hidden" id="templateId" name="message_template">
 
-	
-						<!-- Placeholder for dynamic inputs -->
-	    				<div id="dynamic-inputs"></div>
-	
-						<div class="modal-footer">
-						<a href="" type="button" class="btn btn-secondary px-5">Cancel</a>
-						<button type="button" id="nextButton" class="btn btn-success py-2 px-5" data-dismiss="modal" data-toggle="modal" data-target=".broadCastPreview">Next <i class="fa-solid fa-arrow-right"></i></button>
-					</div>
-						</div>
-				  </div>
-			</div>
-		</div>
-	
-		
-	
-	
-		<!-- second step -->
-		<style>
-			.mesages-card-container{
-				background-image: url(assets/img/chat-bg-yellow.png);
-				background-size: cover;
-				padding: 30px;
-				margin-bottom: 8px;
-				border-radius: 10px;
-			}
-			.message-card{
-				background: #fff;
-				padding: 8px;
-				border-radius: 0px 15px 15px 15px;
-			}
-			.message-card img{
-				width: 100%;
-				border-radius: 10px;
-			}
-			.message-card p,a{
-				font-family: Helvetica, Arial, sans-serif;
-			}
-			.cancel-btn,.submit-btn{
-	            font-size: 16px;
-	            border: 1px solid;
-	            border-radius: 10px;
-	            font-weight: 800;
-	        }
-			.b2{
-				font-weight: 700;
-			}
-		
-		</style>
-		<div class="modal fade broadCastPreview" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h6 class="modal-title text-dark" id="exampleModalLongTitle" style="font-weight: 700;">Broadcast Preview <i class="fa-solid fa-bullhorn text-secondary"></i></h6>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="mesages-card-container">
-									<div class="message-card">
-										<img src="" alt="">
-										<p class="mt-3"></p>
-										<div id="buttons-container" class="text-center">
-	                                    <!-- Buttons will be dynamically inserted here -->
-	                                	</div>
-			
-									</div>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<h5><b>Overview</b></h5>
-								<hr>
-								<h6>Broadcast Name: <span class="b2" id="selectedBroadcastName">Broadcast 1</span></h6>
-								<hr>
-								<h6>Message Template: <span class="b2" id="selectedTemplateName">Template 1</span></h6>
-								<hr>
-								<h6>Sending to: <span class="b2" id="selectedContactCount">0 Contacts</span></h6>
-								<hr>
-	
-								<div class="p-3">
-									<button class="btn btn-outline-secondary w-100 mb-2 cancel-btn" data-dismiss="modal" data-toggle="modal" data-target=".newBroadcastMessage"><i class="fa-solid fa-arrow-left"></i> Back</button>
-									<button type="submit" class="btn btn-primary w-100 submit-btn">Send <i class="fa-regular fa-paper-plane"></i></button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
+                    <!-- Placeholder for dynamic inputs -->
+                    <div id="dynamic-inputs"></div>
 
+                    <div class="modal-footer">
+                        <a href="" type="button" class="btn btn-secondary px-5">Cancel</a>
+                        <button type="button" id="nextButton" class="btn btn-success py-2 px-5" data-dismiss="modal"
+                            data-toggle="modal" data-target=".broadCastPreview">Next <i
+                                class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- second step -->
+    <style>
+        .mesages-card-container {
+            background-image: url(assets/img/chat-bg-yellow.png);
+            background-size: cover;
+            padding: 30px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+        }
 
+        .message-card {
+            background: #fff;
+            padding: 8px;
+            border-radius: 0px 15px 15px 15px;
+        }
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			const broadcastSelect = document.getElementById('pillSelect1');
-			const templateSelect = document.getElementById('pillSelect2');
-			const dynamicInputsContainer = document.getElementById('dynamic-inputs');
-			const messageCard = document.querySelector('.message-card');
-			const messageImage = messageCard.querySelector('img');
-			const messageText = messageCard.querySelectorAll('p');
-			const buttonsContainer = document.getElementById('buttons-container');
+        .message-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
 
-			// Function to update the broadcast details in the preview
-			function updateBroadcastDetails() {
-				const selectedBroadcastOption = broadcastSelect.options[broadcastSelect.selectedIndex];
-				const selectedBroadcastName = selectedBroadcastOption.text; // Get the name of the broadcast
-				const contactCount = selectedBroadcastOption.getAttribute('data-contact-count');
+        .message-card p,
+        a {
+            font-family: Helvetica, Arial, sans-serif;
+        }
 
-				// Update broadcast name and contact count in the preview modal
-				document.getElementById('selectedBroadcastName').textContent = selectedBroadcastName; // Display the broadcast name
-				document.getElementById('selectedContactCount').textContent = `${contactCount} Contacts`;
-			}
+        .cancel-btn,
+        .submit-btn {
+            font-size: 16px;
+            border: 1px solid;
+            border-radius: 10px;
+            font-weight: 800;
+        }
 
+        .b2 {
+            font-weight: 700;
+        }
 
-			// Update broadcast details when the broadcast group changes
-			broadcastSelect.addEventListener('change', updateBroadcastDetails);
+        /* Custom styles for document preview */
+        .custom-document-link {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
 
-			// Function to create the button input field when COPY_CODE is detected
-			function createCouponInput(buttons) {
-				buttons.forEach((button) => {
-					if (button.type === 'COPY_CODE') {
-						dynamicInputsContainer.innerHTML += `
-							<div class="form-group">
-								<label for="couponCode">Coupon Code (<span class="text-danger">Required*</span>)</label>
-								<input type="text" class="form-control input-pill" id="couponCode" name="coupon_code" placeholder="Enter coupon code" required>
-							</div>
-						`;
-					}
-				});
-			}
+        .custom-monospace {
+            font-family: monospace;
+        }
+    </style>
+    <div class="modal fade broadCastPreview" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title text-dark" id="exampleModalLongTitle" style="font-weight: 700;">Broadcast
+                        Preview <i class="fa-solid fa-bullhorn text-secondary"></i></h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Message Preview -->
+                        <div class="col-md-6">
+                            <div class="mesages-card-container">
+                                <div class="message-card">
+                                    <img src="" alt="">
+                                    <p class="mt-3"></p>
+                                    <div id="buttons-container" class="text-center">
+                                        <!-- Buttons will be dynamically inserted here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Overview and Actions -->
+                        <div class="col-md-6">
+                            <h5><b>Overview</b></h5>
+                            <hr>
+                            <h6>Broadcast Name: <span class="b2" id="selectedBroadcastName">Broadcast 1</span></h6>
+                            <hr>
+                            <h6>Message Template: <span class="b2" id="selectedTemplateName">Template 1</span></h6>
+                            <hr>
+                            <h6>Sending to: <span class="b2" id="selectedContactCount">0 Contacts</span></h6>
+                            <hr>
 
-			// Function to update template details in the preview
-			templateSelect.addEventListener('change', function () {
-				dynamicInputsContainer.innerHTML = ''; // Clear previous inputs
-				messageCard.querySelectorAll('.message-video, .document-link').forEach(el => el.remove()); // Clear additional previews
-				buttonsContainer.innerHTML = ''; // Clear previous buttons
+                            <div class="p-3">
+                                <button class="btn btn-outline-secondary w-100 mb-2 cancel-btn" data-dismiss="modal"
+                                    data-toggle="modal" data-target=".newBroadcastMessage"><i
+                                        class="fa-solid fa-arrow-left"></i> Back</button>
+                                <button type="submit" class="btn btn-primary w-100 submit-btn">Send <i
+                                        class="fa-regular fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-				const selectedOption = this.options[this.selectedIndex];
-				let templateData;
-				try {
-					templateData = JSON.parse(selectedOption.value);
-				} catch (error) {
-					console.error('Error parsing template JSON:', error);
-					return;
-				}
+    </div>
+</form>
 
-				// Update template name in the preview
-				document.getElementById('selectedTemplateName').textContent = templateData.name;
+<!-- JavaScript Code -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const broadcastSelect = document.getElementById('pillSelect1');
+        const templateSelect = document.getElementById('pillSelect2');
+        const dynamicInputsContainer = document.getElementById('dynamic-inputs');
+        const messageCard = document.querySelector('.message-card');
+        const messageImage = messageCard.querySelector('img');
+        const messageText = messageCard.querySelectorAll('p');
+        const buttonsContainer = document.getElementById('buttons-container');
+        const nextButton = document.getElementById('nextButton');
+        const templateIdInput = document.getElementById('templateId');
 
-				if (templateData.components) {
-					templateData.components.forEach((component) => {
-						if (component.type === 'HEADER' && component.format) {
-							createHeaderInput(component);
-						}
+        // Function to update the broadcast details in the preview
+        function updateBroadcastDetails() {
+            const selectedBroadcastOption = broadcastSelect.options[broadcastSelect.selectedIndex];
+            const selectedBroadcastName = selectedBroadcastOption.text; // Get the name of the broadcast
+            const contactCount = selectedBroadcastOption.getAttribute('data-contact-count');
 
-						if (component.type === 'BODY' && component.text) {
-							createBodyInputs(component.text);
-							updateBodyPreview(component.text);
-						}
+            // Update broadcast name and contact count in the preview modal
+            document.getElementById('selectedBroadcastName').textContent = selectedBroadcastName; // Display the broadcast name
+            document.getElementById('selectedContactCount').textContent = `${contactCount} Contacts`;
+        }
 
-						if (component.type === 'BUTTONS' && component.buttons) {
-							createButtons(component.buttons);
-							createCouponInput(component.buttons); // Add this line to check for COPY_CODE
-						}
-					});
-				}
-			});
+        // Update broadcast details when the broadcast group changes
+        broadcastSelect.addEventListener('change', updateBroadcastDetails);
 
-			// Call updateBroadcastDetails on page load to set initial values
-			updateBroadcastDetails();
+        // Template selection change event
+        templateSelect.addEventListener('change', function () {
+            dynamicInputsContainer.innerHTML = ''; // Clear previous inputs
+            messageCard.querySelectorAll('.message-video, .custom-document-link').forEach(el => el.remove()); // Clear additional previews
+            buttonsContainer.innerHTML = ''; // Clear previous buttons
+            messageImage.style.display = 'none'; // Hide image preview
+            messageText[0].innerHTML = ''; // Clear message text
 
-			// Functions for handling header and body inputs remain the same
-			function createHeaderInput(component) {
-				let inputType = '';
-				let acceptType = '';
-				let labelText = `Upload ${component.format}`;
+            const selectedOption = this.options[this.selectedIndex];
+            let templateData;
+            try {
+                templateData = JSON.parse(selectedOption.value);
+            } catch (error) {
+                console.error('Error parsing template JSON:', error);
+                return;
+            }
 
-				if (component.format === 'IMAGE') {
-					inputType = 'file';
-					acceptType = 'image/*';
-				} else if (component.format === 'VIDEO') {
-					inputType = 'file';
-					acceptType = 'video/*';
-				} else if (component.format === 'DOCUMENT') {
-					inputType = 'file';
-					acceptType = '.pdf';
-					labelText = 'Upload Document';
-				}
+            // Update template ID and name in the preview
+            templateIdInput.value = templateData.id;
+            document.getElementById('selectedTemplateName').textContent = templateData.name;
 
-				if (inputType) {
-					dynamicInputsContainer.innerHTML += `
-						<div class="form-group">
-							<label>${labelText} (<span class="text-danger">Required*</span>)</label>
-							<input type="${inputType}" class="form-control input-pill" name="media" accept="${acceptType}" id="headerInput">
-						</div>
-					`;
-					const headerInput = document.getElementById('headerInput');
-					headerInput.addEventListener('change', handleHeaderPreview);
-				}
-			}
+            if (templateData.components) {
+                templateData.components.forEach((component) => {
+                    if (component.type === 'HEADER' && component.format) {
+                        createHeaderInput(component);
+                    }
 
-			function createBodyInputs(text) {
-				const variableMatches = text.match(/\{\{\d+\}\}/g);
-				if (variableMatches) {
-					dynamicInputsContainer.innerHTML = ''; // Clear any previous inputs
-					variableMatches.forEach((variable, index) => {
-						dynamicInputsContainer.innerHTML += `
-							<div class="form-group">
-								<label for="variable${index + 1}">Variable ${index + 1} (<span class="text-danger">Required*</span>)</label>
-								<input type="text" name="variables[]" class="form-control input-pill" id="variable${index + 1}" placeholder="Enter value for ${variable}" required>
-							</div>
-						`;
-						document.getElementById(`variable${index + 1}`).addEventListener('input', updateBodyPreview.bind(null, text));
-					});
-				}
-			}
+                    if (component.type === 'BODY' && component.text) {
+                        createBodyInputs(component.text);
+                        updateBodyPreview(component.text);
+                    }
 
+                    if (component.type === 'BUTTONS' && component.buttons) {
+                        createButtons(component.buttons);
+                        createCouponInput(component.buttons);
+                    }
+                });
+            }
+        });
 
-			function updateBodyPreview(text) {
-				let updatedText = text;
-				const variableMatches = text.match(/\{\{\d+\}\}/g);
+        // Function to create the header input
+        function createHeaderInput(component) {
+            let inputType = '';
+            let acceptType = '';
+            let labelText = `Upload ${component.format}`;
 
-				if (variableMatches) {
-					variableMatches.forEach((variable, index) => {
-						const input = document.getElementById(`variable${index + 1}`);
-						if (input) {
-							updatedText = updatedText.replace(variable, input.value || '');
-						}
-					});
-				}
+            if (component.format === 'IMAGE') {
+                inputType = 'file';
+                acceptType = 'image/*';
+            } else if (component.format === 'VIDEO') {
+                inputType = 'file';
+                acceptType = 'video/*';
+            } else if (component.format === 'DOCUMENT') {
+                inputType = 'file';
+                acceptType = '.pdf';
+                labelText = 'Upload Document';
+            }
 
-				updatedText = updatedText
-					.replace(/\*(.*?)\*/g, '<strong>$1</strong>')  // Bold
-					.replace(/_(.*?)_/g, '<em>$1</em>')           // Italics
-					.replace(/~(.*?)~/g, '<del>$1</del>')         // Strikethrough
-					.replace(/`(.*?)`/g, '<span class="custom-monospace">$1</span>') // Monospace
-					.replace(/\n/g, '<br>');
+            if (inputType) {
+                // Create elements
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
 
-				messageText[0].innerHTML = updatedText;
-			}
+                const label = document.createElement('label');
+                label.innerHTML = `${labelText} (<span class="text-danger">Required*</span>)`;
 
-			function handleHeaderPreview(event) {
-				const file = event.target.files[0];
-				if (!file) return;
+                const input = document.createElement('input');
+                input.type = inputType;
+                input.className = 'form-control input-pill';
+                input.name = 'media';
+                input.accept = acceptType;
+                input.id = 'headerInput';
+                input.required = true;
 
-				messageCard.querySelectorAll('.message-video, .document-link').forEach(el => el.remove());
+                // Append elements
+                formGroup.appendChild(label);
+                formGroup.appendChild(input);
+                dynamicInputsContainer.appendChild(formGroup);
 
-				if (file.type.startsWith('image/')) {
-					messageImage.src = URL.createObjectURL(file);
-					messageImage.style.display = 'block';
-				} else if (file.type.startsWith('video/')) {
-					messageImage.style.display = 'none';
-					const videoElement = document.createElement('video');
-					videoElement.controls = true;
-					videoElement.className = 'message-video';
-					videoElement.style.width = '100%';
-					videoElement.style.borderRadius = '10px';
-					videoElement.innerHTML = `<source src="${URL.createObjectURL(file)}" type="${file.type}">`;
-					messageCard.insertBefore(videoElement, messageText[0]);
-				} else if (file.type.startsWith('application/')) {
-					messageImage.style.display = 'none';
-					const documentWrapper = document.createElement('div');
-					documentWrapper.className = 'custom-document-link';
-					documentWrapper.style.display = 'flex';
-					documentWrapper.style.alignItems = 'center';
-					documentWrapper.style.padding = '10px';
-					documentWrapper.style.border = '1px solid #ddd';
-					documentWrapper.style.borderRadius = '10px';
-					documentWrapper.style.marginBottom = '10px';
-					documentWrapper.style.backgroundColor = '#f9f9f9';
+                // Add event listener
+                input.addEventListener('change', handleHeaderPreview);
+            }
+        }
 
-					documentWrapper.innerHTML = `
-						<i class="fa-solid fa-file-pdf" style="font-size: 24px; color: #d9534f; margin-right: 10px;"></i>
-						<div style="flex-grow: 1;">
-							<a href="${URL.createObjectURL(file)}" download="${file.name}" style="color: black; text-decoration:none;">
-								<p style="margin: 0; font-weight: bold;">${file.name}</p>
-							</a>
-						</div>
-					`;
+        // Function to create body inputs
+        function createBodyInputs(text) {
+            const variableMatches = text.match(/\{\{\d+\}\}/g);
+            if (variableMatches) {
+                variableMatches.forEach((variable, index) => {
+                    // Create elements
+                    const formGroup = document.createElement('div');
+                    formGroup.className = 'form-group';
 
-					messageCard.insertBefore(documentWrapper, messageText[0]);
-				}
-			}
+                    const label = document.createElement('label');
+                    label.setAttribute('for', `variable${index + 1}`);
+                    label.innerHTML = `Variable ${index + 1} (<span class="text-danger">Required*</span>)`;
 
-			function createButtons(buttons) {
-				buttonsContainer.innerHTML = ''; // Clear previous buttons
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = 'variables[]';
+                    input.className = 'form-control input-pill';
+                    input.id = `variable${index + 1}`;
+                    input.placeholder = `Enter value for ${variable}`;
+                    input.required = true;
 
-				buttons.forEach((button) => {
-					const hr = document.createElement('hr');
-					buttonsContainer.appendChild(hr);
+                    // Append elements
+                    formGroup.appendChild(label);
+                    formGroup.appendChild(input);
+                    dynamicInputsContainer.appendChild(formGroup);
 
-					let buttonElement;
-					switch (button.type) {
-						case 'URL':
-							buttonElement = document.createElement('a');
-							buttonElement.href = button.url;
-							buttonElement.target = '_blank';
-							buttonElement.innerHTML = `<h6><i class="fa-solid fa-arrow-up-right-from-square"></i>&nbsp; ${button.text}</h6>`;
-							break;
-						case 'PHONE_NUMBER':
-							buttonElement = document.createElement('a');
-							buttonElement.href = `tel:${button.phone_number}`;
-							buttonElement.innerHTML = `<h6><i class="fa-solid fa-phone"></i>&nbsp; ${button.text}</h6>`;
-							break;
-						case 'COPY_CODE':
-							buttonElement = document.createElement('a');
-							buttonElement.href = 'javascript:void(0)';
-							buttonElement.onclick = () => copyToClipboard(button.example[0]);
-							buttonElement.innerHTML = `<h6><i class="fa-regular fa-copy"></i>&nbsp; ${button.text}</h6>`;
-							break;
-					}
+                    // Add event listener
+                    input.addEventListener('input', updateBodyPreview.bind(null, text));
+                });
+            }
+        }
 
-					if (buttonElement) {
-						buttonsContainer.appendChild(buttonElement);
-					}
-				});
-			}
+        // Function to update the body preview
+        function updateBodyPreview(text) {
+            let updatedText = text;
+            const variableMatches = text.match(/\{\{\d+\}\}/g);
 
-			// Validation function to check required inputs
-			function validateInputs() {
-				const inputs = dynamicInputsContainer.querySelectorAll('input');
-				let allValid = true;
+            if (variableMatches) {
+                variableMatches.forEach((variable, index) => {
+                    const input = document.getElementById(`variable${index + 1}`);
+                    if (input) {
+                        updatedText = updatedText.replace(variable, input.value || '');
+                    }
+                });
+            }
 
-				// Remove existing error messages
-				inputs.forEach(input => {
-					const errorElement = input.nextElementSibling;
-					if (errorElement && errorElement.classList.contains('error-message')) {
-						errorElement.remove();
-					}
-				});
+            updatedText = updatedText
+                .replace(/\*(.*?)\*/g, '<strong>$1</strong>')  // Bold
+                .replace(/_(.*?)_/g, '<em>$1</em>')           // Italics
+                .replace(/~(.*?)~/g, '<del>$1</del>')         // Strikethrough
+                .replace(/`(.*?)`/g, '<span class="custom-monospace">$1</span>') // Monospace
+                .replace(/\n/g, '<br>');
 
-				inputs.forEach(input => {
-					if (input.value.trim() === '') {
-						allValid = false;
-						input.classList.add('is-invalid');
+            messageText[0].innerHTML = updatedText;
+        }
 
-						// Create and insert an error message below the input
-						const errorMessage = document.createElement('div');
-						errorMessage.className = 'error-message text-danger mt-1';
-						errorMessage.textContent = 'This field is required.';
-						input.parentElement.appendChild(errorMessage);
-					} else {
-						input.classList.remove('is-invalid');
-					}
-				});
+        // Function to handle header media preview
+        function handleHeaderPreview(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-				return allValid;
-			}
+            messageCard.querySelectorAll('.message-video, .custom-document-link').forEach(el => el.remove());
 
-			// Prevent the next modal from showing if required inputs are not filled
-			nextButton.addEventListener('click', function (event) {
-				if (!validateInputs()) {
-					event.preventDefault(); // Prevents the default action, i.e., hiding the modal
-					return; // Stops further execution if validation fails
-				}
-				
-				// If validation passes, manually show the next modal
-				$('.newBroadcastMessage').modal('hide');
-				$('.broadCastPreview').modal('show');
-			});
+            if (file.type.startsWith('image/')) {
+                messageImage.src = URL.createObjectURL(file);
+                messageImage.style.display = 'block';
+            } else if (file.type.startsWith('video/')) {
+                messageImage.style.display = 'none';
+                const videoElement = document.createElement('video');
+                videoElement.controls = true;
+                videoElement.className = 'message-video';
+                videoElement.style.width = '100%';
+                videoElement.style.borderRadius = '10px';
+                videoElement.innerHTML = `<source src="${URL.createObjectURL(file)}" type="${file.type}">`;
+                messageCard.insertBefore(videoElement, messageText[0]);
+            } else if (file.type.startsWith('application/')) {
+                messageImage.style.display = 'none';
+                const documentWrapper = document.createElement('div');
+                documentWrapper.className = 'custom-document-link';
 
+                documentWrapper.innerHTML = `
+                    <i class="fa-solid fa-file-pdf" style="font-size: 24px; color: #d9534f; margin-right: 10px;"></i>
+                    <div style="flex-grow: 1;">
+                        <a href="${URL.createObjectURL(file)}" download="${file.name}" style="color: black; text-decoration:none;">
+                            <p style="margin: 0; font-weight: bold;">${file.name}</p>
+                        </a>
+                    </div>
+                `;
 
-		});
+                messageCard.insertBefore(documentWrapper, messageText[0]);
+            }
+        }
 
-	</script>
-	<!--==== New Broadcast Mssage end ====-->
+        // Function to create buttons
+        function createButtons(buttons) {
+            buttonsContainer.innerHTML = ''; // Clear previous buttons
+
+            buttons.forEach((button) => {
+                const hr = document.createElement('hr');
+                buttonsContainer.appendChild(hr);
+
+                let buttonElement;
+                switch (button.type) {
+                    case 'URL':
+                        buttonElement = document.createElement('a');
+                        buttonElement.href = button.url;
+                        buttonElement.target = '_blank';
+                        buttonElement.innerHTML = `<h6><i class="fa-solid fa-arrow-up-right-from-square"></i>&nbsp; ${button.text}</h6>`;
+                        break;
+                    case 'PHONE_NUMBER':
+                        buttonElement = document.createElement('a');
+                        buttonElement.href = `tel:${button.phone_number}`;
+                        buttonElement.innerHTML = `<h6><i class="fa-solid fa-phone"></i>&nbsp; ${button.text}</h6>`;
+                        break;
+                    case 'COPY_CODE':
+                        buttonElement = document.createElement('a');
+                        buttonElement.href = 'javascript:void(0)';
+                        buttonElement.onclick = () => copyToClipboard(button.example[0]);
+                        buttonElement.innerHTML = `<h6><i class="fa-regular fa-copy"></i>&nbsp; ${button.text}</h6>`;
+                        break;
+                }
+
+                if (buttonElement) {
+                    buttonsContainer.appendChild(buttonElement);
+                }
+            });
+        }
+
+        // Function to create coupon input for COPY_CODE buttons
+        function createCouponInput(buttons) {
+            buttons.forEach((button) => {
+                if (button.type === 'COPY_CODE') {
+                    // Create elements
+                    const formGroup = document.createElement('div');
+                    formGroup.className = 'form-group';
+
+                    const label = document.createElement('label');
+                    label.setAttribute('for', 'couponCode');
+                    label.innerHTML = `Coupon Code (<span class="text-danger">Required*</span>)`;
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'form-control input-pill';
+                    input.id = 'couponCode';
+                    input.name = 'coupon_code';
+                    input.placeholder = 'Enter coupon code';
+                    input.required = true;
+
+                    // Append elements
+                    formGroup.appendChild(label);
+                    formGroup.appendChild(input);
+                    dynamicInputsContainer.appendChild(formGroup);
+                }
+            });
+        }
+
+        // Validation function to check required inputs
+        function validateInputs() {
+            const inputs = dynamicInputsContainer.querySelectorAll('input');
+            let allValid = true;
+
+            // Remove existing error messages
+            inputs.forEach(input => {
+                const errorElement = input.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.remove();
+                }
+            });
+
+            inputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    allValid = false;
+                    input.classList.add('is-invalid');
+
+                    // Create and insert an error message below the input
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'error-message text-danger mt-1';
+                    errorMessage.textContent = 'This field is required.';
+                    input.parentElement.appendChild(errorMessage);
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            return allValid;
+        }
+
+        // Prevent the next modal from showing if required inputs are not filled
+        nextButton.addEventListener('click', function (event) {
+            if (!validateInputs()) {
+                event.preventDefault(); // Prevents the default action, i.e., hiding the modal
+                // Display an alert or highlight the form fields that need attention.
+                alert('Please fill out all required fields before proceeding.');
+                return; // Stops further execution if validation fails
+            }
+
+            // If validation passes, manually show the next modal
+            $('.newBroadcastMessage').modal('hide');
+            $('.broadCastPreview').modal('show');
+        });
+
+        // Copy to clipboard function for COPY_CODE buttons
+        function copyToClipboard(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Coupon code copied to clipboard!');
+            }, (err) => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Initial call to update broadcast details
+        updateBroadcastDetails();
+
+    });
+</script>
+<!--==== New Broadcast Message end ====-->
+
 
 
 	<!-- Update broadcast group modal -->
@@ -647,58 +716,7 @@
 									</td>
 									
 								</tr>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input" type="checkbox" value="" checked >
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>2</td>
-									<td>Jacob</td>
-									<td>+91 8890652711</td>
-									<td>jacob@mail.com</td>
-									<td class="text-center">
-										<span class="badge badge-count">Google</span>
-										<span class="badge badge-count">Social Media</span>
-									</td>
-									
-								</tr>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input" type="checkbox" value="" checked>
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>3</td>
-									<td>Larry</td>
-									<td>+91 9986732453</td>
-									<td>Larry@mail.com</td>
-									<td class="text-center">
-										<span class="badge badge-count">Social Media</span>
-										<span class="badge badge-count">Meta</span>
-										<span class="badge badge-count">Google</span>
-									</td>
-									
-								</tr>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input" type="checkbox" value="" checked>
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>4</td>
-									<td>Larry</td>
-									<td>+91 9986732453</td>
-									<td>Larry@mail.com</td>
-									<td class="text-center">
-										<span class="badge badge-count">Social Media</span>
-										<span class="badge badge-count">Meta</span>
-										<span class="badge badge-count">Google</span>
-									</td>
-								</tr>
+								
 							</tbody>
 						</table>
 					</div>
@@ -775,7 +793,7 @@
 											<th scope="col">Email</th>
 											<th scope="col" class="text-center">Tags</th>
 										</tr>
-									</thead>
+									</thead> 
 									<tbody>
 										@foreach ($contacts as $contact)
 										<tr>
@@ -831,236 +849,6 @@
 		});
 	</script>
 
-
-
-	<!-- Broadcast History or View start -->
-	<style>
-		.custom-modal-width .modal-dialog {
-			max-width: 70%; /* Adjust this value as needed */
-		}
-	</style>
-		
-	<div class="modal fade bd-example-modal-lg broadcastHistory custom-modal-width" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content p-4">
-				<div class="d-flex justify-content-between align-items-center">
-					<h5 class="mb-0"><b>Broadcast 3</b></h5>
-					<i class="fa-regular fa-circle-xmark fa-xl" data-dismiss="modal" style="color: #767676;"></i>
-				</div>
-				<hr>
-
-
-				<div class="row row-card-no-pd" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; border-radius: 20px;">
-					<div class="col-md-5">
-						<div class="card">
-							
-							<div class="card-body">
-								<div class="d-flex justify-content-between">
-									<div>
-										<small>Scheduled Date</small>
-										<p><i class="fa-regular fa-calendar-days"></i> <b>10-10-2024</b></p>
-									</div>
-									<div>
-										<small>Scheduled Time</small>
-										<p><i class="fa-regular fa-clock"></i> <b>10:30 am</b></p>
-									</div>
-								</div>
-								<hr class="m-2">
-								<small>Status</small>
-								<button class="btn btn-warning w-100">Pending</button>
-							</div>
-							<div class="card-footer text-center">
-								<small>Recipients</small>
-								<h4><b>301</b></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card">
-							<div class="card-body">
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Reply</span>
-										<span class="text-muted fw-bold"> 28</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-success" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="78%"></div>
-									</div>
-								</div>
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Opened</span>
-										<span class="text-muted fw-bold"> 76</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-info" role="progressbar" style="width: 65%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="65%"></div>
-									</div>
-								</div>
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Delivered</span>
-										<span class="text-muted fw-bold"> 190</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-primary" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="70%"></div>
-									</div>
-								</div>
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Pending</span>
-										<span class="text-muted fw-bold"> 17</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="60%"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="card card-stats">
-							<div class="card-body">
-								<p class="fw-bold mt-1">Statistic</p>
-								<div class="row">
-									<div class="col-5">
-										<div class="icon-big text-center icon-warning">
-											<i class="fa-regular fa-circle-check text-primary"></i>
-										</div>
-									</div>
-									<div class="col-7 d-flex align-items-center">
-										<div class="numbers">
-											<p class="card-category">Sent</p>
-											<h4 class="card-title">280</h4>
-										</div>
-									</div>
-								</div>
-								<hr/>
-								<div class="row">
-									<div class="col-5">
-										<div class="icon-big text-center"><i class=""></i>
-											<i class="fa-regular fa-circle-xmark text-danger"></i>
-										</div>
-									</div>
-									<div class="col-7 d-flex align-items-center">
-										<div class="numbers">
-											<p class="card-category">Failed</p>
-											<h4 class="card-title">21</h4>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="row row-card-no-pd" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; border-radius: 20px;">
-					<div class="col-md-5">
-						<div class="card">
-							
-							<div class="card-body">
-								<div class="d-flex justify-content-between">
-									<div>
-										<small>Scheduled Date</small>
-										<p><i class="fa-regular fa-calendar-days"></i> <b>22-08-2024</b></p>
-									</div>
-									<div>
-										<small>Scheduled Time</small>
-										<p><i class="fa-regular fa-clock"></i> <b>02:50 pm</b></p>
-									</div>
-								</div>
-								<hr class="m-2">
-								<small>Status</small>
-								<button class="btn btn-success w-100">Completed</button>
-							</div>
-							<div class="card-footer text-center">
-								<small>Recipients</small>
-								<h4><b>280</b></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card">
-							<div class="card-body">
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Reply</span>
-										<span class="text-muted fw-bold"> 28</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-success" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="78%"></div>
-									</div>
-								</div>
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Opened</span>
-										<span class="text-muted fw-bold"> 76</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-info" role="progressbar" style="width: 65%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="65%"></div>
-									</div>
-								</div>
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Delivered</span>
-										<span class="text-muted fw-bold"> 190</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-primary" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="70%"></div>
-									</div>
-								</div>
-								<div class="progress-card">
-									<div class="d-flex justify-content-between mb-1">
-										<span class="text-muted">Pending</span>
-										<span class="text-muted fw-bold"> 17</span>
-									</div>
-									<div class="progress mb-2" style="height: 7px;">
-										<div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="60%"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="card card-stats">
-							<div class="card-body">
-								<p class="fw-bold mt-1">Statistic</p>
-								<div class="row">
-									<div class="col-5">
-										<div class="icon-big text-center icon-warning">
-											<i class="fa-regular fa-circle-check text-primary"></i>
-										</div>
-									</div>
-									<div class="col-7 d-flex align-items-center">
-										<div class="numbers">
-											<p class="card-category">Sent</p>
-											<h4 class="card-title">264</h4>
-										</div>
-									</div>
-								</div>
-								<hr/>
-								<div class="row">
-									<div class="col-5">
-										<div class="icon-big text-center"><i class=""></i>
-											<i class="fa-regular fa-circle-xmark text-danger"></i>
-										</div>
-									</div>
-									<div class="col-7 d-flex align-items-center">
-										<div class="numbers">
-											<p class="card-category">Failed</p>
-											<h4 class="card-title">16</h4>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				
-			</div>
-		</div>
-	</div>
-	<!-- Broadcast History or View end -->
 
 
 	<!-- Messaging Limit info Modal -->
