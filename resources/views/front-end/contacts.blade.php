@@ -10,8 +10,15 @@
 	<link rel="stylesheet" href="assets/css/ready.css">
 	<link rel="stylesheet" href="assets/css/demo.css">
 
+	<!-- bootstrap js -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 	<!-- font awsome -->
 	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+	 <!-- export as excel -->
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 </head>
 <body>
 		<!-- header -->
@@ -23,12 +30,27 @@
 
                 <div class="content">
                 	<div class="container-fluid">
+						@if(session('success'))
+							<div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+								<p class="mb-0">{{ session('success') }}</p>
+								<a type="button" class="" data-bs-dismiss="alert" aria-label="Close" style="cursor:pointer; color:#fff;">X</a>
+							</div>
+						@endif
+						@if(session('error'))
+							<div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+								<p class="mb-0">{{ session('error') }}</p>
+								<a type="button" class="" data-bs-dismiss="alert" aria-label="Close" style="cursor:pointer; color:#fff;">X</a>
+							</div>
+						@endif
 	                    <div class="row">
 	                        
 	                        <div class="col-12 text-right pb-4 d-flex justify-content-between">
 								<h4 class="page-title">Contacts</h4>
 	                            <div>
-	                            	<button class="btn btn-primary">Export Contacts <i class="fa-solid fa-file-arrow-down"></i></button>
+									<button class="btn btn-primary" onclick="exportTableToExcel('contactsTable', 'contacts')">
+										Export Contacts <i class="fa-solid fa-file-arrow-down"></i>
+									</button>
+
 		                            <button class="btn btn-success" data-toggle="modal" data-target="#bulkUploadModal">Bulk Upload <i class="fa-solid fa-upload"></i></button>
 	                            </div>
 	                        </div>
@@ -44,6 +66,7 @@
 		                                                border: .5px solid transparent;
 		                                                border-radius: 30px;
 		                                                transition: border-color 0.3s;
+														width: 400px;
 		                                            }
 		                                            .search-container:hover,
 		                                            .search-container:focus-within {
@@ -51,19 +74,18 @@
 		                                            }
 		                                        </style>
 		                                        <div class="input-group search-container">
-		                                            <input type="text" placeholder="Search ..." class="form-control search-input">
-		                                            <div class="input-group-append">
-		                                                <span class="input-group-text">
-		                                                    <a href="" style="text-decoration: none;">
-		                                                        <i class="la la-search search-icon text-success"></i>
-		                                                    </a>
-		                                                </span>
-		                                            </div>
-		                                        </div>
+													<input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search ..." class="form-control search-input">
+													<div class="input-group-append">
+														<span class="input-group-text">
+															<a href="" style="text-decoration: none;">
+																<i class="la la-search search-icon text-success"></i>
+															</a>	
+														</span>
+													</div>
+												</div>
+
 		                                    </form>
-		                                    <button class="btn btn-outline-success my-1" style="border-radius: 30px;">
-		                                        <i class="fa-solid fa-filter"></i> <b>Filter</b>
-		                                    </button>
+		                                    
 	                                    </div>
 
 										<button class="btn btn-outline-success my-1" data-toggle="modal" data-target="#addContactModal">
@@ -71,65 +93,49 @@
 										</button>
 	                                </div>
 	                                <div class="card-body">
-	                                    <div class="table-responsive">
-	                                    	<table class="table table-hover">
-		                                        <thead>
-		                                            <tr class="bg-light">
-		                                                <th scope="col" style="width: 10px;">
-		                                                    <label class="form-check-label">
-		                                                        <input class="form-check-input" type="checkbox" value="">
-		                                                        <span class="form-check-sign"></span>
-		                                                    </label>
-		                                                </th>
-		                                                <th scope="col">#</th>
-		                                                <th scope="col">Name</th>
-		                                                <th scope="col">WhatApp Number</th>
-		                                                <th scope="col">Email</th>
-		                                                <th scope="col" class="text-center">Tags</th>
-		                                                <th scope="col" class="text-center">Action</th>
-		                                            </tr>
-		                                        </thead>
-		                                        <tbody>
-
-												@foreach ($contacts as $contact)
-		                                            <tr>
-		                                                <td>
-		                                                    <label class="form-check-label">
-		                                                        <input class="form-check-input" type="checkbox" value="">
-		                                                        <span class="form-check-sign"></span>
-		                                                    </label>
-		                                                </td>
-		                                                <td>{{$loop -> iteration}}</td>
-		                                                <td>{{$contact->name}}</td>
-		                                                <td>+ {{$contact->mobile}}</td>
-		                                                <td>{{$contact->email}}</td>
-		                                                <td class="text-center">
+										<div class="table-responsive">
+											<table class="table table-hover" id="contactsTable">
+												<thead>
+													<tr class="bg-light">
+														<th scope="col">#</th>
+														<th scope="col">Name</th>
+														<th scope="col">WhatsApp Number</th>
+														<th scope="col">Email</th>
+														<th scope="col" class="text-center">Tags</th>
+														<th scope="col" class="text-center">Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach ($contacts as $contact)
+													<tr>
+														<td>{{$loop->iteration}}</td>
+														<td>{{$contact->name}}</td>
+														<td>+ {{$contact->mobile}}</td>
+														<td>{{$contact->email}}</td>
+														<td class="text-center">
 															@if (is_array(json_decode($contact->tags)))
 																@foreach (json_decode($contact->tags) as $tag)
 																	<span class="badge badge-count">{{ $tag }}</span>
 																@endforeach
 															@endif
-
-		                                                </td>
-		                                                <td class="text-center d-flex justify-content-center">
-		                                                    <a href="" class="text-info mx-1" title="Edit" data-toggle="modal" data-target="#editContactModal{{$contact->id}}">
-		                                                        <i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-															
-															<form method="POST" action="{{ route('contacts.destroy',$contact->id) }}">
+														</td>
+														<td class="text-center d-flex justify-content-center">
+															<a href="" class="text-info mx-1" title="Edit" data-toggle="modal" data-target="#editContactModal{{$contact->id}}">
+																<i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
+															</a>
+															<form method="POST" action="{{ route('contacts.destroy', $contact->id) }}">
 																@csrf
 																@method('DELETE')
 																<a href="#" class="text-danger mx-1" onclick="confirmMessage(event, this)" title="Delete">
 																	<i class="fa fa-trash-can bg-light border rounded-circle p-2"></i>
 																</a>
 															</form>
-		                                                </td>
-		                                            </tr>
-												@endforeach
-    
-		                                        </tbody>
-		                                    </table>
-	                                    </div>
+														</td>
+													</tr>
+													@endforeach
+												</tbody>
+											</table>
+										</div>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -141,7 +147,42 @@
 			</div>
 			
 
+<script>
+	function searchTable() {
+    // Get the value of the search input
+    let input = document.getElementById("searchInput");
+    let filter = input.value.toLowerCase();
 
+    // Get the table and all rows
+    let table = document.getElementById("contactsTable");
+    let rows = table.getElementsByTagName("tr");
+
+    // Loop through all rows, excluding the table header
+    for (let i = 1; i < rows.length; i++) {
+        let cells = rows[i].getElementsByTagName("td");
+        let match = false;
+
+        // Check each cell in the row
+        for (let j = 0; j < cells.length; j++) {
+            let cellValue = cells[j].innerText.toLowerCase();
+
+            // If the cell contains the search term, mark it as a match
+            if (cellValue.includes(filter)) {
+                match = true;
+                break;
+            }
+        }
+
+        // If a match is found, display the row, otherwise hide it
+        if (match) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
+
+</script>
 
 
 	<!-- Bulk upload Modal -->
@@ -169,8 +210,21 @@
 						color: #404040;
 						cursor: pointer;
 						}
-
+						.download-file{
+							border-bottom: 1px solid gray;
+							margin-bottom: 15px;
+							padding-bottom: 10px;
+						}
 					</style>
+
+					<div class="d-flex justify-content-between align-items-center download-file">
+						<p>Download example file to upload</p>
+						<a href="assets/contact/Contact_Book_Sample.xlsx" download class="btn btn-outline-primary btn-sm" style="border-radius:50px;">
+							Download <i class="fa-regular fa-circle-down"></i>
+						</a>
+					</div>
+
+
 					<label for="file" class="labelFile">
 						<span><svg 
 						xml:space="preserve"
@@ -209,11 +263,15 @@
 							</g>
 						</g></svg></span>
 					<p style="color: #25D366 ;">drag and drop your file here or click to select a file!</p></label>
-					<input class="input file-upload" name="text" id="file" type="file" />
-					<div class="text-center pt-3">
-						<button class="btn btn-danger mx-2" data-dismiss="modal">Cancel <i class="fa-solid fa-ban"></i></button>
-						<button class="btn btn-success mx-2">Upload <i class="fa fa-upload"></i></button>
-					</div>
+					<form action="{{ route('contacts.upload') }}" method="POST" enctype="multipart/form-data">
+						@csrf
+						<input class="input file-upload" name="file" id="file" type="file" />
+						<div class="text-center pt-3">
+							<button type="button" class="btn btn-danger mx-2" data-dismiss="modal">Cancel <i class="fa-solid fa-ban"></i></button>
+							<button type="submit" class="btn btn-success mx-2">Upload <i class="fa fa-upload"></i></button>
+						</div>
+					</form>
+
 				</div>
 			</div>
 		</div>
@@ -439,13 +497,27 @@
 
 	<!-- Edit contact Modal end -->
 	
+	<!-- export as excel -->
+	<script>
+		function exportTableToExcel(tableID, filename = '') {
+			// Select the table element
+			const table = document.getElementById(tableID);
+			const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
+
+			// Create the file name if not provided
+			filename = filename ? filename + '.xlsx' : 'excel_data.xlsx';
+
+			// Use SheetJS to write and download the Excel file
+			XLSX.writeFile(workbook, filename);
+		}
+	</script>
 
 	<!-- confirm message -->
 	<script>
 		function confirmMessage(event, element) {
 			event.preventDefault(); // Prevent default link behavior
 
-			if (confirm('Are you sure you want to delete this contact?')) {
+			if (confirm('Are you sure you want to delete this contact? This will also delete chat history')) {
 				// Find the closest form and submit it
 				const form = element.closest('form');
 				if (form) {

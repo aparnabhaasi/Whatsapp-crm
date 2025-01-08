@@ -24,7 +24,20 @@
                 <div class="content">
                 	<div class="container-fluid">
 	                    <div class="row">
-	                        
+	                        <div class="col-12">
+							@if(session('success'))
+								<div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+									<p class="mb-0">{{ session('success') }}</p>
+									<a type="button" class="" data-bs-dismiss="alert" aria-label="Close" style="cursor:pointer; color:#fff;">X</a>
+								</div>
+							@endif
+							@if(session('error'))	
+								<div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+									<p class="mb-0">{{ session('error') }}</p>
+									<a type="button" class="" data-bs-dismiss="alert" aria-label="Close" style="cursor:pointer; color:#fff;">X</a>
+								</div>
+							@endif
+							</div>
 	                        <div class="col-12 mb-0">
 								<divc class="card p-4" style="border-radius: 15px;">
 									<div class="d-flex justify-content-between align-items-center">
@@ -60,19 +73,23 @@
 		                                            </tr>
 		                                        </thead>
 		                                        <tbody>
+
+												@foreach ($users as $user)
 		                                            <tr>
-		                                                
-		                                                <td>1</td>
-		                                                <td>Anagha</td>
-		                                                <td>anagha@mail.com</td>
+		                                                <td>{{ $loop->iteration }}</td>
+		                                                <td>{{ $user->name }}</td>
+		                                                <td>{{ $user->email }}</td>
 		                                                <td class="text-center">
-		                                                    <span class="badge badge-light">Admin</span>
-		                                                </td>
+															@foreach (json_decode($user->role, true) ?? [] as $role)
+																<span class="badge badge-light">{{ $role }}</span>
+															@endforeach
+														</td>
+
 		                                                <td class="text-center">
-															<a href="" class="text-success" title="Assign Chats" data-toggle="modal" data-target=".assignChatModal">
+															<!-- <a href="" class="text-success" title="Assign Chats" data-toggle="modal" data-target="#assignChatModal{{$user->id}}">
 																<i class="fa-solid fa-comments bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-		                                                    <a href="" class="text-info" title="Edit" data-toggle="modal" data-target=".updateUserModal">
+		                                                    </a> -->
+		                                                    <a href="" class="text-info" title="Edit" data-toggle="modal" data-target="#updateUserModal{{$user->id}}">
 		                                                        <i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
 		                                                    </a>
 		                                                    <a href="" class="text-danger" title="Delete">
@@ -80,48 +97,112 @@
 		                                                    </a>
 		                                                </td>
 		                                            </tr>
-		                                            <tr>
-		                                                
-		                                                <td>2</td>
-		                                                <td>Aiswarya</td>
-		                                                <td>aiswarya@mail.com</td>
-		                                                <td class="text-center">
-		                                                    <span class="badge badge-light">Chat Manager</span>
-		                                                    <span class="badge badge-light">Contact Manager</span>
-		                                                </td>
-		                                                <td class="text-center">
-															<a href="" class="text-success" title="Assign Chats" data-toggle="modal" data-target=".assignChatModal">
-																<i class="fa-solid fa-comments bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-		                                                    <a href="" class="text-info" title="Edit" data-toggle="modal" data-target=".updateUserModal">
-		                                                        <i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-		                                                    <a href="" class="text-danger" title="Delete">
-		                                                        <i class="fa fa-trash-can bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-		                                                </td>
-		                                            </tr>
-                                                    <tr>
-		                                                
-		                                                <td>3</td>
-		                                                <td>Angel</td>
-		                                                <td>angel@mail.com</td>
-		                                                <td class="text-center">
-		                                                    <span class="badge badge-light">Broadcast Manager</span>
-		                                                    <span class="badge badge-light">Template Manager</span>
-		                                                </td>
-		                                                <td class="text-center">
-															<a href="" class="text-success" title="Assign Chats" data-toggle="modal" data-target=".assignChatModal">
-																<i class="fa-solid fa-comments bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-		                                                    <a href="" class="text-info" title="Edit" data-toggle="modal" data-target=".updateUserModal">
-		                                                        <i class="fa fa-pen-to-square bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-		                                                    <a href="" class="text-danger" title="Delete">
-		                                                        <i class="fa fa-trash-can bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-		                                                </td>
-		                                            </tr>
+
+
+													<!-- update user -->
+													<div class="modal fade updateUserModal" id="updateUserModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+														<div class="modal-dialog modal-dialog-centered" role="document">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h6 id="exampleModalLongTitle">Update {{$user->name}}</h6>
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																</div>
+																<div class="modal-body">
+
+																<form action="{{ route('update.user', $user->id) }}" method="post" id="userForm">
+																	@csrf
+																	<div class="form-group">
+																		<label for="name">Name</label>
+																		<input type="text" class="form-control input-pill" id="name" name="name" 
+																			value="{{$user->name}}" placeholder="Enter name" required>
+																	</div>
+
+																	<div class="form-group">
+																		<label for="customPillSelect1">Select Roles</label>
+																		<div id="roleSelection" class="px-4">
+																			@php
+																				$roles = json_decode($user->role, true) ?? [];
+																			@endphp
+
+																			<div class="form-check p-0">
+																				<input class="form-check-input" type="checkbox" name="roles[]" id="admin" value="admin" 
+																					{{ in_array('admin', $roles) ? 'checked' : '' }}>
+																				<label class="form-check-label" for="admin">Admin (All access)</label>
+																			</div>
+
+																			<div class="form-check p-0">
+																				<input class="form-check-input" type="checkbox" name="roles[]" id="user" value="chat manager" 
+																					{{ in_array('chat manager', $roles) ? 'checked' : '' }}>
+																				<label class="form-check-label" for="user">Chat Manager</label>
+																			</div>
+
+																			<div class="form-check p-0">
+																				<input class="form-check-input" type="checkbox" name="roles[]" id="contact manager" value="contact manager" 
+																					{{ in_array('contact manager', $roles) ? 'checked' : '' }}>
+																				<label class="form-check-label" for="contact_manager">Contact Manager</label>
+																			</div>
+
+																			<div class="form-check p-0">
+																				<input class="form-check-input" type="checkbox" name="roles[]" id="broadcast manager" value="broadcast manager" 
+																					{{ in_array('broadcast manager', $roles) ? 'checked' : '' }}>
+																				<label class="form-check-label" for="broadcast_manager">Broadcast Manager</label>
+																			</div>
+
+																			<div class="form-check p-0">
+																				<input class="form-check-input" type="checkbox" name="roles[]" id="template manager" value="template manager" 
+																					{{ in_array('template manager', $roles) ? 'checked' : '' }}>
+																				<label class="form-check-label" for="template_manager">Template Manager</label>
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="form-group">
+																		<label for="email">Email</label>
+																		<input type="email" class="form-control input-pill" id="email" name="email" 
+																			value="{{$user->email}}" placeholder="Eg: mail@domain.com" required>
+																	</div>
+
+																	<div class="form-group">
+																		<label for="password">Password</label>
+																		<input type="password" class="form-control input-pill" id="password" name="password" placeholder="* * * * * *" >
+																	</div>
+
+																	<div class="form-group">
+																		<label for="confirmPassword">Confirm Password</label>
+																		<input type="password" class="form-control input-pill" id="confirmPassword" name="confirmPassword" 
+																			placeholder="* * * * * *" >
+																		<small id="passwordError" class="text-danger d-none">Passwords do not match</small>
+																	</div>
+
+																	<div class="d-flex justify-content-end">
+																		<button type="button" class="btn btn-danger mx-2" data-dismiss="modal">Cancel</button>
+																		<button type="submit" class="btn btn-success">Save changes</button>
+																	</div>
+																</form>
+
+																<script>
+																	document.getElementById('userForm').addEventListener('submit', function (event) {
+																		const password = document.getElementById('password').value;
+																		const confirmPassword = document.getElementById('confirmPassword').value;
+																		const errorElement = document.getElementById('passwordError');
+
+																		if (password !== confirmPassword) {
+																			event.preventDefault();  // Prevent form submission
+																			errorElement.classList.remove('d-none');  // Show the error message
+																		} else {
+																			errorElement.classList.add('d-none');  // Hide the error message if passwords match
+																		}
+																	});
+																</script>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												@endforeach
+		                                            
 		                                        </tbody>
 		                                    </table>
 	                                    </div>
@@ -136,60 +217,6 @@
 				<!-- footer -->
 			 	@endsection
 			</div>
-
-
-
-    <!-- update user -->
-    <div class="modal fade updateUserModal" id="updateUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-				<div class="modal-header">
-					<h6 id="exampleModalLongTitle">Update user</h6>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="pillInput1">Name</label>
-						<input type="text" class="form-control input-pill" id="pillInput1" placeholder="Enter name">
-					</div>
-					<div class="form-group">
-                        <label for="customPillSelect1">Role</label>
-                        <select class="form-control input-pill" id="customPillSelect1">
-                            <option value="" disabled selected>Select your role</option>
-                            <option value="admin">Admin (All access)</option>
-                            <option value="user">Chat Manager</option>
-                            <option value="contact_manager">Contact Manager</option>
-                            <option value="broadcast_manager">Broadcast Manager</option>
-                            <option value="template_manager">Template Manager</option>
-                        </select>
-                    </div>
-                    <div class="custom-pill-container" id="customPillContainer"></div>                    
-                    
-					<div class="form-group">
-						<label for="pillInput1">Email</label>
-						<input type="text" class="form-control input-pill" id="pillInput1" placeholder="Eg: mail@domain.com">
-					</div>
-
-                    <div class="form-group">
-						<label for="pillInput1">Password</label>
-						<input type="password" class="form-control input-pill" id="pillInput1" placeholder="* * * * * *">
-					</div>
-
-                    <div class="form-group">
-						<label for="pillInput1">Confirm Password</label>
-						<input type="password" class="form-control input-pill" id="pillInput1" placeholder="* * * * * *">
-					</div>
-					
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-					<button type="button" class="btn btn-success">Save changes</button>
-				</div>
-			</div>
-        </div>
-    </div>
 
 
     <!-- Add user Modal -->
@@ -215,6 +242,10 @@
             margin-left: 10px;
             cursor: pointer;
         }
+
+		.form-check-input{
+			left: 0px !important;
+		}
     </style>
     <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -225,50 +256,91 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="pillInput1">Name</label>
-						<input type="text" class="form-control input-pill" id="pillInput1" placeholder="Enter name">
-					</div>
-					<div class="form-group">
-                        <label for="customPillSelect1">Role</label>
-                        <select class="form-control input-pill" id="customPillSelect1">
-                            <option value="" disabled selected>Select your role</option>
-                            <option value="admin">Admin (All access)</option>
-                            <option value="user">Chat Manager</option>
-                            <option value="contact_manager">Contact Manager</option>
-                            <option value="broadcast_manager">Broadcast Manager</option>
-                            <option value="template_manager">Template Manager</option>
-                        </select>
-                    </div>
-                    <div class="custom-pill-container" id="customPillContainer"></div>                    
-                    
-					<div class="form-group">
-						<label for="pillInput1">Email</label>
-						<input type="text" class="form-control input-pill" id="pillInput1" placeholder="Eg: mail@domain.com">
-					</div>
+				<form method="POST" action="{{ route('storeUser') }}">
+					@csrf <!-- This adds a CSRF token for form submission in Laravel -->
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="nameInput">Name</label>
+							<input type="text" name="name" class="form-control input-pill" id="nameInput" placeholder="Enter name">
+						</div>
 
-                    <div class="form-group">
-						<label for="pillInput1">Password</label>
-						<input type="password" class="form-control input-pill" id="pillInput1" placeholder="* * * * * *">
-					</div>
+						<div class="form-group">
+							<label for="customPillSelect1">Select Roles</label>
+							<div id="roleSelection" class="px-4">
+								<div class="form-check p-0">
+									<input class="form-check-input" type="checkbox" name="roles[]" id="admin" value="admin">
+									<label class="form-check-label" for="admin">Admin (All access)</label>
+								</div>
+								<div class="form-check p-0">
+									<input class="form-check-input" type="checkbox" name="roles[]" id="user" value="chat manager">
+									<label class="form-check-label" for="user">Chat Manager</label>
+								</div>
+								<div class="form-check p-0">
+									<input class="form-check-input" type="checkbox" name="roles[]" id="contact_manager" value="contact manager">
+									<label class="form-check-label" for="contact_manager">Contact Manager</label>
+								</div>
+								<div class="form-check p-0">
+									<input class="form-check-input" type="checkbox" name="roles[]" id="broadcast_manager" value="broadcast manager">
+									<label class="form-check-label" for="broadcast_manager">Broadcast Manager</label>
+								</div>
+								<div class="form-check p-0">
+									<input class="form-check-input" type="checkbox" name="roles[]" id="template_manager" value="template manager">
+									<label class="form-check-label" for="template_manager">Template Manager</label>
+								</div>
+							</div>
+						</div>
 
-                    <div class="form-group">
-						<label for="pillInput1">Confirm Password</label>
-						<input type="password" class="form-control input-pill" id="pillInput1" placeholder="* * * * * *">
+						<div class="form-group">
+							<label for="emailInput">Email</label>
+							<input type="text" name="email" class="form-control input-pill" id="emailInput" placeholder="Eg: mail@domain.com">
+						</div>
+
+						<div class="form-group">
+							<label for="passwordInput">Password</label>
+							<input type="password" name="password" class="form-control input-pill" id="passwordInput" placeholder="* * * * * *">
+						</div>
+
+						<div class="form-group">
+							<label for="confirmPasswordInput">Confirm Password</label>
+							<input type="password" name="password_confirmation" class="form-control input-pill" id="confirmPasswordInput" placeholder="* * * * * *">
+							<small id="passwordMismatchError" class="text-danger" style="display:none;">Passwords do not match</small>
+						</div>
+
+						<div class="py-3 d-flex justify-content-end">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-success ml-2">Save changes</button>
+						</div>
 					</div>
-					
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-					<button type="button" class="btn btn-success">Save changes</button>
-				</div>
+				</form>
+
+			<script>
+				// Handle role selection logic (Admin disables others)
+				const adminCheckbox = document.getElementById('admin');
+				const otherCheckboxes = document.querySelectorAll('#roleSelection .form-check-input:not(#admin)');
+
+				adminCheckbox.addEventListener('change', function () {
+					if (this.checked) {
+						otherCheckboxes.forEach(checkbox => {
+							checkbox.checked = false;
+							checkbox.disabled = true;
+						});
+					} else {
+						otherCheckboxes.forEach(checkbox => {
+							checkbox.disabled = false;
+						});
+					}
+				});
+			</script>
+
 			</div>
         </div>
     </div>
 
 	<!-- Chat asssign modal -->
-	<div class="modal fade assignChatModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<!-- @foreach ($users as $user)
+	
+	
+	<div class="modal fade assignChatModal" id="assignChatModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 		  <div class="modal-content" style="border-radius: 20px !important;">
 			<div class="card mb-0" style="border-radius: 15px;">
@@ -304,105 +376,65 @@
 						<i class="fa-solid fa-filter"></i> <b>Filter</b>
 					</button>
 				</div>
-				<div class="card-body" style="height: 400px; overflow-y: auto;">
-					<div class="table-responsive">
-						<table class="table table-hover">
-							<thead>
-								<tr class="bg-light">
-									<th scope="col" style="width: 10px;">
-										<label class="form-check-label">
-											<input id="selectAll" class="form-check-input" type="checkbox" value="">
-											<span class="form-check-sign"></span>
-										</label>
-									</th>
-									<th scope="col">#</th>
-									<th scope="col">Name</th>
-									<th scope="col">Mobile</th>
-									<th scope="col" class="text-center">Tags</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input row-checkbox" type="checkbox" value="" >
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>1</td>
-									<td>Mark</td>
-									<td>+91 9087654321</td>
-									<td class="text-center">
-										<span class="badge badge-count">Meta</span>
-										<span class="badge badge-count">Google</span>
-									</td>
-									
-								</tr>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input row-checkbox" type="checkbox" value="" >
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>2</td>
-									<td>Jacob</td>
-									<td>+91 8890652711</td>
-									<td class="text-center">
-										<span class="badge badge-count">Google</span>
-										<span class="badge badge-count">Social Media</span>
-									</td>
-									
-								</tr>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input row-checkbox" type="checkbox" value="">
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>3</td>
-									<td>Larry</td>
-									<td>+91 9986732453</td>
-									<td class="text-center">
-										<span class="badge badge-count">Social Media</span>
-										<span class="badge badge-count">Meta</span>
-										<span class="badge badge-count">Google</span>
-									</td>
-									
-								</tr>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input row-checkbox" type="checkbox" value="">
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>4</td>
-									<td>Larry</td>
-									<td>+91 9986732453</td>
-									<td class="text-center">
-										<span class="badge badge-count">Social Media</span>
-										<span class="badge badge-count">Meta</span>
-										<span class="badge badge-count">Google</span>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+				<form action="" method="post">
+					@csrf
+					<div class="card-body" style="height: 400px; overflow-y: auto;">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead>
+									<tr class="bg-light">
+										<th scope="col" style="width: 10px;">
+											<label class="form-check-label">
+												<input type="hidden" name="user_id" value="{{$user->id}}">
+												<input id="selectAll" class="form-check-input d-none" type="checkbox" value="">
+												<span class="form-check-sign"></span>
+											</label>
+										</th>
+										<th scope="col">#</th>
+										<th scope="col">Name</th>
+										<th scope="col">Mobile</th>
+										<th scope="col" class="text-center">Tags</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach ($contacts as $contact)
+										<tr>
+											<td>
+												<label class="form-check-label">
+													<input class="form-check-input row-checkbox d-none" type="checkbox" name="contact_id[]" value="{{ $contact->id }}" >
+													<span class="form-check-sign"></span>
+												</label>
+											</td>
+											<td>{{ $loop->iteration }}</td>
+											<td>{{ $contact->name }}</td>
+											<td>{{ $contact->mobile }}</td>
+											<td class="text-center">
+												@foreach (json_decode($contact->tags, true) ?? [] as $tag)
+													<span class="badge badge-count">{{ $tag }}</span>
+												@endforeach
+											</td>										
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
+					<div class="p-3 d-flex justify-content-end bg-light">
+						<button class="btn btn-success ml-3 px-5">Update</button>
+					</div>
+				</form>
 			</div>
 			<style>
 				.cus-input:focus{
 					border: 2px solid green;
 				}
 			</style>
-			<div class="p-3 d-flex justify-content-end">
-				<button class="btn btn-success ml-3 px-5">Update</button>
-			</div>
+			
 		  </div>
 		</div>
 	</div>
+	@endforeach
+
 	<script>
 		document.getElementById('selectAll').addEventListener('change', function() {
 			// Get the state of the header checkbox
@@ -416,43 +448,29 @@
 				checkbox.checked = isChecked;
 			});
 		});
-	</script>
+	</script> -->
 	<!-- Chat asssign modal -->
 
 
 	<script>
-        document.getElementById('customPillSelect1').addEventListener('change', function() {
-            var selectedValue = this.value;
-            var selectedText = this.options[this.selectedIndex].text;
-    
-            if (!selectedValue) return;
-    
-            // Check if the value is already selected
-            if (document.querySelector(`.custom-pill[data-value="${selectedValue}"]`)) return;
-    
-            var pillContainer = document.getElementById('customPillContainer');
-    
-            // Create the pill element
-            var pill = document.createElement('div');
-            pill.className = 'custom-pill';
-            pill.setAttribute('data-value', selectedValue);
-            pill.innerText = selectedText;
-    
-            // Create the remove button
-            var removeButton = document.createElement('span');
-            removeButton.className = 'remove-pill';
-            removeButton.innerHTML = '&times;';
-            removeButton.onclick = function() {
-                pillContainer.removeChild(pill);
-            };
-    
-            // Append the remove button to the pill
-            pill.appendChild(removeButton);
-    
-            // Append the pill to the pill container
-            pillContainer.appendChild(pill);
-        });
-    </script>
+		const passwordInput = document.getElementById('passwordInput');
+		const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+		const errorElement = document.getElementById('passwordMismatchError');
+
+		// Function to check if passwords match
+		function checkPasswords() {
+			if (confirmPasswordInput.value !== passwordInput.value) {
+				errorElement.style.display = 'block'; // Show error message
+			} else {
+				errorElement.style.display = 'none'; // Hide error message
+			}
+		}
+
+		// Add event listener only to the confirm password field
+		confirmPasswordInput.addEventListener('input', checkPasswords);
+	</script>
+
+
 </body>
 <script src="assets/js/core/jquery.3.2.1.min.js"></script>
 <script src="assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>

@@ -19,6 +19,7 @@ class Chats extends Model
         'media_type',
         'media_caption',
         'is_read',
+        'user_id',
     ];
 
     // Relationship with Contacts

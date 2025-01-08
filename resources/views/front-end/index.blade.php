@@ -17,10 +17,12 @@
 	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
+	
 		<!-- header -->
 		@extends('layout.app')
 
 		@section('content')
+		
 		
 			<div class="main-panel">
 				<div class="content">
@@ -46,8 +48,8 @@
 												</div>
 												<div class="col-7 d-flex align-items-center">
 													<div class="numbers">
-														<p class="card-category">Chats</p>
-														<h4 class="card-title">1,345</h4>
+														<p class="card-category">New Chats</p>
+														<h4 class="card-title">{{ $countChats }}</h4>
 													</div>
 												</div>
 											</div>
@@ -69,7 +71,7 @@
 												<div class="col-7 d-flex align-items-center">
 													<div class="numbers">
 														<p class="card-category">Contacts</p>
-														<h4 class="card-title">1,294</h4>
+														<h4 class="card-title">{{ $contctCount }}</h4>
 													</div>
 												</div>
 											</div>
@@ -91,7 +93,7 @@
 												<div class="col-7 d-flex align-items-center">
 													<div class="numbers">
 														<p class="card-category">Broadcasts</p>
-														<h4 class="card-title">1303</h4>
+														<h4 class="card-title">{{ $broadcastCount }}</h4>
 													</div>
 												</div>
 											</div>
@@ -112,37 +114,39 @@
 												<div class="col-7 d-flex align-items-center">
 													<div class="numbers">
 														<p class="card-category">Message Template</p>
-														<h4 class="card-title">76</h4>
+														<h4 class="card-title">
+															{{ $isTemplateCountFetched ? $templateCount : 'Not connected' }}
+														</h4>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</a>
-							</div>	
-							<div class="col-12 d-flex mb-1">
-								<div class="form-group border rounded mr-1">
-									<label for="pillInput1">Date from</label>
-									<input type="date" class="form-control input-pill" id="pillInput1" placeholder="Eg: lead">
-								</div>
-								<div class="form-group border rounded">
-									<label for="pillInput1">Date to</label>
-									<input type="date" class="form-control input-pill" id="pillInput1" placeholder="Eg: lead">
-								</div>
 							</div>
+	
+							
+							<div class="col-12 border-bottom-cus mb-4">
+								<style>
+									.border-bottom-cus{
+										border-bottom: 3px solid #e1e1e1;
+									} 
+								</style>
+							</div>
+
 							<div class="col-md-3">
 								<div class="card card-stats" style="border-radius: 5px;">
 									<div class="card-body ">
 										<div class="row">
-											<div class="col-5">
+											<div class="col-4">
 												<div class="icon-big text-center icon-warning">
-													<i class="fa-regular fa-clock text-warning"></i>
+													<i class="fa-brands fa-whatsapp text-success"></i>
 												</div>
 											</div>
-											<div class="col-7 d-flex align-items-center">
+											<div class="col-8 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Pending Messages</p>
-													<h4 class="card-title">250</h4>
+													<p class="card-category">Phone number</p>
+													<h4 class="card-title">{{ $display_phone_number }}</h4>
 												</div>
 											</div>
 										</div>
@@ -153,15 +157,15 @@
 								<div class="card card-stats" style="border-radius: 5px;">
 									<div class="card-body ">
 										<div class="row">
-											<div class="col-5">
+											<div class="col-4">
 												<div class="icon-big text-center">
-													<i class="fa-regular fa-circle-check text-success"></i>
+													<i class="fa-regular fa-circle-check text-primary"></i>
 												</div>
 											</div>
-											<div class="col-7 d-flex align-items-center">
+											<div class="col-8 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Message Delivered</p>
-													<h4 class="card-title">1,345</h4>
+													<p class="card-category">Verified Name</p>
+													<h4 class="card-title">{{$verified_name}}</h4>
 												</div>
 											</div>
 										</div>
@@ -172,15 +176,15 @@
 								<div class="card card-stats" style="border-radius: 5px;">
 									<div class="card-body">
 										<div class="row">
-											<div class="col-5">
+											<div class="col-4">
 												<div class="icon-big text-center">
-													<i class="fa-regular fa-circle-xmark text-danger"></i>
+													<i class="fa-regular fa-star text-warning"></i>
 												</div>
 											</div>
-											<div class="col-7 d-flex align-items-center">
+											<div class="col-8 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Not Send</p>
-													<h4 class="card-title">23</h4>
+													<p class="card-category">Quality Rating</p>
+													<h4 class="card-title">{{ $quality_rating }}</h4>
 												</div>
 											</div>
 										</div>
@@ -191,15 +195,15 @@
 								<div class="card card-stats" style="border-radius: 5px;">
 									<div class="card-body">
 										<div class="row">
-											<div class="col-5">
+											<div class="col-4">
 												<div class="icon-big text-center">
 													<i class="fa-solid fa-reply-all text-primary"></i>
 												</div>
 											</div>
-											<div class="col-7 d-flex align-items-center">
+											<div class="col-8 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Responses</p>
-													<h4 class="card-title">1045</h4>
+													<p class="card-category">Phone number status</p>
+													<h4 class="card-title">{{ $code_verification_status }}</h4>
 												</div>
 											</div>
 										</div>
@@ -207,8 +211,8 @@
 								</div>
 							</div>
 						</div>
-						
-						<div class="row row-card-no-pd" style="border-radius: 20px;">
+
+						<div class="row row-card-no-pd" style="border-radius: 15px;">
 							<div class="col-md-4">
 								<div class="card" >
 									<div class="card-body">
@@ -216,60 +220,17 @@
 											<p class="fw-bold mt-1">Last Broadcast Message</p>
 											<p class="nav-item ml-auto"><a class="btn btn-default btn-link" href="#"><i class="la la-refresh"></i> Refresh</a></p>
 										</div>
-										<h4><b>301</b></h4>
-										<a href="broadcast" class="btn btn-primary btn-full text-left mt-3 mb-3"><i class="la la-plus"></i> Send new broadcast message</a>
-									</div>
-									<div class="card-footer">
-										<p>Scheduled on 10-10-2024, 10:30 AM</p>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-5">
-								<div class="card">
-									<div class="card-body">
-										<div class="progress-card">
-											<div class="d-flex justify-content-between mb-1">
-												<span class="text-muted">Reply</span>
-												<span class="text-muted fw-bold"> 28</span>
-											</div>
-											<div class="progress mb-2" style="height: 7px;">
-												<div class="progress-bar bg-success" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="78%"></div>
-											</div>
-										</div>
-										<div class="progress-card">
-											<div class="d-flex justify-content-between mb-1">
-												<span class="text-muted">Opened</span>
-												<span class="text-muted fw-bold"> 76</span>
-											</div>
-											<div class="progress mb-2" style="height: 7px;">
-												<div class="progress-bar bg-info" role="progressbar" style="width: 65%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="65%"></div>
-											</div>
-										</div>
-										<div class="progress-card">
-											<div class="d-flex justify-content-between mb-1">
-												<span class="text-muted">Delivered</span>
-												<span class="text-muted fw-bold"> 190</span>
-											</div>
-											<div class="progress mb-2" style="height: 7px;">
-												<div class="progress-bar bg-primary" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="70%"></div>
-											</div>
-										</div>
-										<div class="progress-card">
-											<div class="d-flex justify-content-between mb-1">
-												<span class="text-muted">Pending</span>
-												<span class="text-muted fw-bold"> 17</span>
-											</div>
-											<div class="progress mb-2" style="height: 7px;">
-												<div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="60%"></div>
-											</div>
+										<div class="d-flex justify-content-between">
+											<h4><b>{{ $totalContacts }}</b></h4>
+											<p>Sent on {{ $sentDate }}</p>
 										</div>
 									</div>
 								</div>
 							</div>
+							
 							<div class="col-md-3">
 								<div class="card card-stats">
 									<div class="card-body">
-										<p class="fw-bold mt-1">Statistic</p>
 										<div class="row">
 											<div class="col-5">
 												<div class="icon-big text-center icon-warning">
@@ -278,12 +239,19 @@
 											</div>
 											<div class="col-7 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Pending</p>
-													<h4 class="card-title">17</h4>
+													<p class="card-category">Send</p>
+													<h4 class="card-title">{{ $acceptedCount }}</h4>
 												</div>
 											</div>
 										</div>
-										<hr/>
+										
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="card card-stats">
+									<div class="card-body">
 										<div class="row">
 											<div class="col-5">
 												<div class="icon-big text-center">
@@ -293,12 +261,16 @@
 											<div class="col-7 d-flex align-items-center">
 												<div class="numbers">
 													<p class="card-category">Not Send</p>
-													<h4 class="card-title">84</h4>
+													<h4 class="card-title">{{ $rejectedCount }}</h4>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+							</div>
+
+							<div class="col-md-2">
+								<a href="broadcast" class="btn btn-primary btn-full text-center mt-3 mb-3"><i class="la la-plus"></i> Send new <br> broadcast message</a>
 							</div>
 						</div>
 						

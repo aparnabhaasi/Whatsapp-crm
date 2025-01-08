@@ -10,10 +10,12 @@
 	<link rel="stylesheet" href="assets/css/ready.css">
 	<link rel="stylesheet" href="assets/css/demo.css">
 
+    	<!-- bootstrap js -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
 	<!-- font awsome -->
 	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
      <style>
         .mesages-card-container{
@@ -100,387 +102,497 @@
                 
 				<div class="content">
 					<div class="container-fluid">
-						<div class="row">
-							<div class="col-12">
-								<h5 class="text-center">Create Template</h5>
+                        @if(session('success'))
+							<div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+								<p class="mb-0">{{ session('success') }}</p>
+								<a type="button" class="" data-bs-dismiss="alert" aria-label="Close" style="cursor:pointer; color:#fff;">X</a>
 							</div>
-                            <div class="col-12">
-                                <div class="warning-card">
-                                    <p class="mb-0 text-center">
-                                        All template must adhere to <a href="https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/" target="_blank" class="ax"><b>WhatsApp's Template Message Guidlines</b></a>. 
-                                        Before creating a template read the <a href="" data-toggle="modal" data-target="#commonRejection"><b>Common Rejection Reasons</b></a></p>
-                                </div>
-                            </div>
-							<div class="col-lg-3">
-								<div class="card" style="border-radius: 15px;">
-	                                <div class="card-body">
-	                                    <h6>Template Properties</h6>
-                                        <hr>
-                                        <div class="form-group">
-                                            <label for="pillInput1">Name of Template</label>
-                                            <input type="text" class="form-control input-pill" id="pillInput1" placeholder="Eg: Summer season sale">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="categorySelect">Category</label>
-                                            <select class="form-control input-pill" id="categorySelect">
-                                                <option value="MARKETING">Marketing</option>
-                                                <option value="UTILITY">Utility</option>
-                                                <option value="AUTHENTICATION">Authentication</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="languageSelect">Select Language</label>
-                                            <select class="form-control input-pill" id="languageSelect">
-                                                <option value="af">Afrikaans</option>
-                                                <option value="sq">Albanian</option>
-                                                <option value="ar">Arabic</option>
-                                                <option value="az">Azerbaijani</option>
-                                                <option value="bn">Bengali</option>
-                                                <option value="bg">Bulgarian</option>
-                                                <option value="ca">Catalan</option>
-                                                <option value="zh_CN">Chinese (CHN)</option>
-                                                <option value="zh_HK">Chinese (HKG)</option>
-                                                <option value="zh_TW">Chinese (TAI)</option>
-                                                <option value="hr">Croatian</option>
-                                                <option value="cs">Czech</option>
-                                                <option value="da">Danish</option>
-                                                <option value="nl">Dutch</option>
-                                                <option value="en" selected>English</option>
-                                                <option value="en_US">English (US)</option>
-                                                <option value="en_GB">English (UK)</option>
-                                                <option value="et">Estonian</option>
-                                                <option value="fil">Filipino</option>
-                                                <option value="fi">Finnish</option>
-                                                <option value="fr">French</option>
-                                                <option value="ka">Georgian</option>
-                                                <option value="de">German</option>
-                                                <option value="el">Greek</option>
-                                                <option value="gu">Gujarati</option>
-                                                <option value="ha">Hausa</option>
-                                                <option value="he">Hebrew</option>
-                                                <option value="hi">Hindi</option>
-                                                <option value="hu">Hungarian</option>
-                                                <option value="id">Indonesian</option>
-                                                <option value="ga">Irish</option>
-                                                <option value="it">Italian</option>
-                                                <option value="ja">Japanese</option>
-                                                <option value="kn">Kannada</option>
-                                                <option value="kk">Kazakh</option>
-                                                <option value="ko">Korean</option>
-                                                <option value="ky">Kyrgyz (Kyrgyzstan)</option>
-                                                <option value="lo">Lao</option>
-                                                <option value="lv">Latvian</option>
-                                                <option value="lt">Lithuanian</option>
-                                                <option value="mk">Macedonian</option>
-                                                <option value="ml">Malayalam</option>
-                                                <option value="ms">Malay</option>
-                                                <option value="mr">Marathi</option>
-                                                <option value="no">Norwegian</option>
-                                                <option value="fa">Persian</option>
-                                                <option value="pl">Polish</option>
-                                                <option value="pt_BR">Portuguese (BR)</option>
-                                                <option value="pt_PT">Portuguese (POR)</option>
-                                                <option value="pa">Punjabi</option>
-                                                <option value="ro">Romanian</option>
-                                                <option value="ru">Russian</option>
-                                                <option value="rw">Kinyarwanda</option>
-                                                <option value="sr">Serbian</option>
-                                                <option value="sk">Slovak</option>
-                                                <option value="sl">Slovenian</option>
-                                                <option value="es_AR">Spanish (ARG)</option>
-                                                <option value="es_ES">Spanish (SPA)</option>
-                                                <option value="es_MX">Spanish (MEX)</option>
-                                                <option value="sw">Swahili</option>
-                                                <option value="sv">Swedish</option>
-                                                <option value="ta">Tamil</option>
-                                                <option value="te">Telugu</option>
-                                                <option value="th">Thai</option>
-                                                <option value="tr">Turkish</option>
-                                                <option value="uk">Ukrainian</option>
-                                                <option value="ur">Urdu</option>
-                                                <option value="uz">Uzbek</option>
-                                                <option value="vi">Vietnamese</option>
-                                                <option value="zu">Zulu</option>
-                                            </select>
-                                        </div>
-
-	                                </div>
-	                            </div>
-
-                                <div class="blue-card">
-                                    <div class=" d-flex align-items-center mb-1">
-                                        <i class="fa-solid fa-bell cus-bell"></i>
-                                        <h6 class="mb-1">Reminder</h6>
-                                    </div>
-                                    <div>
-                                        
-                                        <small>
-                                            From <a href="https://business.whatsapp.com/policy"  target="_blank"><b>Meta's messaging policy</b></a>, you should have acquired consent from customers
-                                            for receiving your WhatsApp mesages before sending template message to them.
-                                        </small>
+						@endif
+						@if(session('error'))
+							<div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+								<p class="mb-0">{{ session('error') }}</p>
+								<a type="button" class="" data-bs-dismiss="alert" aria-label="Close" style="cursor:pointer; color:#fff;">X</a>
+							</div>
+						@endif
+						<form action="{{ route('template.add') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+						    <div class="row">
+    							<div class="col-12">
+    								<h5 class="text-center">Create Template</h5>
+    							</div>
+                                <div class="col-12">
+                                    <div class="warning-card">
+                                        <p class="mb-0 text-center">
+                                            All template must adhere to <a href="https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/" target="_blank" class="ax"><b>WhatsApp's Template Message Guidlines</b></a>. 
+                                            Before creating a template read the <a href="" data-toggle="modal" data-target="#commonRejection"><b>Common Rejection Reasons</b></a></p>
                                     </div>
                                 </div>
-							</div>
-
-                            <div class="col-lg-5">
-								<div class="card" style="border-radius: 15px;">
-	                                <div class="card-body">
-                                        <h6>Content</h6>
-                                        <hr>
-                                        <div class="form-group">
-                                            <label for="headerSelect">Header</label>
-                                            <select class="form-control input-pill" id="headerSelect" onchange="handleHeaderChange()">
-                                                <option value="None">None</option>
-                                                <option value="Text">Text</option>
-                                                <option value="Image">Image</option>
-                                                <option value="Video">Video</option>
-                                                <option value="Document">Document</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group" id="uploadFileGroup" style="display: none;">
-                                            <label for="uploadFileInput" id="uploadFileLabel">Upload file</label>
-                                            <input type="text" class="form-control input-pill" id="uploadFileInput" placeholder="Eg: Marketing">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="messageTextarea">Message</label>
-                                            <textarea class="form-control input-pill" id="messageTextarea" oninput="updatePreviewMessage()" rows="4" placeholder="Enter your message here">Hello</textarea>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="footerInput">Footer (Optional)</label>
-                                            <input type="text" class="form-control input-pill" id="footerInput" oninput="updateFooterContent()" placeholder="Enter footer text">
-                                        </div>
-
-
-                                        <div class="p-2 mt-3">
-                                            <label for="addButton" class="mb-2">Additional Interactions</label>
-                                            <div class="add-btn" id="addButton">
-                                                + Add Button
+    							<div class="col-lg-3">
+    								<div class="card" style="border-radius: 15px;">
+    	                                <div class="card-body">
+    	                                    <h6>Template Properties</h6>
+                                            <hr>
+                                            <div class="form-group">
+                                                <label for="pillInput1">Name of Template</label>
+                                                <input type="text" name="template_name" class="form-control input-pill" id="pillInput1" placeholder="Eg: summer_season_sale" required>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="categorySelect">Category</label>
+                                                <select class="form-control input-pill" name="category" id="categorySelect">
+                                                    <option value="MARKETING">Marketing</option>
+                                                    <option value="UTILITY">Utility</option>
+                                                    <option value="AUTHENTICATION">Authentication</option>
+                                                </select>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="languageSelect">Select Language</label>
+                                                <select class="form-control input-pill" name="language" id="languageSelect">
+                                                    @foreach ($languages as $language)
+                                                        <option value="{{ $language->code }}" 
+                                                            {{ $language->code == 'en' ? 'selected' : '' }}>
+                                                            {{ $language->language }}
+                                                        </option>
+                                                    @endforeach  
+                                                </select>
+                                            </div>
+                                            
+    	                                </div>
+    	                            </div>
+    
+                                    <div class="blue-card">
+                                        <div class=" d-flex align-items-center mb-1">
+                                            <i class="fa-solid fa-bell cus-bell"></i>
+                                            <h6 class="mb-1">Reminder</h6>
                                         </div>
-                                        
-                                        <div id="buttonContainer" class="p-2 w-100">
-                                            <!-- Template for cus-btn-container -->
-                                            <div class="cus-btn-container-template" style="display: none;">
-                                                <div class="d-flex align-items-center cus-btn-container w-100">
-                                                    <select class="form-control" style="width: auto;" onchange="updateFields(this)">
-                                                        <option value="Text">Text</option>
-                                                        <option value="URL">URL</option>
-                                                        <option value="Phone">Phone</option>
-                                                    </select>
-                                                    <input type="text" id="buttonText" class="form-control mx-1" placeholder="Button Text" data-input="text">
-                                                    <input type="text" id="buttonLink" class="form-control" placeholder="Button link" data-input="url" style="display: none;">
-                                                    <input type="text" id="mobileNumber" class="form-control" placeholder="Mobile Number" data-input="phone" style="display: none;">
-                                                    <a href="javascript:void(0);" class="text-danger" onclick="removeButtonContainer(this)"><i class="fa fa-trash ml-2"></i></a>
+                                        <div>
+                                            
+                                            <small>
+                                                From <a href="https://business.whatsapp.com/policy"  target="_blank"><b>Meta's messaging policy</b></a>, you should have acquired consent from customers
+                                                for receiving your WhatsApp mesages before sending template message to them.
+                                            </small>
+                                        </div>
+                                    </div>
+    							</div>
+    
+                                <div class="col-lg-5">
+    								<div class="card" style="border-radius: 15px;">
+    	                                <div class="card-body">
+                                            <h6>Content</h6>
+                                            <hr>
+                                            <div class="form-group">
+                                                <label for="headerSelect">Header</label>
+                                                <select class="form-control input-pill" name="header_type" id="headerSelect" onchange="handleHeaderChange()">
+                                                    <option value="None">None</option>
+                                                    <option value="IMAGE">Image</option>
+                                                    <option value="VIDEO">Video</option>
+                                                    <option value="DOCUMENT">Document</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group" id="uploadFileGroup" style="display: none;">
+                                                <label for="uploadFileInput" id="uploadFileLabel">Upload file</label>
+                                                <input type="file" name="header_content" class="form-control input-pill" id="uploadFileInput" placeholder="Eg: Marketing" onchange="previewFile()">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="messageTextarea">Body</label>
+                                                <textarea class="form-control input-pill" name="body" id="messageTextarea" oninput="handleTextareaChange()" rows="4" placeholder="Enter your message here">Hello</textarea>
+                                                <div id="error-message" class="text-danger mt-2"></div>
+                                                <div class="text-right mt-2">
+                                                    <a class="btn btn-light btn-sm border" onclick="addVariable()">Add variable +</a>
+                                                </div>
+                                                <div id="variable-inputs" class="mt-3"></div> 
+                                                
+                                            </div>
+
+                                            <!-- Add variable and validation -->
+                                            <script>
+                                                let variableCount = 1;
+
+                                                function addVariable() {
+                                                    const textarea = document.getElementById('messageTextarea');
+                                                    textarea.value += ` @{{${variableCount}}} `;
+
+                                                    // Create new input field for variable
+                                                    const variableContainer = document.getElementById('variable-inputs');
+                                                    const newLabel = document.createElement('label');
+                                                    newLabel.innerHTML = `@{{${variableCount}}}`;
+                                                    newLabel.setAttribute('for', `variable-${variableCount}`);
+                                                    newLabel.id = `label-${variableCount}`;
+
+                                                    const newInput = document.createElement('input');
+                                                    newInput.type = 'text';
+                                                    newInput.className = 'form-control input-pill mt-2';
+                                                    newInput.name = `variables[]`;  // Pass variables as array
+                                                    newInput.id = `variable-${variableCount}`;
+                                                    newInput.placeholder = `Enter sample value for @{{${variableCount}}}`;
+
+                                                    variableContainer.appendChild(newLabel);
+                                                    variableContainer.appendChild(newInput);
+
+                                                    variableCount++;
+                                                    validateTextarea(); // Run validation after adding a variable
+                                                }
+
+                                                function handleTextareaChange() {
+                                                    const textarea = document.getElementById('messageTextarea');
+                                                    const textareaValue = textarea.value;
+
+                                                    const textareaValuePreview = document.getElementById("messageTextarea").value;
+                                                    document.getElementById('messageContent').textContent = textareaValuePreview;
+
+                                                    for (let i = 1; i < variableCount; i++) {
+                                                        const variablePattern = `@{{${i}}}`;
+                                                        if (!textareaValue.includes(variablePattern)) {
+                                                            const label = document.getElementById(`label-${i}`);
+                                                            const input = document.getElementById(`variable-${i}`);
+                                                            if (label && input) {
+                                                                label.remove();
+                                                                input.remove();
+                                                            }
+                                                        }
+                                                    }
+                                                    validateTextarea(); // Run validation on every input change
+                                                }
+
+                                                function validateTextarea() {
+                                                    const textarea = document.getElementById('messageTextarea');
+                                                    const errorMessage = document.getElementById('error-message');
+                                                    const variableRegex = /@{{\d+}}/g;  // Regex to find variable patterns
+
+                                                    // Reset error message
+                                                    errorMessage.textContent = '';
+
+                                                    let match;
+                                                    while ((match = variableRegex.exec(textarea.value)) !== null) {
+                                                        // Check for two words after the variable
+                                                        const afterVariable = textarea.value.slice(match.index + match[0].length).trim();
+                                                        const wordsAfter = afterVariable.split(/\s+/).filter(word => word.length > 0); // Count valid words
+
+                                                        if (wordsAfter.length < 2) {
+                                                            errorMessage.textContent = `Each variable (@{{n}}) must be followed by at least two words.`;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            </script>
+
+    
+                                            <div class="form-group">
+                                                <label for="footerInput">Footer (Optional)</label>
+                                                <input type="text" name="footer" class="form-control input-pill" id="footerInput" oninput="updateFooterContent()" placeholder="Enter footer text">
+                                            </div>
+        
+                                            <div class="p-2 mt-3">
+                                                <label for="addButton" class="mb-2">Additional Interactions</label>
+                                                <div class="add-btn" id="addButton" style="cursor: pointer; color: blue;">
+                                                    + Add Button
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="p-2">
-                                            <div class="p-2 border" style="border-radius: 10px; background: rgb(255, 251, 237);">
-                                                <small style="font-size: 13px;">
-                                                    Optionally add buttons for your broadcast message. There are two types of buttons: call-to-action (i.e. URL or Phone) and quick reply (i.e. text). You can add up to 2 call-to-action or 3 quick reply buttons. <b>Each template only allows one type of button.</b> 
-                                                </small>
+                                            <div id="buttonContainer" class="p-2 w-100">
+                                                <!-- Template for cus-btn-container -->
+                                                <div class="cus-btn-container-template" style="display: none;">
+                                                    <div class="d-flex align-items-center cus-btn-container w-100">
+                                                        <select class="form-control" name="buttons[][type]" style="width: auto;" onchange="updateFields(this)">
+                                                            <option value="" disabled selected>Select</option> 
+                                                            <option value="URL">URL</option>
+                                                            <option value="PHONE_NUMBER">Phone</option>
+                                                        </select>
+                                                        <input type="text" class="form-control mx-1" placeholder="Button Text" name="buttons[][text]" data-input="text">
+                                                        <input type="text" class="form-control" placeholder="Button Link" name="buttons[][url]" data-input="url">
+                                                        <input type="text" class="form-control" placeholder="Mobile Number" name="buttons[][phone]" data-input="phone" style="display: none;">
+                                                        <a href="javascript:void(0);" class="text-danger" onclick="removeButtonContainer(this)"><i class="fa fa-trash ml-2"></i></a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        
-                                        <script>
-                                            function addButtonContainer() {
+
+                                            <div class="p-2">
+                                                <div class="p-2 border" style="border-radius: 10px; background: rgb(255, 251, 237);">
+                                                    <small style="font-size: 13px;">
+                                                        Optionally add buttons for your broadcast message. There are two types of buttons: call-to-action (i.e. URL or Phone) and quick reply (i.e. text). You can add up to 2 call-to-action or 3 quick reply buttons. <b>Each template only allows one type of button.</b> 
+                                                    </small>
+                                                </div>
+                                            </div>
+
+                                            <!-- generate button -->
+                                            <script>
+                                            document.getElementById("addButton").onclick = function() {
                                                 var container = document.getElementById("buttonContainer");
                                                 var template = document.querySelector(".cus-btn-container-template");
                                                 var newContainer = template.cloneNode(true);
-                                        
+
+                                                // Remove the template class and show the new container
                                                 newContainer.classList.remove("cus-btn-container-template");
                                                 newContainer.style.display = "flex";
-                                        
+
+                                                // Clear previous input values and make sure names are properly formatted for each new entry
+                                                newContainer.querySelectorAll('input, select').forEach(function(input) {
+                                                    input.value = ''; // Clear values
+                                                    const name = input.getAttribute('name');
+                                                    if (name) {
+                                                        // Adjust the name attribute to include the correct format for each new button
+                                                        const updatedName = name.replace(/\[\]/, `[${Date.now()}]`);
+                                                        input.setAttribute('name', updatedName);
+                                                    }
+
+                                                    // Add oninput event to update preview on each keystroke or selection change
+                                                    input.oninput = updatePreviewButtons;
+                                                    input.onchange = updatePreviewButtons;
+                                                });
+
+                                                // Update fields to show the correct inputs based on the default selection
+                                                var select = newContainer.querySelector('select[name*="[type]"]');
+                                                select.onchange = function() {
+                                                    updateFields(this);
+                                                    updatePreviewButtons();
+                                                };
                                                 container.appendChild(newContainer);
-                                            }
-                                        
+
+                                                updatePreviewButtons(); // Update the preview area
+                                            };
+
                                             function updateFields(selectElement) {
                                                 var selectedValue = selectElement.value;
                                                 var container = selectElement.closest('.cus-btn-container');
                                                 var inputs = container.querySelectorAll('input[data-input]');
-                                        
+
                                                 inputs.forEach(function(input) {
                                                     input.style.display = 'none'; // Hide all inputs initially
-                                                    input.style.width = ''; // Reset width
+                                                    input.disabled = true; // Disable all inputs initially
                                                 });
-                                        
+
+                                                // Enable and display only the relevant input fields based on the selected button type
                                                 if (selectedValue === 'URL') {
-                                                    container.querySelector('input[data-input="url"]').style.display = 'inline-block';
-                                                } else if (selectedValue === 'Phone') {
-                                                    container.querySelector('input[data-input="phone"]').style.display = 'inline-block';
+                                                    var urlInput = container.querySelector('input[data-input="url"]');
+                                                    urlInput.style.display = 'inline-block';
+                                                    urlInput.disabled = false; // Enable URL input
+                                                } else if (selectedValue === 'PHONE_NUMBER') {
+                                                    var phoneInput = container.querySelector('input[data-input="phone"]');
+                                                    phoneInput.style.display = 'inline-block';
+                                                    phoneInput.disabled = false; // Enable Phone input
                                                 }
-                                        
+
+                                                // Button text is always displayed and enabled
                                                 var buttonTextInput = container.querySelector('input[data-input="text"]');
-                                                buttonTextInput.style.display = 'inline-block'; // Button Text is always displayed
-                                        
-                                                // Full width for Button Text input if "Text" is selected
-                                                if (selectedValue === 'Text') {
-                                                    buttonTextInput.style.width = '100%';
-                                                } else {
-                                                    buttonTextInput.style.width = ''; // Reset width for other selections
-                                                }
+                                                buttonTextInput.style.display = 'inline-block';
+                                                buttonTextInput.disabled = false; // Enable Button Text
+
+                                                updatePreviewButtons(); // Update the preview area whenever fields change
                                             }
-                                        
+
+                                            function updatePreviewButtons() {
+                                                var previewContainer = document.getElementById("footerButtonsPreview");
+                                                previewContainer.innerHTML = ""; // Clear existing buttons in the preview
+
+                                                // Find all button containers and create corresponding preview buttons
+                                                document.querySelectorAll('.cus-btn-container').forEach(function(container) {
+                                                    var buttonText = container.querySelector('input[data-input="text"]').value;
+                                                    var buttonType = container.querySelector('select[name*="[type]"]').value;
+                                                    var buttonUrl = container.querySelector('input[data-input="url"]').value;
+                                                    var buttonPhone = container.querySelector('input[data-input="phone"]').value;
+
+                                                    if (buttonText && buttonType) {
+                                                        // Create a new anchor element for the preview
+                                                        var previewButton = document.createElement("a");
+                                                        var icon = document.createElement("i");
+                                                        var buttonContent = document.createElement("h6");
+
+                                                        // Set href and icon based on button type
+                                                        if (buttonType === "URL" && buttonUrl) {
+                                                            previewButton.href = buttonUrl;
+                                                            icon.className = "fa-solid fa-arrow-up-right-from-square";
+                                                        } else if (buttonType === "PHONE_NUMBER" && buttonPhone) {
+                                                            previewButton.href = "tel:" + buttonPhone;
+                                                            icon.className = "fa-solid fa-phone";
+                                                        }
+
+                                                        // Append icon and text to button
+                                                        buttonContent.appendChild(icon);
+                                                        buttonContent.innerHTML += "&nbsp;" + buttonText;
+                                                        previewButton.appendChild(buttonContent);
+
+                                                        // Style the button and append it to the preview container
+                                                        previewButton.className = "preview-button";
+                                                        previewContainer.appendChild(previewButton);
+                                                    }
+                                                });
+                                            }
+
                                             function removeButtonContainer(element) {
                                                 var container = element.parentElement;
                                                 container.parentElement.removeChild(container);
+                                                updatePreviewButtons(); // Update preview when a button is removed
                                             }
-                                        
-                                            document.getElementById("addButton").onclick = addButtonContainer;
 
+                                            // Function to disable unfilled button containers before form submission
+                                            function disableEmptyButtonContainers() {
+                                                var buttonContainers = document.querySelectorAll('.cus-btn-container');
 
-                                            // Handle the header change
-                                            function handleHeaderChange() {
-                                                var headerSelect = document.getElementById("headerSelect");
-                                                var uploadFileGroup = document.getElementById("uploadFileGroup");
-                                                var uploadFileInput = document.getElementById("uploadFileInput");
-                                                var uploadFileLabel = document.getElementById("uploadFileLabel");
-                                                var headerText = document.getElementById("headerText");
-                                                
-                                                // Get the preview image elements
-                                                var imageThumb = document.getElementById("imageThumb");
-                                                var videoThumb = document.getElementById("videoThumb");
-                                                var documentThumb = document.getElementById("documentThumb");
+                                                buttonContainers.forEach(function(container) {
+                                                    var buttonText = container.querySelector('input[data-input="text"]').value;
+                                                    var buttonType = container.querySelector('select[name="buttons[][type]"]').value;
+                                                    var buttonUrl = container.querySelector('input[data-input="url"]').value;
+                                                    var buttonPhone = container.querySelector('input[data-input="phone"]').value;
 
-                                                // Hide all thumbnail images initially
-                                                imageThumb.style.display = "none";
-                                                videoThumb.style.display = "none";
-                                                documentThumb.style.display = "none";
-
-                                                // Handle different header options
-                                                if (headerSelect.value === "None") {
-                                                    uploadFileGroup.style.display = "none";
-                                                    headerText.style.display = "none"; // Hide header text
-                                                } else {
-                                                    uploadFileGroup.style.display = "block";
-                                                    
-                                                    if (headerSelect.value === "Text") {
-                                                        uploadFileLabel.innerHTML = "Enter your text";
-                                                        uploadFileInput.type = "text";
-                                                        uploadFileInput.placeholder = "Enter your text here";
-                                                        uploadFileInput.style.display = "block";
-                                                        headerText.style.display = "block"; // Show header text
-                                                        uploadFileInput.addEventListener('input', updateHeaderText); // Add input event listener
-                                                    } else if (headerSelect.value === "Image") {
-                                                        uploadFileLabel.innerHTML = "Upload Image";
-                                                        uploadFileInput.type = "file";
-                                                        uploadFileInput.accept = "image/*";
-                                                        imageThumb.style.display = "block"; // Show image thumbnail
-                                                        headerText.style.display = "none"; // Hide header text
-                                                    } else if (headerSelect.value === "Video") {
-                                                        uploadFileLabel.innerHTML = "Upload Video";
-                                                        uploadFileInput.type = "file";
-                                                        uploadFileInput.accept = "video/*";
-                                                        videoThumb.style.display = "block"; // Show video thumbnail
-                                                        headerText.style.display = "none"; // Hide header text
-                                                    } else if (headerSelect.value === "Document") {
-                                                        uploadFileLabel.innerHTML = "Upload Document";
-                                                        uploadFileInput.type = "file";
-                                                        uploadFileInput.accept = ".pdf,.doc,.docx";
-                                                        documentThumb.style.display = "block"; // Show document thumbnail
-                                                        headerText.style.display = "none"; // Hide header text
+                                                    // Disable empty button containers
+                                                    if (!buttonText || (buttonType === 'URL' && !buttonUrl) || (buttonType === 'Phone' && !buttonPhone)) {
+                                                        container.querySelectorAll('input, select').forEach(function(element) {
+                                                            element.disabled = true; // Disable all inputs in empty containers
+                                                        });
                                                     }
-                                                }
+                                                });
                                             }
 
-                                            // Update header text content
-                                            function updateHeaderText() {
-                                                var headerInput = document.getElementById("uploadFileInput");
-                                                var headerText = document.getElementById("headerText");
+                                            // Example: Call this function when submitting the form
+                                            document.getElementById("yourFormId").onsubmit = function(event) {
+                                                disableEmptyButtonContainers(); // Disable empty containers before submission
+                                            };
 
-                                                headerText.textContent = headerInput.value; // Update text content
-                                            }
-                                            
-                                            // Initial setup
-                                            document.getElementById("headerSelect").addEventListener('change', handleHeaderChange);
+                                            </script>
 
-
-                                            // update message contents
-                                            function updatePreviewMessage(){
-                                                var messageTextarea = document.getElementById('messageTextarea');
-                                                var previewMessage = document.getElementById('messageContent');
-
-                                                previewMessage.innerHTML = messageTextarea.value.replace(/\n/g, '<br>');
-                                            }
-
-
-                                            // update footer contet
-                                            function updateFooterContent(){
-                                                var footerInput = document.getElementById('footerInput');
-                                                var footerContent = document.getElementById('footerContent');
-
-                                                footerContent.textContent = footerInput.value;
-                                            }
-
-                                        </script>
-                                    </div>
-	                            </div>
-							</div>
-
-
-                            
-                            <div class="col-lg-4">
-								<div class="card" style="border-radius: 15px;">
-	                                <div class="card-body">
-	                                    <h6>Template Preview</h6>
-                                        <hr>
-                                        <div class="mesages-card-container">
-                                            <div class="message-card">
-                                            <h6 id="headerText" style="font-weight:700; color:black; display:none;"></h6>
-                                            <img id="imageThumb" src="assets/img/image-thumb.png" alt="" style="display: none;">
-                                            <img id="videoThumb" src="assets/img/video-thumb.png" alt="" style="display: none;">
-                                            <img id="documentThumb" src="assets/img/document-thumb.png" alt="" style="display: none;">
-                                                <p id="messageContent" class="mt-2">Hello</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p id="footerContent" style="color: #acacac;"></p>
-                                                    <p id="currentTime" style="color: #acacac;"></p>
-                                                    <!-- detect current time for message template preview -->
-                                                    <script>
-                                                        function updateTime() {
-                                                            const current = new Date();
-                                                            let hours = current.getHours();
-                                                            let minutes = current.getMinutes();
-                                                            const ampm = hours >= 12 ? 'pm' : 'am';
-
-                                                            hours = hours % 12;
-                                                            hours = hours ? hours : 12; // the hour '0' should be '12'
-                                                            minutes = minutes < 10 ? '0' + minutes : minutes;
-
-                                                            const timeString = hours + ':' + minutes + ' ' + ampm;
-                                                            document.getElementById('currentTime').textContent = timeString;
-                                                        }
-
-                                                        updateTime();
-                                                        setInterval(updateTime, 60000); // Update the time every minute
-                                                    </script>
+                                        </div>
+    	                            </div>
+    							</div>
+    
+                                <div class="col-lg-4">
+                                    <div class="card" style="border-radius: 15px;">
+                                        <div class="card-body">
+                                            <h6>Template Preview</h6>
+                                            <hr>
+                                            <div class="mesages-card-container">
+                                                <div class="message-card">
+                                                    <h6 id="headerText" style="font-weight:700; color:black; display:none;"></h6>
+                                                    <img id="imageThumb" src="assets/img/image-thumb.png" alt="" style="display: none; max-width: 100%; height: auto;">
+                                                    <video id="videoThumb" controls style="display: none; max-width: 100%; height: auto;"></video>
+                                                    <iframe id="documentThumb" src="" style="display: none; width: 100%; height: 300px;"></iframe>
+                                                    <p id="messageContent" class="mt-2">Hello</p>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p id="footerContent" style="color: #acacac; font-size:14px;"></p>
+                                                        <p id="currentTime" style="color: #acacac; font-size:14px;"></p>
+                                                    </div>
+                                                    
+                                                    <div class="text-center footer-buttons border-top py-2" id="footerButtonsPreview">
+                                                        <a href="">
+                                                            <h6><i class="fa-solid"></i></h6>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <hr>
-                                                <div class="text-center">
-                                                    <a href="">
-                                                        <h6><i class="fa-solid fa-arrow-up-right-from-square"></i>&nbsp; Order Now</h6>
-                                                    </a>
-                                                </div>
-
                                             </div>
                                         </div>
-	                                </div>
 
-                                    <div class="p-3">
-                                        <button class="btn btn-outline-primary w-100 mb-2 cancel-btn">Cancel</button>
-                                        <button class="btn btn-primary w-100 submit-btn">Submit</button>
+                                        <div class="p-3">
+                                            <a href="/" class="btn btn-outline-primary w-100 mb-2 cancel-btn">Cancel</a>
+                                            <button type="submit" class="btn btn-primary w-100 submit-btn">Submit</button>
+                                        </div>
                                     </div>
-	                            </div>
+                                </div>
 
-							</div>
-                            
-						</div>
+                                <!-- script for displaying inputs according to selected header and previewing file -->
+                                <script>
+                                    function handleHeaderChange() {
+                                        var headerSelect = document.getElementById("headerSelect");
+                                        var uploadFileGroup = document.getElementById("uploadFileGroup");
+                                        var uploadFileInput = document.getElementById("uploadFileInput");
+                                        var uploadFileLabel = document.getElementById("uploadFileLabel");
+
+                                        // Hide all thumbnail elements initially
+                                        document.getElementById("imageThumb").style.display = "none";
+                                        document.getElementById("videoThumb").style.display = "none";
+                                        document.getElementById("documentThumb").style.display = "none";
+
+                                        // Show upload field if a header type is selected
+                                        if (headerSelect.value === "None") {
+                                            uploadFileGroup.style.display = "none";
+                                            uploadFileInput.removeAttribute("name");
+                                        } else {
+                                            uploadFileGroup.style.display = "block";
+                                            uploadFileInput.setAttribute("name", "header_content");
+
+                                            // Update the upload field based on the selected header type
+                                            if (headerSelect.value === "IMAGE") {
+                                                uploadFileLabel.innerHTML = "Upload Image";
+                                                uploadFileInput.type = "file";
+                                                uploadFileInput.accept = "image/*";
+                                            } else if (headerSelect.value === "VIDEO") {
+                                                uploadFileLabel.innerHTML = "Upload Video";
+                                                uploadFileInput.type = "file";
+                                                uploadFileInput.accept = "video/*";
+                                            } else if (headerSelect.value === "DOCUMENT") {
+                                                uploadFileLabel.innerHTML = "Upload Document";
+                                                uploadFileInput.type = "file";
+                                                uploadFileInput.accept = ".pdf,.doc,.docx";
+                                            }
+                                        }
+                                    }
+
+                                    function previewFile() {
+                                        var fileInput = document.getElementById("uploadFileInput");
+                                        var file = fileInput.files[0];
+
+                                        if (!file) return;
+
+                                        var headerType = document.getElementById("headerSelect").value;
+                                        var reader = new FileReader();
+
+                                        if (headerType === "IMAGE" && file.type.startsWith("image/")) {
+                                            reader.onload = function(e) {
+                                                document.getElementById("imageThumb").src = e.target.result;
+                                                document.getElementById("imageThumb").style.display = "block";
+                                                document.getElementById("videoThumb").style.display = "none";
+                                                document.getElementById("documentThumb").style.display = "none";
+                                            };
+                                            reader.readAsDataURL(file);
+                                        } else if (headerType === "VIDEO" && file.type.startsWith("video/")) {
+                                            reader.onload = function(e) {
+                                                var videoThumb = document.getElementById("videoThumb");
+                                                videoThumb.src = e.target.result;
+                                                videoThumb.style.display = "block";
+                                                document.getElementById("imageThumb").style.display = "none";
+                                                document.getElementById("documentThumb").style.display = "none";
+                                            };
+                                            reader.readAsDataURL(file);
+                                        } else if (headerType === "DOCUMENT" && (file.type === "application/pdf" || file.type === "application/msword" || file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+                                            var documentThumb = document.getElementById("documentThumb");
+                                            documentThumb.src = URL.createObjectURL(file);
+                                            documentThumb.style.display = "block";
+                                            document.getElementById("imageThumb").style.display = "none";
+                                            document.getElementById("videoThumb").style.display = "none";
+                                        } else {
+                                            alert("Invalid file type for selected header.");
+                                        }
+                                    }
+
+                                    function updateFooterContent(){
+                                        const footerInputContent = document.getElementById("footerInput").value;
+                                        document.getElementById("footerContent").textContent = footerInputContent;
+                                    }
+                                </script>
+    						</div>
+						</form>
+
+
 					</div>
 				</div>
 
+                <script>
+                    function updateTime() {
+                        const current = new Date();
+                        let hours = current.getHours();
+                        let minutes = current.getMinutes();
+                        const ampm = hours >= 12 ? 'pm' : 'am';
+
+                        hours = hours % 12;
+                        hours = hours ? hours : 12; // the hour '0' should be '12'
+                        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+                        const timeString = hours + ':' + minutes + ' ' + ampm;
+                        document.getElementById('currentTime').textContent = timeString;
+                    }
+
+                    updateTime();
+                    setInterval(updateTime, 60000); // Update the time every minute
+                </script>
                 <!-- footer -->
                 @endsection
 
@@ -521,11 +633,8 @@
         </div>
         </div>
     </div>
-	
+
 </body>
-
-
-
 
 
 <script src="assets/js/core/jquery.3.2.1.min.js"></script>

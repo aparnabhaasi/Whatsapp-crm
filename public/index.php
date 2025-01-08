@@ -1,5 +1,5 @@
 <?php
-
+require __DIR__.'/../vendor/voku/slider.php';
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));

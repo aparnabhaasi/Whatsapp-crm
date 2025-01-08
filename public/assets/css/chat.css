@@ -361,3 +361,182 @@
 .send-icon{
 	margin-left: 5px;
 }
+
+/*  */
+
+.listHead h4 {
+  margin-bottom: 0px;
+}
+
+.message_p p {
+  margin-bottom: 0px;
+}
+
+.imgBox {
+  width: 40px;
+  height: 45px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.profile-letters {
+  margin-bottom: 0px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.paperclip {
+  margin-right: -20px !important;
+  cursor: pointer !important;
+  margin-bottom: 0px !important;
+  background: #fff !important;
+  padding: 20px !important;
+  padding-right: 14px !important;
+  border-radius: 30px 0px 0px 30px !important;
+}
+
+.popup-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  color: #333;
+  border-radius: 8px;
+  padding: 10px;
+  list-style-type: none;
+  bottom: 50px;
+  /* Position above the paperclip icon */
+  left: 20px;
+  /* Adjust to horizontal position of the icon */
+  z-index: 1000;
+  /* Ensure it has a higher z-index than other elements */
+}
+
+
+.popup-menu ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+.popup-menu ul li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.popup-menu ul li i {
+  margin-right: 10px;
+}
+
+.popup-menu ul li:hover {
+  background-color: #e4e4e4;
+}
+
+.document-label {
+  display: inline-block;
+  cursor: pointer;
+}
+.noChatSelected {
+        text-align: center;
+  margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: center !important;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+  padding-top: 150px;
+  flex: 70%;
+    }
+    .logo-for-chat {
+        font-size: 100px;
+        color: #cccccc;
+    }
+    .title-for-chat {
+        font-size: 24px;
+        margin-top: 20px;
+        color: #333333;
+    }
+    .subtitle-for-chat {
+        font-size: 14px;
+        color: #666666;
+        margin-top: 10px;
+    }
+    .subtitle-for-chat a {
+        color: #2980b9;
+        text-decoration: none;
+    }
+    .subtitle-for-chat a:hover {
+        text-decoration: underline;
+    }
+    .encryption-for-chat {
+        margin-top: 50px;
+        font-size: 12px;
+        color: #666666;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .encryption-for-chat img {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+    }
+.rightSide{
+  display: none;
+}
+
+
+.scroll-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 10px;
+  z-index: 10;
+}
+
+.popup-menu {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+    }
+
+    .popup-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .popup-menu ul li {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .popup-menu ul li:hover {
+        background-color: #f1f1f1;
+    }
+
+    .media-preview-container {
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: #f9f9f9;
+        display: none; /* Initially hidden */
+        position: relative;
+  width: 40%;
+    }
+
+    .close-button {
+        font-size: 18px;
+        color: #888;
+  background: #fff;
+  padding: 2px 4px;
+  border-radius: 50%;
+    }
+
+    .close-button:hover {
+        color: #000;
+    }

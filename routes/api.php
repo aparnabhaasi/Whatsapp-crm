@@ -19,3 +19,4 @@ Route::post('/whatsapp/webhook', [ContactsController::class, 'handleWebhook']);
 
 // send message
 Route::post('/send-message', [ChatController::class, 'sendMessage']);
+Route::get('/fetch-messages', [ChatController::class, 'fetchMessages']);

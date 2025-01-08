@@ -25,7 +25,7 @@
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
-					@if(session('success'))
+					    @if(session('success'))
 							<div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
 								<p class="mb-0">{{ session('success') }}</p>
 								<a type="button" class="" data-bs-dismiss="alert" aria-label="Close" style="cursor:pointer; color:#fff;">X</a>
@@ -63,32 +63,28 @@
 	                                <div class="card-header ">
 	                                    <div class="d-flex align-items-center justify-content-between">
 	                                    	<div class="d-flex align-items-center">
-	                                    		<form class="navbar-left navbar-form nav-search mr-md-3" action="">
-			                                        <style>
-			                                            .search-container {
-			                                                border: .5px solid transparent;
-			                                                border-radius: 30px;
-			                                                transition: border-color 0.3s;
-			                                            }
-			                                            .search-container:hover,
-			                                            .search-container:focus-within {
-			                                                border-color: #25D366 !important;
-			                                            }
-			                                        </style>
-			                                        <div class="input-group search-container">
-			                                            <input type="text" placeholder="Search ..." class="form-control search-input">
-			                                            <div class="input-group-append">
-			                                                <span class="input-group-text">
-			                                                    <a href="" style="text-decoration: none;">
-			                                                        <i class="la la-search search-icon text-success"></i>
-			                                                    </a>
-			                                                </span>
-			                                            </div>
-			                                        </div>
-			                                    </form>
-												<button class="btn btn-outline-success my-1" style="border-radius: 30px;">
-													<i class="fa-solid fa-filter"></i> <b>Filter</b>
-												</button>
+	                                    		<form class="navbar-left navbar-form nav-search mr-md-3" action="javascript:void(0);">
+                                                    <style>
+                                                        .search-container {
+                                                            border: .5px solid transparent;
+                                                            border-radius: 30px;
+                                                            transition: border-color 0.3s;
+                                                        }
+                                                        .search-container:hover,
+                                                        .search-container:focus-within {
+                                                            border-color: #25D366 !important;
+                                                        }
+                                                    </style>
+                                                    <div class="input-group search-container">
+                                                        <input type="text" placeholder="Search ..." class="form-control search-input" id="searchInput" onkeyup="filterBroadcasts()">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">
+                                                                <i class="la la-search search-icon text-success"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
 	                                    	</div>
 		                                    
 											<div class="align-items-center d-flex">
@@ -99,16 +95,14 @@
 	                                </div>
 	                                <div class="card-body">
 	                                    <div class="table-responsive">
-	                                    	<table class="table table-hover">
+	                                    	<table class="table table-hover" id="broadcastTable">
 		                                        <thead>
 		                                            <tr class="bg-light">
 		                                                <th scope="col">#</th>
 		                                                <th scope="col">Broadcast Name</th>
 		                                                <!-- <th scope="col">Scheduled at</th> -->
 		                                                <th scope="col" class="text-center">Recipients</th>
-		                                                <th scope="col" class="text-center">Sent</th>
-														<th scope="col" class="text-center">Failed</th>
-														<th scope="col">Status</th>
+                                                        <th scope="col" class="text-center">Last Updates</th>
 		                                                <th scope="col" class="text-center">Action</th>
 		                                            </tr>
 		                                        </thead>
@@ -119,16 +113,64 @@
 															<td>{{ $broadcast -> broadcast_name }}</td>
 															<!-- <td>{{ $broadcast->scheduled_at ? $broadcast->scheduled_at : 'Not scheduled' }}</td> -->
 															<td class="text-center">{{ count($broadcast->contact_id) }}</td>
-															<td class="text-center">0</td>
-															<td class="text-center">0</td>
-															<td><span class="badge badge-primary">No messages</span></td>
+                                                            <td class="text-center">{{ \Carbon\Carbon::parse($broadcast->updated_at)->format('d-M-Y h:i:s A') }}</td>
 															<td class="text-center">
-																<a href="" class="text-dark" data-toggle="modal" data-target=".updateBroadcast" title="Edit Broadcast Group">
+																<a href="" class="text-dark" data-toggle="modal" data-target="#updateBroadcast{{ $broadcast->id }}" title="Edit Broadcast Group">
 																	<i class="fa-solid fa-pen bg-light border rounded-circle p-2"></i>
 																</a>
-																<a href="" class="text-danger"  title="Delete Broadcast Group">
-																	<i class="fa-regular fa-trash-can bg-light border rounded-circle p-2"></i>
-																</a>
+																<!-- Button to trigger the modal -->
+<button type="button" class="text-danger" data-toggle="modal" data-target="#deleteConfirmationModal{{ $broadcast->id }}" title="Delete Broadcast Group" id="deleteBroadcastBtn{{ $broadcast->id }}">
+    <i class="fa-regular fa-trash-can bg-light border rounded-circle p-2"></i>
+</button>
+
+<!-- Hidden Form for Deletion -->
+<form id="deleteForm{{ $broadcast->id }}" action="{{ route('broadcast.destroy', $broadcast->id) }}" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
+<!-- Modal HTML for each broadcast -->
+<div class="modal fade" id="deleteConfirmationModal{{ $broadcast->id }}" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel{{ $broadcast->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel{{ $broadcast->id }}">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>If you delete this broadcast, all related template messages and chats will be deleted. Are you sure you want to delete? Once deleted, the chats cannot be recovered.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelBtn{{ $broadcast->id }}" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn{{ $broadcast->id }}">OK, Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle modal and form submission -->
+<script>
+    // Open modal when the delete button is clicked
+    document.getElementById('deleteBroadcastBtn{{ $broadcast->id }}').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent form submission
+        var modal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal{{ $broadcast->id }}'));
+        modal.show();
+    });
+
+    // When user clicks "OK, Delete"
+    document.getElementById('confirmDeleteBtn{{ $broadcast->id }}').addEventListener('click', function() {
+        // Submit the form to proceed with the deletion
+        document.getElementById('deleteForm{{ $broadcast->id }}').submit();
+    });
+
+    // If Cancel button is clicked, modal will be dismissed by Bootstrap's data-bs-dismiss="modal"
+    document.getElementById('cancelBtn{{ $broadcast->id }}').addEventListener('click', function() {
+        var modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmationModal{{ $broadcast->id }}'));
+        modal.hide(); // Manually hide the modal
+    });
+</script>
+
+
 															</td>
 														</tr>
 													@endforeach
@@ -143,9 +185,50 @@
 				</div>
 				<!-- footer -->
 				@endsection
+<script>
+function filterBroadcasts() {
+    // Get the search input and convert it to lowercase for case-insensitive search
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    
+    // Get all rows from the broadcast table
+    const rows = document.querySelectorAll('#broadcastTable tbody tr');
+
+    rows.forEach(row => {
+        // Get the text from the second column (Broadcast Name)
+        const broadcastName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+        // Check if the broadcast name contains the search term
+        if (broadcastName.includes(searchInput)) {
+            row.style.display = ''; // Show the row
+        } else {
+            row.style.display = 'none'; // Hide the row
+        }
+    });
+}
+</script>
 
 			</div>
 
+            <!-- script for search -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('searchInput').addEventListener('keyup', function() {
+                        // Get the search input value and convert it to lowercase for case-insensitive search
+                        let searchValue = this.value.toLowerCase();
+                        
+                        // Get all table rows from the tbody
+                        let rows = document.querySelectorAll('#broadcastTable tbody tr');
+
+                        // Loop through the rows and toggle visibility based on search input
+                        rows.forEach(function(row) {
+                            let rowText = row.textContent.toLowerCase();
+                            
+                            // If the row text includes the search value, display it, otherwise hide it
+                            row.style.display = rowText.includes(searchValue) ? '' : 'none';
+                        });
+                    });
+                });
+            </script>
 
 	<!--==== New Broadcast Message start ====-->
 <style>
@@ -185,7 +268,7 @@
                         <label for="pillSelect2">Select Template</label>
                         <select class="form-control input-pill" id="pillSelect2">
                             <option value="" disabled selected>Select a pre-approved template</option>
-                            @foreach ($allTemplates as $template)
+                            @foreach ($approvedTemplates as $template)
                                 <option value="{{ json_encode($template) }}">{{ $template['name'] }}</option>
                             @endforeach
                         </select>
@@ -644,97 +727,150 @@
 
 
 	<!-- Update broadcast group modal -->
-	<div class="modal fade updateBroadcast" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-		  <div class="modal-content" style="border-radius: 20px !important;">
-			<div class="card" style="border-radius: 15px;">
-				<h5 class="text-center mt-3">Update Broadcast 2</h5>
-				<div class="card-header d-md-flex justify-content-between">
-					<div class="d-md-flex align-items-center">
-						<form class="navbar-left navbar-form nav-search mr-md-3" action="">
-							<style>
-								.search-container {
-									border: .5px solid transparent;
-									border-radius: 30px;
-									transition: border-color 0.3s;
-								}
-								.search-container:hover,
-								.search-container:focus-within {
-									border-color: #25D366 !important;
-								}
-							</style>
-							<div class="input-group search-container">
-								<input type="text" placeholder="Search ..." class="form-control search-input">
-								<div class="input-group-append">
-									<span class="input-group-text">
-										<a href="" style="text-decoration: none;">
-											<i class="la la-search search-icon text-success"></i>
-										</a>
-									</span>
-								</div>
-							</div>
-						</form>
-						
-					</div>
-					<button class="btn btn-outline-success my-1" style="border-radius: 30px;">
-						<i class="fa-solid fa-filter"></i> <b>Filter</b>
-					</button>
-				</div>
-				<div class="card-body" style="height: 400px; overflow-y: auto;">
-					<div class="table-responsive">
-						<table class="table table-hover">
-							<thead>
-								<tr class="bg-light">
-									<th scope="col" style="width: 10px;">
-										<label class="form-check-label">
-											<input class="form-check-input" type="checkbox" value="">
-											<span class="form-check-sign"></span>
-										</label>
-									</th>
-									<th scope="col">#</th>
-									<th scope="col">Name</th>
-									<th scope="col">Mobile</th>
-									<th scope="col">Email</th>
-									<th scope="col" class="text-center">Tags</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>
-										<label class="form-check-label">
-											<input class="form-check-input" type="checkbox" value="" checked >
-											<span class="form-check-sign"></span>
-										</label>
-									</td>
-									<td>1</td>
-									<td>Mark</td>
-									<td>+91 9087654321</td>
-									<td>mark@mail.com</td>
-									<td class="text-center">
-										<span class="badge badge-count">Meta</span>
-										<span class="badge badge-count">Google</span>
-									</td>
-									
-								</tr>
-								
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-			<style>
-				.cus-input:focus{
-					border: 2px solid green;
-				}
-			</style>
-			<div class="p-4 d-flex">
-				<input type="text" class="form-control cus-input" placeholder="Broadcast Name" value="Broadcast 2" required>
-				<button class="btn btn-success ml-3">Update Broadcast</button>
-			</div>
-		  </div>
-		</div>
-	</div>
+    @foreach ($broadcasts as $broadcast)
+    <div class="modal fade" id="updateBroadcast{{ $broadcast->id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="border-radius: 20px !important;">
+                <div class="card" style="border-radius: 15px;">
+                    <h5 class="text-center mt-3">Update {{ $broadcast->broadcast_name }}</h5>
+                    <div class="card-header d-md-flex justify-content-between">
+                        <div class="d-md-flex align-items-center">
+                            <form class="navbar-left navbar-form nav-search mr-md-3" action="">
+                                <style>
+                                    .search-container {
+                                        border: .5px solid transparent;
+                                        border-radius: 30px;
+                                        transition: border-color 0.3s;
+                                    }
+                                    .search-container:hover,
+                                    .search-container:focus-within {
+                                        border-color: #25D366 !important;
+                                    }
+                                </style>
+                                <div class="input-group search-container">
+                                    <input type="text" placeholder="Search ..." class="form-control search-input" id="searchInput1">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <a href="" style="text-decoration: none;">
+                                                <i class="la la-search search-icon text-success"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-body" style="height: 400px; overflow-y: auto;">
+                        <form method="post" action="{{ route('update.broadcastGruop', $broadcast->id ) }}">
+                            @csrf
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="contactsTable">
+                                    <thead>
+                                        <tr class="bg-light">
+                                            <th scope="col" style="width: 10px;">
+                                                <label class="form-check-label">
+                                                    <input id="selectAll" class="form-check-input" type="checkbox" value="">
+                                                    <span class="form-check-sign"></span>
+                                                </label>
+                                            </th>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Mobile</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col" class="text-center">Tags</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($contacts as $contact)
+                                            <tr>
+                                                <td>
+                                                    <label class="form-check-label">
+                                                        
+    <input 
+        name="contact_id[]"
+        class="form-check-input" 
+        type="checkbox" 
+        value="{{ $contact->id }}" 
+        @if(is_array($broadcast->contact_id) && in_array($contact->id, $broadcast->contact_id)) checked @endif
+    >
+ 
 
+
+
+                                                        <span class="form-check-sign"></span>
+                                                    </label>
+                                                </td>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $contact->name }}</td>
+                                                <td>{{ $contact->mobile }}</td>
+                                                <td>{{ $contact->email }}</td>
+                                                <td class="text-center">
+                                                    @php
+                                                        // Ensure $contact->tags is treated as an array
+                                                        $tags = is_string($contact->tags) ? json_decode($contact->tags, true) : $contact->tags;
+                                                    @endphp
+                                                    @if (is_array($tags))
+                                                        @foreach ($tags as $tag)
+                                                            <span class="badge badge-count">{{ $tag }}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="text-muted">No tags</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        .cus-input:focus {
+                            border: 2px solid green;
+                        }
+                    </style>
+                    <div class="p-4 d-flex">
+                        <input type="text" class="form-control cus-input" name="broadcast_name" placeholder="Broadcast Name" value="{{ $broadcast->broadcast_name }}" required>
+                        <button class="btn btn-success ml-3">Update Broadcast</button>
+                    </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+<script>
+    document.getElementById('searchInput1').addEventListener('keyup', function() {
+        let searchValue = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#contactsTable tbody tr');
+
+        rows.forEach(function(row) {
+            let rowText = row.textContent.toLowerCase();
+            if (rowText.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('selectAll').addEventListener('change', function() {
+        // Get all checkboxes in the table body
+        const checkboxes = document.querySelectorAll('#contactsTable tbody .form-check-input');
+        
+        // Set the checked property of each checkbox based on the header checkbox
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = this.checked;
+        }, this);
+    });
+</script>
+
+@endforeach
+
+
+
+
+ 
 
 	<!-- Create broadcast modal -->
 	<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -758,7 +894,7 @@
 									}
 								</style>
 								<div class="input-group search-container">
-									<input type="text" placeholder="Search ..." class="form-control search-input">
+									<input type="text" placeholder="Search ..." class="form-control search-input" id="searchInput2">
 									<div class="input-group-append">
 										<span class="input-group-text">
 											<a href="" style="text-decoration: none;">
@@ -770,15 +906,12 @@
 							</form>
 							
 						</div>
-						<button class="btn btn-outline-success my-1" style="border-radius: 30px;">
-							<i class="fa-solid fa-filter"></i> <b>Filter</b>
-						</button>
 					</div>
-					<div class="card-body" style="height: 400px; overflow-y: auto;">
+					<div class="card-body" style="height: 700px; overflow-y: auto;">
 						<form action="{{ route('broadcast.store')}}" method="post">
 							@csrf
 							<div class="table-responsive">
-								<table class="table table-hover">
+								<table class="table table-hover" id="contactsTable2">
 									<thead>
 										<tr class="bg-light">
 											<th scope="col" style="width: 10px;">
@@ -808,11 +941,21 @@
 											<td>{{$contact->mobile}}</td>
 											<td>{{$contact->email}}</td>
 											<td class="text-center">
-												@foreach (json_decode($contact->tags, true) as $tag)
-													<span class="badge badge-count">{{$tag}}</span>
-												@endforeach
-		
-											</td>
+                                                @php
+                                                    // Decode tags safely and fallback to an empty array if invalid
+                                                    $tags = json_decode($contact->tags, true);
+                                                    $tags = is_array($tags) ? $tags : [];
+                                                @endphp
+
+                                                @if (!empty($tags))
+                                                    @foreach ($tags as $tag)
+                                                        <span class="badge badge-count">{{ $tag }}</span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-muted">No tags</span>
+                                                @endif
+                                            </td>
+
 										</tr>
 										@endforeach
 										
@@ -834,6 +977,23 @@
 		  </div>
 		</div>
 	</div>
+	
+	
+    <script>
+        document.getElementById('searchInput2').addEventListener('keyup', function() {
+            let searchValue = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#contactsTable2 tbody tr');
+
+            rows.forEach(function(row) {
+                let rowText = row.textContent.toLowerCase();
+                if (rowText.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 	<script>
 		document.getElementById('selectAll').addEventListener('change', function() {
 			// Get the state of the header checkbox

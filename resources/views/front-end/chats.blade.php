@@ -7,6 +7,8 @@
 	<link rel="icon" type="image/x-icon" href="https://i.postimg.cc/02RpgdM2/whatsapp3d.png">
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
 		name='viewport' />
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
 	<link rel="stylesheet"
 		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -17,184 +19,43 @@
 	<!-- font awsome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-	
 	<style>
-		.listHead h4 {
-			margin-bottom: 0px;
+		.footer{
+			display:none;
+		}
+		.message-card {
+			background: #dcf8c8;
+			padding: 8px;
+			border-radius: 10px;
+			max-width: 45%;
+			margin-bottom: 15px;
+		}
+		.message-card img {
+			width: 100%;
+			border-radius: 10px;
+		}
+		.message-card p,
+		a {
+			font-family: Helvetica, Arial, sans-serif;
 		}
 
-		.message_p p {
-			margin-bottom: 0px;
-		}
-
-		.imgBox {
-			width: 40px;
-			height: 45px;
-			color: #fff;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			text-align: center;
-		}
-
-		.profile-letters {
-			margin-bottom: 0px;
-			font-size: 17px;
-			font-weight: 600;
-		}
-
-		.paperclip {
-			margin-right: -20px !important;
-			cursor: pointer !important;
-			margin-bottom: 0px !important;
-			background: #fff !important;
-			padding: 20px !important;
-			padding-right: 14px !important;
-			border-radius: 30px 0px 0px 30px !important;
-		}
-
-		.popup-menu {
-			display: none;
-			position: absolute;
-			background-color: #fff;
-			color: #333;
-			border-radius: 8px;
-			padding: 10px;
-			list-style-type: none;
-			bottom: 50px;
-			/* Position above the paperclip icon */
-			left: 20px;
-			/* Adjust to horizontal position of the icon */
-			z-index: 1000;
-			/* Ensure it has a higher z-index than other elements */
-		}
-
-
-		.popup-menu ul {
-			padding: 0;
-			list-style-type: none;
-		}
-
-		.popup-menu ul li {
-			padding: 10px;
-			cursor: pointer;
-		}
-
-		.popup-menu ul li i {
-			margin-right: 10px;
-		}
-
-		.popup-menu ul li:hover {
-			background-color: #e4e4e4;
-		}
-
-		.document-label {
-			display: inline-block;
-			cursor: pointer;
-		}
-		.noChatSelected {
-            text-align: center;
-			margin: 0;
-            padding: 0;
-            justify-content: center;
-            align-items: center !important;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-			padding-top: 150px;
-			flex: 70%;
-        }
-        .logo-for-chat {
-            font-size: 100px;
-            color: #cccccc;
-        }
-        .title-for-chat {
-            font-size: 24px;
-            margin-top: 20px;
-            color: #333333;
-        }
-        .subtitle-for-chat {
-            font-size: 14px;
-            color: #666666;
-            margin-top: 10px;
-        }
-        .subtitle-for-chat a {
-            color: #2980b9;
-            text-decoration: none;
-        }
-        .subtitle-for-chat a:hover {
-            text-decoration: underline;
-        }
-        .encryption-for-chat {
-            margin-top: 50px;
-            font-size: 12px;
-            color: #666666;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .encryption-for-chat img {
-            width: 16px;
-            height: 16px;
-            margin-right: 5px;
-        }
-		.rightSide{
-			display: none;
-		}
-
-		
-		.scroll-btn {
-			position: fixed;
-			bottom: 100px;
-			right: 10px;
-			z-index: 10;
-		}
-
-		.popup-menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            border: 1px solid #ddd;
-            padding: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        .popup-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .popup-menu ul li {
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .popup-menu ul li:hover {
-            background-color: #f1f1f1;
-        }
-
-        .media-preview-container {
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            padding: 10px;
-            background-color: #f9f9f9;
-            display: none; /* Initially hidden */
-            position: relative;
-			width: 40%;
-        }
-
-        .close-button {
-            font-size: 18px;
-            color: #888;
+		.message-card-left{
+			margin-right: auto;
 			background: #fff;
-			padding: 2px 4px;
-			border-radius: 50%;
-        }
+		}
+		.message-card-right{
+			margin-left: auto;
+		}
 
-        .close-button:hover {
-            color: #000;
-        }
+		.messageDate {
+			background: #f6f8ff;
+			display: inline-block;
+			border-radius: 8px;
+			padding: 6px;
+			font-size: 12px;
+			font-weight: 700;
+			color: #918d8d;
+		}
 	</style>
 </head>
 
@@ -205,106 +66,227 @@
 
 	@section('content')
 
-	<div class="main-panel">
-		<div class="content p-0">
-
-			<div class="containerx" id="containerx">
-				<div class="leftSide">
+	<div class="main-panel" id="main-panel">
+	<div class="content p-0">
+		<div class="containerx" id="containerx">
+			<div class="leftSide">
 					<!-- Header -->
 					<div class="header">
 						<h6 style="font-weight:700;">Chats</h6>
 						<ul class="nav_icons">
+                        <li onclick="toggleContacts()">
+                            <i class="fa-regular fa-circle-user"></i>
+                        </li>
 							<li><i class="fa-solid fa-expand" id="fullscreen-icon"></i></li>
-							<li>
-								<i class="fa-solid fa-tags" id="dropdownMenuButton" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"></i>
-								<div class="dropdown-menu">
-									<a class="dropdown-item" href="#">Social Media</a>
-									<a class="dropdown-item" href="#">Meta</a>
-									<a class="dropdown-item" href="#">Google</a>
-								</div>
-							</li>
+							
 							<li>
 								<ion-icon name="ellipsis-vertical" id="dropdownMenuButton"
 									data-toggle="dropdown"></ion-icon>
 								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-									<a class="dropdown-item" href="#">Unread</a>
-									<a class="dropdown-item" href="#">Broadcast</a>
-									<a class="dropdown-item" href="#">Contacts</a>
+								<a class="dropdown-item" href="#">Social Media</a>
+									<a class="dropdown-item" href="#">Meta</a>
+									<a class="dropdown-item" href="#">Google</a>
 								</div>
 							</li>
 						</ul>
 					</div>
+					<script>
+						document.addEventListener('DOMContentLoaded', function () {
+							const fullscreenIcon = document.getElementById('fullscreen-icon');
+							const mainPanel = document.getElementById('main-panel');
 
+							fullscreenIcon.addEventListener('click', function () {
+								if (mainPanel) {
+									if (!document.fullscreenElement) {
+										mainPanel.requestFullscreen().catch(err => {
+											alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`); // Fixed template literal
+										});
+									} else {
+										document.exitFullscreen();
+									}
+								} else {
+									console.warn("mainPanel element not found.");
+								}
+							});
+						});
+					</script>
+
+
+
+				<!-- CSS -->
+				<style>
+					/* Style the main-panel to be truly fullscreen */
+					.main-panel:fullscreen {
+						width: 100vw;
+						height: 100vh;
+						overflow: hidden;
+						margin: 0;
+						padding: 0;
+					}
+
+					/* Ensure child elements fill the screen in fullscreen mode */
+					.main-panel:fullscreen .content,
+					.main-panel:fullscreen .containerx,
+					.main-panel:fullscreen .leftSide,
+					.main-panel:fullscreen .chat-section {
+						width: 100%;
+						height: 100%;
+						margin: 0;
+						padding: 0;
+						box-sizing: border-box;
+					}
+				</style>
 					<!-- Search Chat -->
 					<div class="search_chat">
 						<div>
-							<input type="text" placeholder="Search or start new chat">
+							<input type="text" id="searchInput" placeholder="Search or start new chat" onkeyup="filterContacts()">
 							<ion-icon name="search-outline"></ion-icon>
 						</div>
 					</div>
+					<div id="contacts">
+						<!-- CHAT LIST -->
+						<div class="chatlist" id="chattedContacts">
+							@php
+    use Illuminate\Support\Facades\Auth;
 
-					<!-- CHAT LIST -->
-					<div class="chatlist">
+    $authAppId = Auth::user()->app_id;
+    $colors = ['#FF5733', '#00951a', '#3357FF', '#FF33A1', '#003e9a', '#FFBD33', '#A133FF'];
 
-						@php
-							// Array of solid background colors
-							$colors = ['#FF5733', '#00951a', '#3357FF', '#FF33A1', '#003e9a', '#FFBD33', '#A133FF'];
+    function getColorForContact($contactId, $colors) {
+        return $colors[$contactId % count($colors)];
+    }
 
-							// Function to assign a fixed color based on the contact ID
-							function getColorForContact($contactId, $colors)
-							{
-								return $colors[$contactId % count($colors)];
-							}
+    // Group messages by contact_id, taking the latest message for each contact and filtering based on app_id
+    $groupedMessages = $messages->filter(function ($message) use ($authAppId) {
+        // Ensure the contact's app_id matches the authenticated user's app_id
+        $contact = \App\Models\Contacts::find($message->contact_id);
+        return $contact && $contact->app_id === $authAppId;
+    })->groupBy('contact_id')->map(function ($group) {
+        return $group->last(); // Get the latest message for each contact
+    })->sortByDesc('created_at');
 
-							// Group messages by contact_id and get the last message for each contact
-							$groupedMessages = $messages->groupBy('contact_id')->map(function ($group) {
-								return $group->last();
-							})->sortByDesc('created_at'); // Sort the grouped messages by the created_at in descending order
+    // Count unread messages per contact
+    $unreadChatsCounts = \App\Models\Chats::select('contact_id', \DB::raw('COUNT(*) as unread_count'))
+        ->where('is_read', false)
+        ->groupBy('contact_id')
+        ->pluck('unread_count', 'contact_id');
 
-							// Calculate the unread chats count for each contact
-							$unreadChatsCounts = \App\Models\Chats::select('contact_id', \DB::raw('COUNT(*) as unread_count'))
-								->where('is_read', false)
-								->groupBy('contact_id')
-								->pluck('unread_count', 'contact_id');
-						@endphp
+    // Fetch contacts that belong to the authenticated user's app_id
+    $contacts = \App\Models\Contacts::where('app_id', $authAppId)->get();
 
-						@foreach ($groupedMessages as $contactId => $message)
-												@php
-													// Assign a fixed color for each contact based on their ID
-													$fixedColor = getColorForContact($message->contact->id, $colors);
+    // Separate chatted and non-chatted contacts
+    $chattedContactIds = $groupedMessages->keys();
+    $chattedContacts = $groupedMessages->values();
+    $nonChattedContacts = $contacts->whereNotIn('id', $chattedContactIds)->sortBy('name');
+@endphp
 
-													// Get the number of unread chats for the current contact
-													$unreadChatsCount = $unreadChatsCounts[$contactId] ?? 0;
-												@endphp
 
-												<!-- Apply the 'unread' class only if there are unread chats -->
-												<div class="block {{ $unreadChatsCount > 0 ? 'unread' : '' }}"
-													id="chat{{ $message->contact_id }}"
-													onclick="activateChat('chat{{ $message->contact_id }}')">
-													<div class="imgBox" style="background: {{ $fixedColor }};">
-														<p class="profile-letters">{{ strtoupper(substr($message->contact->name, 0, 2)) }}</p>
-													</div>
-													<div class="details">
-														<div class="listHead">
-															<h4>{{ $message->contact->name }}</h4>
-															<p class="time">{{ $message->created_at->format('h:i a') }}</p>
-														</div>
-														<div class="message_p">
-															<p>{{ $message->message }}</p>
+							<!-- Display Chatted Contacts -->
+							@foreach ($chattedContacts as $contact)
+								@php
+									$fixedColor = getColorForContact($contact->contact->id, $colors);
+									$unreadChatsCount = $unreadChatsCounts[$contact->contact->id] ?? 0;
+								@endphp
 
-															<!-- Display the number of unread chats if there are any -->
-															@if ($unreadChatsCount > 0)
-																<b>{{ $unreadChatsCount }}</b>
-															@endif
-														</div>
-													</div>
-												</div>
-						@endforeach
+								@php
+									// Ensure $contact->tags is treated as an array
+									$tags = is_array($contact->contact->tags) ? $contact->contact->tags : explode(',', $contact->contact->tags);
+								@endphp
+								<div class="block {{ $unreadChatsCount > 0 ? 'unread' : '' }} contact-item"
+									id="chat{{ $contact->contact_id }}"
+									onclick="activateChat('chat{{ $contact->contact_id }}')"
+									data-name="{{ strtolower($contact->contact->name) }}"
+									data-phone="{{ $contact->contact->mobile }}"
+									data-tags="{{ implode(',', $tags) }}">
 
+
+
+ 
+									<div class="imgBox" style="background: {{ $fixedColor }};">
+										<p class="profile-letters">{{ strtoupper(substr($contact->contact->name, 0, 2)) }}</p>
+									</div>
+									<div class="details">
+										<div class="listHead">
+											<h4>{{ $contact->contact->name }}</h4>
+											<p class="time">{{ $contact->created_at->format('h:i a') }}</p>
+										</div>
+										<div class="message_p">
+											<p>{{ $contact->message }}</p>
+											@if ($unreadChatsCount > 0)
+												<b>{{ $unreadChatsCount }}</b>
+											@endif
+										</div>
+									</div>
+								</div>
+							@endforeach
+						</div>
 					</div>
-				</div>
 
+					<div id="all-contacts" style="display: none; max-height: 670px; overflow-y: auto;">
+						<div class="chatlist">
+							<!-- Display All Contacts with the same structure as Chatted Contacts -->
+							@foreach ($allContacts as $contact)
+								@php
+									$fixedColor = getColorForContact($contact->id, $colors);
+								@endphp
+
+								<div class="block contact-item"
+									id="chat{{ $contact->id }}"
+									onclick="activateChat('chat{{ $contact->id }}')"
+									data-name="{{ strtolower($contact->name) }}">
+									<div class="imgBox" style="background: {{ $fixedColor }};">
+										<p class="profile-letters">{{ strtoupper(substr($contact->name, 0, 2)) }}</p>
+									</div>
+									<div class="details">
+										<div class="listHead">
+											<h4>{{ $contact->name }}</h4>
+										</div>
+									</div>
+								</div>
+							@endforeach
+						</div>
+					</div>
+
+					<!-- JavaScript for Filtering -->
+					<script>
+						function filterContacts() {
+							const input = document.getElementById("searchInput").value.toLowerCase();
+							const contacts = document.getElementsByClassName("contact-item");
+
+							Array.from(contacts).forEach(contact => {
+								const name = contact.getAttribute("data-name");
+								if (input === "" || name.includes(input)) {
+									// Restore original display and style when search is cleared or contact matches the search
+									contact.style.removeProperty("display");
+								} else {
+									// Hide unmatched contacts
+									contact.style.display = "none";
+								}   
+							});
+						}
+					</script>
+
+
+
+
+
+                    <script>
+                        function toggleContacts() {
+                            const chattedContacts = document.getElementById('contacts');
+                            const allContacts = document.getElementById('all-contacts');
+
+                            if (chattedContacts.style.display === 'none') {
+                                chattedContacts.style.display = 'block';
+                                allContacts.style.display = 'none';
+                            } else {
+                                chattedContacts.style.display = 'none';
+                                allContacts.style.display = 'block';
+                            }
+                        }
+
+                         
+                    </script>
+				</div>
 				<!-- No chat selected -->
 				<div class="container noChatSelected">
 					<div class="logo-for-chat"><i class="fa-brands fa-whatsapp"></i></div>
@@ -319,197 +301,321 @@
 				</div>
 
 
-				<!-- right side -->
-				<div class="rightSide">
 
+                <!-- right side -->
+				<div class="rightSide">
 					<div class="header chatHeader">
 						<div class="imgText">
 							<div class="userimg">
-
+								<!-- Image will be dynamically added here -->
 							</div>
-							<h6 class="ml-3">ICT Global Tech Pvt. Ltd. <br><small>online</small></h6>
+							<h6 class="ml-3">
+								<!-- Name and phone will be updated here dynamically -->
+							</h6>
 						</div>
-						<ul class="nav_icons">
-							<li><ion-icon name="search-outline"></ion-icon></li>
-							<li><ion-icon name="ellipsis-vertical"></ion-icon></li>
-						</ul>
+						<!-- Display tags as badges -->
+						<div id="contactTags" class="badge-container">
+							<!-- Tags will be dynamically added here -->
+							@php
+								// Ensure $contact->tags is treated as an array
+								$tags = is_string($contact->tags) ? json_decode($contact->tags, true) : $contact->tags;
+							@endphp
+							@if (is_array($tags) && !empty($tags))
+								@foreach ($tags as $tag)
+									<span class="badge badge-count">{{ $tag }}</span>
+								@endforeach
+							@else
+								<span class="text-muted">No tags</span>
+							@endif
+						</div>
 					</div>
 
-					<style>
-						.message-card {
-							background: #dcf8c8;
-							padding: 8px;
-							border-radius: 10px;
-							max-width: 45%;
-							margin-left: auto;
-							margin-bottom: 15px;
-						}
 
-						.message-card img {
-							width: 100%;
-							border-radius: 10px;
-						}
-
-						.message-card p,
-						a {
-							font-family: Helvetica, Arial, sans-serif;
-						}
-						.messageDate {
-							background: #f6f8ff;
-							display: inline-block;
-							border-radius: 8px;
-							padding: 6px;
-							font-size: 12px;
-							font-weight: 700;
-							color: #918d8d;
-						}
-
-					</style>
 
 					<!-- CHAT-BOX -->
 					<div class="chatbox" id="chatbox">
-						@foreach ($messages->groupBy('contact_id') as $contactId => $contactMessages)
-							@php
-								$combinedMessages = [];
+    @foreach ($messages->groupBy('contact_id') as $contactId => $contactMessages)
+        @php
+            $combinedMessages = [];
 
-								// Add customer and business messages to the combined array
-								foreach ($contactMessages as $message) {
-									$combinedMessages[] = [
-										'type' => 'chat',
-										'sender' => $message->sender,
-										'message' => $message->message,
-										'created_at' => $message->created_at
-									];
-								}
+            // Add customer and business messages to the combined array
+            foreach ($contactMessages as $message) {
+                $combinedMessages[] = [
+                'id' => $message->id,
+                    'type' => 'chat',
+                    'sender' => $message->sender,
+                    'message' => $message->message,
+                    'created_at' => $message->created_at,
+                    'media_url' => $message->media_url, // Add media URL from the message
+                    'media_type' => $message->media_type // Add media type from the message
+                ];
+            }
 
-								// Add broadcast template messages to the combined array
-								foreach ($broadcasts as $broadcast) {
-									if (is_array($broadcast->contact_id) && in_array($contactId, $broadcast->contact_id)) {
-										if (isset($templateData[$broadcast->id])) {
-											foreach ($templateData[$broadcast->id] as $templateId => $template) {
-												$combinedMessages[] = [
-													'type' => 'template',
-													'broadcast_id' => $broadcast->id,
-													'template_id' => $templateId,
-													'components' => $template['components'],
-													'created_at' => \Carbon\Carbon::parse($broadcastMessages[$broadcast->id][$templateId]['created_at'])
-												];
-											}
-										}
-									}
-								}
+            // Add broadcast template messages to the combined array
+            foreach ($broadcasts as $broadcast) {
+                if (is_array($broadcast->contact_id) && in_array($contactId, $broadcast->contact_id)) {
+                    if (isset($templateData[$broadcast->id])) {
+                        foreach ($templateData[$broadcast->id] as $templateId => $template) {
+                            $combinedMessages[] = [
+                             
+                                'type' => 'template',
+                                'broadcast_id' => $broadcast->id,
+                                'template_id' => $templateId,
+                                'components' => $template['components'],
+                                'created_at' => \Carbon\Carbon::parse($broadcastMessages[$broadcast->id][$templateId]['created_at'])
+                            ];
+                        }
+                    }
+                }
+            }
 
-								// Sort combined messages by created_at
-								usort($combinedMessages, function($a, $b) {
-									return $a['created_at']->timestamp <=> $b['created_at']->timestamp;
-								});
+            // Sort combined messages by created_at
+            usort($combinedMessages, function($a, $b) {
+                return $a['created_at']->timestamp <=> $b['created_at']->timestamp;
+            });
 
-								// Variable to keep track of last message date
-								$lastMessageDate = null;
+            // Variable to keep track of last message date
+            $lastMessageDate = null;
 
-								// Get current date and yesterday's date
-								$currentDate = \Carbon\Carbon::now()->format('d-m-Y');
-								$yesterdayDate = \Carbon\Carbon::yesterday()->format('d-m-Y');
-							@endphp
+            // Get current date and yesterday's date
+            $currentDate = \Carbon\Carbon::now()->format('d-m-Y');
+            $yesterdayDate = \Carbon\Carbon::yesterday()->format('d-m-Y');
+        @endphp
 
-							<!-- Chat content for each contact -->
-							<div id="chat{{ $contactId }}Content" class="chatContent" style="display: none;">
-								@foreach ($combinedMessages as $item)
-									@php
-										// Format message date
-										$currentMessageDate = $item['created_at']->format('d-m-Y');
+        <!-- Chat content for each contact -->
+        <div id="chat{{ $contactId }}Content" class="chatContent" style="display: none;">
+            @foreach ($combinedMessages as $item)
+                @php
+                    // Format message date
+                    $currentMessageDate = $item['created_at']->format('d-m-Y');
 
-										// Check if the date is today, yesterday, or another date
-										if ($currentMessageDate === $currentDate) {
-											$displayDate = 'Today';
-										} elseif ($currentMessageDate === $yesterdayDate) {
-											$displayDate = 'Yesterday';
-										} else {
-											$displayDate = $currentMessageDate;
-										}
-									@endphp
+                    // Check if the date is today, yesterday, or another date
+                    if ($currentMessageDate === $currentDate) {
+                        $displayDate = 'Today';
+                    } elseif ($currentMessageDate === $yesterdayDate) {
+                        $displayDate = 'Yesterday';
+                    } else {
+                        $displayDate = $currentMessageDate;
+                    }
+                @endphp
 
-									@if ($lastMessageDate !== $currentMessageDate)
-										<!-- Display Date Before the First Message of the Day -->
-										<div class="text-center">
-											<p class="messageDate">{{ $displayDate }}</p>
-										</div>
-										@php
-											$lastMessageDate = $currentMessageDate;
-										@endphp
-									@endif
+                @if ($lastMessageDate !== $currentMessageDate)
+                    <!-- Display Date Before the First Message of the Day -->
+                    <div class="text-center">
+                        <p class="messageDate">{{ $displayDate }}</p>
+                    </div>
+                    @php
+                        $lastMessageDate = $currentMessageDate;
+                    @endphp
+                @endif
 
-									@if ($item['type'] === 'chat')
-										<!-- Display Chat Messages -->
-										@if ($item['sender'] === 'customer')
-											<div class="message friend_msg">
-												<p>{{ $item['message'] }} <br><span>{{ $item['created_at']->format('h:i a') }}</span></p>
-											</div>
-										@elseif ($item['sender'] === 'business')
-											<div class="message my_msg">
-												@if (!empty($item['media_url']))
+                @if ($item['type'] === 'chat')
+    <!-- Display Chat Messages -->
+    @if ($item['sender'] === 'customer')
+    <button 
+    type="button" 
+    class="btn btn-sm forward-btn" 
+    data-message-id="{{ $item['id'] }}" 
+    data-type="chat" 
+    data-toggle="modal" 
+    data-target="#forwardModal">
+    <i class="fa fa-share" aria-hidden="true"></i>
+</button>
+        @if (!empty($item['media_url']))
+            <div class="message-card message-card-left friend_msg">
+                @if ($item['media_type'] === 'image')
+                    <img src="{{ asset('storage/'.$item['media_url']) }}" alt="Image" style="max-width: 100%; border-radius: 5px;">
+                @elseif ($item['media_type'] === 'video')
+                    <video controls style="max-width: 100%; border-radius: 5px;">
+                        <source src="{{ asset('storage/'.$item['media_url']) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                @elseif ($item['media_type'] === 'audio')
+                    <audio controls style="width: 100%;">
+                        <source src="{{ asset('storage/'.$item['media_url']) }}" type="audio/mpeg">
+                        Your browser does not support the audio tag.
+                    </audio>
+                @elseif ($item['media_type'] === 'document')
+                    @php
+                        $filename = basename($item['media_url']);
+                        $extension = pathinfo($item['media_url'], PATHINFO_EXTENSION);
+                    @endphp
+                    <div class="d-flex align-items-center border-bottom p-2">
+                        <i class="fa-solid fa-file-invoice fa-3x text-danger mr-3"></i>
+                        <div>
+                            <h6 class="mb-0">{{ $filename }}</h6>
+                            <small>{{ strtoupper($extension) }} Document</small>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <a href="{{ asset('storage/'.$item['media_url']) }}" target="_blank" class="btn btn-light border mr-1 w-100">Open</a>
+                    </div>
+                @endif
 
-													@if ($item['media_type'] === 'image')
-														<img src="{{ $item['media_url'] }}" alt="Image" style="max-width: 100%; border-radius: 5px;">
-													@elseif ($item['media_type'] === 'video')
-														<video controls style="max-width: 100%; border-radius: 5px;">
-															<source src="{{ $item['media_url'] }}" type="video/mp4">
-															Your browser does not support the video tag.
-														</video>
-													@elseif ($item['media_type'] === 'document')
-														<embed src="{{ $item['media_url'] }}" type="application/pdf" width="100%" style="border-radius: 5px;">
-													@endif
-													
-												@endif
+                <p style="margin: 0; margin-top: 5px;">
+                    {{ $item['message'] }}
+                </p>
+                <small style="display: block; text-align: right;">{{ $item['created_at']->format('h:i a') }}</small>
+            </div>
+        @else
+            <div class="message friend_msg">
+                <p style="margin: 0; margin-top: 5px;">
+                    {{ $item['message'] }} <br>
+                    <small style="text-align: right;">{{ $item['created_at']->format('h:i a') }}</small>
+                </p>
+            </div>
+        @endif
+    @elseif ($item['sender'] === 'business')
+        @if (!empty($item['media_url']))
+            <div class="message-card message-card-right my_msg">
+                <button type="button" style="background-color: transparent;" class="btn btn-sm forward-btn" data-message-id="{{ $item['id'] }}" data-toggle="modal" data-target="#forwardModal">
+                                            <i class="fa fa-share" aria-hidden="true"></i>
+                                        </button>
+                @if ($item['media_type'] === 'image')
+                    <img src="{{ $item['media_url'] }}" alt="Image" style="max-width: 100%; border-radius: 5px;">
+                @elseif ($item['media_type'] === 'video')
+                    <video controls style="max-width: 100%; border-radius: 5px;">
+                        <source src="{{ $item['media_url'] }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                @elseif ($item['media_type'] === 'audio')
+                    <audio controls style="width: 100%;">
+                        <source src="{{ $item['media_url'] }}" type="audio/mpeg">
+                        Your browser does not support the audio tag.
+                    </audio>
+                @elseif ($item['media_type'] === 'document')
+                    @php
+                        $filename = basename($item['media_url']);
+                        $extension = pathinfo($item['media_url'], PATHINFO_EXTENSION);
+                    @endphp
+                    <div class="d-flex align-items-center border-bottom p-2">
+                        <i class="fa-solid fa-file-invoice fa-3x text-danger mr-3"></i>
+                        <div>
+                            <h6 class="mb-0">{{ $filename }}</h6>
+                            <small>{{ strtoupper($extension) }} Document</small>
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex">
+                        <a href="{{ $item['media_url'] }}" target="_blank" class="btn btn-light border mr-1 w-100">Open</a>
+                    </div>
+                @endif
 
-												<p>
-													{{ $item['message'] }} <span>{{ $item['created_at']->format('h:i a') }}</span>
-												</p>
-											</div>
-										@endif
-									@elseif ($item['type'] === 'template')
-										<!-- Display Template Messages -->
-										<div class="message-card my_msg">
-											<!-- Header Section -->
-											@foreach ($item['components'] as $component)
-												@if ($component['type'] === 'HEADER')
-													@if ($component['format'] === 'TEXT' && isset($component['text']))
-														<p><b>{{ $component['text'] }}</b></p>
-													@elseif($component['format'] === 'IMAGE' && isset($broadcastMessages[$item['broadcast_id']][$item['template_id']]['media']))
-														<img src="storage/{{ $broadcastMessages[$item['broadcast_id']][$item['template_id']]['media'] }}" alt="Header Image" />
-													@elseif($component['format'] === 'VIDEO' && isset($component['example']['header_handle'][0]))
-														<video width="100%" controls>
-															<source src="{{ $component['example']['header_handle'][0] }}" type="video/mp4">
-															Your browser does not support the video tag.
-														</video>
-													@elseif($component['format'] === 'DOCUMENT' && isset($component['example']['header_handle'][0]))
-														<embed src="{{ $component['example']['header_handle'][0] }}" type="application/pdf" width="100%">
-													@endif
-												@endif
-											@endforeach
+                <p style="margin: 0; margin-top: 5px;">
+                    {{ $item['message'] }}
+                </p>
+                <small style="display: block; text-align: right;">{{ $item['created_at']->format('h:i a') }}</small>
+            </div>
+        @else
+            <div class="message my_msg">
+                <p style="margin: 0; margin-top: 5px;">
+                    {{ $item['message'] }} <br>
+                    <small style="text-align: right;">{{ $item['created_at']->format('h:i a') }}</small>
+                </p>
+            </div>
+        @endif
+    @endif
+@elseif ($item['type'] === 'template')
+    <!-- Display Template Messages -->
+    <div class="message-card message-card-right my_msg">
+        <!-- Header Section -->
+      
+                                <button 
+                                    type="button" 
+                                    class="btn btn-sm forward-btn" 
+                                    data-message-id="{{ $item['broadcast_id'] }}" 
+                                    data-type="template" 
+                                    data-template-id="{{ $item['template_id'] }}" 
+                                    data-toggle="modal" 
+                                    data-target="#forwardModal">
+                                    <i class="fa fa-share" aria-hidden="true"></i>
+                                </button>
+ 
+
+        @foreach ($item['components'] as $component)
+            @if ($component['type'] === 'HEADER')
+                @if ($component['format'] === 'TEXT' && isset($component['text']))
+                    <p><b>{{ $component['text'] }}</b></p>
+                @elseif($component['format'] === 'IMAGE' && isset($broadcastMessages[$item['broadcast_id']][$item['template_id']]['media']))
+                    <img src="storage/{{ $broadcastMessages[$item['broadcast_id']][$item['template_id']]['media'] }}" alt="Header Image">
+                @elseif($component['format'] === 'VIDEO' && isset($component['example']['header_handle'][0]))
+                    <video width="100%" controls>
+                        <source src="{{ $component['example']['header_handle'][0] }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                @elseif($component['format'] === 'DOCUMENT' && isset($component['example']['header_handle'][0]))
+                    <embed src="{{ $component['example']['header_handle'][0] }}" type="application/pdf" width="100%">
+                @endif
+            @endif
+        @endforeach
 
 											<!-- Body Section -->
 											@foreach ($item['components'] as $component)
 												@if ($component['type'] === 'BODY' && isset($component['text']))
 													<p class="mt-3">
-														{!! nl2br(
-															preg_replace(
-																[
-																	'/\*(.*?)\*/', // Bold
-																	'/_(.*?)_/',   // Italics
-																	'/~(.*?)~/',   // Strikethrough
-																	'/`(.*?)`/',   // Monospace
-																],
-																[
-																	'<strong>$1</strong>',
-																	'<em>$1</em>',
-																	'<del>$1</del>',
-																	'<span class="custom-monospace">$1</span>', // Apply custom class for monospace
-																],
-																e($component['text'])
-															)
-														) !!}
+													{!! nl2br(
+												preg_replace(
+													[
+														'/\*(.*?)\*/', // Bold
+														'/_(.*?)_/',   // Italics
+														'/~(.*?)~/',   // Strikethrough
+														'/`(.*?)`/',   // Monospace
+													],
+													[
+														'<strong>$1</strong>',
+														'<em>$1</em>',
+														'<del>$1</del>',
+														'<span class="custom-monospace">$1</span>', // Apply custom class for monospace
+													],
+													e($component['text'])
+												)
+											) !!}
+
 													</p>
+													<script>
+                                            $('.forward-btn').on('click', function() {
+                                                const messageId = $(this).data('message-id');
+                                                const type = $(this).data('type');
+                                                const templateId = $(this).data('template-id') || null; // Optional for chat messages
+
+                                                // Set the modal's hidden input values
+                                                $('#forwardModal #messageId').val(messageId);
+                                                $('#forwardModal #messageType').val(type);
+                                                $('#forwardModal #templateId').val(templateId);
+                                            });
+
+                                        </script>
+													<!-- Forward Modal -->
+                                    <div class="modal fade" id="forwardModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="forwardForm" method="POST" action="{{ route('forward.message') }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Forward Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="message_id" id="messageId">
+                    <input type="hidden" name="type" id="messageType">
+                    <input type="hidden" name="template_id" id="templateId">
+                    <div class="form-group">
+                        <label for="contactId">Select Contact</label>
+                        <select class="form-control" name="contact_id" id="contactId" required>
+                            @foreach ($contacts as $contact)
+                                <option value="{{ $contact->id }}">{{ $contact->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Forward</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 												@endif
 											@endforeach
 
@@ -567,14 +673,189 @@
 						@endforeach
 
 						<button class="scroll-btn btn btn-light"><i class="fa-solid fa-arrow-down"></i></button>
+						<script>
+                    $('.scroll-btn').on('click', function () {
+                        $('#chatbox').animate({ scrollTop: $('#chatbox')[0].scrollHeight }, 'slow');
+                    });
+                </script>
 					</div>
+					<!-- Broadcast Message Form -->
+<form method="post" action="{{ route('broadcast.message') }}" enctype="multipart/form-data">
+    @csrf
+    <div class="modal fade newBroadcastMessage" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title text-dark" id="exampleModalLongTitle" style="font-weight: 700;">
+                        New Broadcast Message <i class="fa-solid fa-bullhorn text-secondary"></i>
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Template Selection -->
+                    <div class="form-group">
+                        <label for="pillSelect2">Select Template</label>
+                        <select class="form-control input-pill" id="pillSelect2">
+                            <option value="" disabled selected>Select a pre-approved template</option>
+                            @foreach ($allTemplates as $template)
+                                <option value="{{ json_encode($template) }}">{{ $template['name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Hidden inputs to store the template ID and contact ID -->
+                    <input type="hidden" id="templateId" name="message_template">
+                    <input type="hidden" id="contactId" name="contact_id">
+
+                    <!-- Placeholder for dynamic inputs -->
+                    <div id="dynamic-inputs"></div>
+
+                    <div class="modal-footer">
+                        <a href="" type="button" class="btn btn-secondary px-5">Cancel</a>
+                        <button type="submit" id="nextButton" class="btn btn-success py-2 px-5">Next <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- JavaScript Code -->
+<!-- Broadcast Message Form -->
+
+
+<!-- JavaScript Code -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const templateSelect = document.getElementById('pillSelect2');
+        const dynamicInputsContainer = document.getElementById('dynamic-inputs');
+        const templateIdInput = document.getElementById('templateId');
+        const contactIdInput = document.getElementById('contactId'); 
+
+        // Function to set the contact ID in the hidden input
+        function setContactId(contactId) {
+            console.log("Setting contact ID:", contactId); // Debugging line to check contactId
+            contactIdInput.value = contactId; // Set the contactId in the hidden input field
+        }
+
+        // Updated activateChat function to set contact_id for broadcast form
+        function activateChat(chatId) {
+            const activeContactId = chatId.replace('chat', ''); 
+            setContactId(activeContactId); 
+
+            document.querySelectorAll('.chatContent').forEach(content => content.style.display = 'none');
+            const activeChatContent = document.getElementById(chatId + 'Content');
+            if (activeChatContent) {
+                activeChatContent.style.display = 'block';
+            }
+
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.value = '';
+                messageInput.disabled = false;
+            }
+
+            const noChatSelected = document.querySelector('.noChatSelected');
+            const rightSide = document.querySelector('.rightSide');
+            if (noChatSelected && rightSide) {
+                noChatSelected.style.display = 'none';
+                rightSide.style.display = 'block';
+            }
+
+            const chatElement = document.getElementById(chatId);
+            if (chatElement) {
+                const chatName = chatElement.querySelector('.listHead h4').innerText;
+                const chatPhone = chatElement.getAttribute('data-phone');
+                const chatTagsString = chatElement.getAttribute('data-tags') || '';
+
+                const chatTags = chatTagsString
+                    .replace(/^\[|\]$/g, '')
+                    .replace(/"/g, '')
+                    .split(',')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag);
+
+                const userImgContainer = document.querySelector('.rightSide .header .userimg');
+                if (userImgContainer) {
+                    userImgContainer.innerHTML = '';
+                    const chatImage = chatElement.querySelector('.imgBox').cloneNode(true);
+                    userImgContainer.appendChild(chatImage);
+                }
+
+                const userNameContainer = document.querySelector('.rightSide .header h6');
+                if (userNameContainer) {
+                    userNameContainer.innerHTML = `${chatName}<br><small>${chatPhone}</small>`;
+                }
+
+                const tagsContainer = document.getElementById('contactTags');
+                if (tagsContainer) {
+                    tagsContainer.innerHTML = ''; 
+                    if (chatTags.length === 0) {
+                        tagsContainer.innerHTML = '<span class="text-muted">No tags</span>';
+                    } else {
+                        chatTags.forEach(tag => {
+                            const tagElement = document.createElement('span');
+                            tagElement.classList.add('badge', 'badge-count');
+                            tagElement.innerText = tag;
+                            tagsContainer.appendChild(tagElement);
+                        });
+                    }
+                }
+            }
+        }
+
+        // Show the modal and confirm the contact_id is set
+        $('.newBroadcastMessage').on('show.bs.modal', function () {
+            console.log("Opening modal with contact ID:", contactIdInput.value); // Confirm activeContactId in modal
+        });
+
+        templateSelect.addEventListener('change', function () {
+            dynamicInputsContainer.innerHTML = ''; 
+
+            const selectedOption = this.options[this.selectedIndex];
+            let templateData;
+
+            try {
+                templateData = JSON.parse(selectedOption.value);
+            } catch (error) {
+                console.error('Error parsing template JSON:', error);
+                return;
+            }
+
+            templateIdInput.value = templateData.id;
+
+            if (templateData.components) {
+                templateData.components.forEach((component) => {
+                    if (component.type === 'HEADER' && component.format) {
+                        createHeaderInput(component);
+                    }
+                    if (component.type === 'BODY' && component.text) {
+                        createBodyInputs(component.text);
+                        updateBodyPreview(component.text);
+                    }
+                    if (component.type === 'BUTTONS' && component.buttons) {
+                        createButtons(component.buttons);
+                    }
+                });
+            }
+        });
+        
+        // Function definitions for createHeaderInput, createBodyInputs, updateBodyPreview, etc. remain the same.
+    });
+</script>
 
 
 
+ 
 
-					<!-- CHAT INPUT -->
-					<div class="chat_input">
-    <ion-icon name="happy-outline"></ion-icon>
+   
+
+
+
+					<div class="chat_input" style="position: relative; display: flex; align-items: center;">
+                    <!--<i class="fa-regular fa-newspaper" data-toggle="modal" data-target=".newBroadcastMessage" title="Template Message" style="font-size: 24px; margin-right: 10px; cursor: pointer;"></i>-->
 
     <p class="document-label" style="margin-bottom:0px;">
         <i class="paperclip fa fa-paperclip fa-xl" id="paperclip"></i>
@@ -591,6 +872,7 @@
     <!-- Popup with media upload options -->
     <div id="popupMenu" class="popup-menu" style="display: none;">
         <ul>
+        <li id="audioUpload"><i class="fa fa-image"></i> Audio</li>
             <li id="photoUpload"><i class="fa fa-image"></i> Photos</li>
             <li id="videoUpload"><i class="fa fa-video"></i> Videos</li>
             <li id="documentUpload"><i class="fa fa-file"></i> Document</li>
@@ -598,6 +880,7 @@
     </div>
 
     <!-- Hidden file input elements -->
+    <input type="file" id="audioInput" accept="audio/*" style="display:none;">
     <input type="file" id="imageInput" accept="image/*" style="display:none;">
     <input type="file" id="videoInput" accept="video/*" style="display:none;">
     <input type="file" id="documentInput" accept=".pdf,.doc,.docx,.txt" style="display:none;">
@@ -608,195 +891,358 @@
         <div id="previewContent"></div>
     </div>
 
-    <!-- Include Axios via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+     
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const paperclipIcon = document.getElementById('paperclip');
-            const popupMenu = document.getElementById('popupMenu');
-            const imageInput = document.getElementById('imageInput');
-            const videoInput = document.getElementById('videoInput');
-            const documentInput = document.getElementById('documentInput');
-            const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
-            const previewContent = document.getElementById('previewContent');
-            const sendMessageButton = document.getElementById('sendMessage');
-            let selectedMediaFile = null; // Store selected media file
-            let selectedMediaType = ''; // Store selected media type
+                            function markAsRead(contactId) {
+    console.log("Marking messages as read for contact ID:", contactId);
 
-            // Toggle popup display on paperclip icon click
-            paperclipIcon.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent click propagation
-                popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
-            });
+    // Make an AJAX request to mark messages as read in the database
+    fetch(`/mark-as-read/${contactId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log("Messages marked as read successfully");
+            // Update the UI to reflect the read status
+            const chatElement = document.getElementById(`chat${contactId}`);
+            if (chatElement) {
+                const unreadBadge = chatElement.querySelector('.unread-badge');
+                if (unreadBadge) {
+                    unreadBadge.style.display = 'none'; // Hide unread badge
+                }
+            }
+        } else {
+            console.error("Failed to mark messages as read:", data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error marking messages as read:", error);
+    });
+}
 
-            // Function to show media preview
-            function showMediaPreview(content) {
-                previewContent.innerHTML = content;
-                mediaPreviewContainer.style.display = 'block'; // Show the preview container
+
+                            let activeChatId = null;
+
+                            function activateChat(chatId) {
+    // Extract contact_id from the chatId (remove 'chat' prefix)
+    const activeContactId = chatId.replace('chat', ''); 
+
+    // Update global activeChatId
+    activeChatId = activeContactId; 
+
+    const contactIdInput = document.getElementById('contactId');
+    if (contactIdInput) {
+        contactIdInput.value = activeContactId; // Set contact_id in the hidden input
+    }
+
+    // Call markAsRead for the selected contact
+    markAsRead(activeContactId); // Mark the messages of this contact as read
+
+    // Hide all other chats and show the active chat content
+    document.querySelectorAll('.chatContent').forEach(content => content.style.display = 'none');
+    const activeChatContent = document.getElementById(chatId + 'Content');
+    if (activeChatContent) {
+        activeChatContent.style.display = 'block';
+    }
+
+    // Enable message input
+    const messageInput = document.getElementById('messageInput');
+    if (messageInput) {
+        messageInput.value = '';
+        messageInput.disabled = false;
+    }
+
+    // Show the right side and hide 'no chat selected' message
+    const noChatSelected = document.querySelector('.noChatSelected');
+    const rightSide = document.querySelector('.rightSide');
+    if (noChatSelected && rightSide) {
+        noChatSelected.style.display = 'none';
+        rightSide.style.display = 'block';
+    }
+
+    // Get chat details
+    const chatElement = document.getElementById(chatId);
+    if (chatElement) {
+        const chatName = chatElement.querySelector('.listHead h4').innerText;
+        const chatPhone = chatElement.getAttribute('data-phone');
+        const chatTagsString = chatElement.getAttribute('data-tags') || '';
+
+        // Parse tags, removing brackets and double quotes, then splitting into an array
+        const chatTags = chatTagsString
+            .replace(/^\[|\]$/g, '')
+            .replace(/"/g, '')
+            .split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag);
+
+        // Update user image and name/phone
+        const userImgContainer = document.querySelector('.rightSide .header .userimg');
+        if (userImgContainer) {
+            userImgContainer.innerHTML = ''; // Clear previous image
+            const chatImage = chatElement.querySelector('.imgBox').cloneNode(true);
+            userImgContainer.appendChild(chatImage);
+        }
+
+        const userNameContainer = document.querySelector('.rightSide .header h6');
+        if (userNameContainer) {
+            userNameContainer.innerHTML = `${chatName}<br><small>${chatPhone}</small>`;
+        }
+
+        // Display tags as badges
+        const tagsContainer = document.getElementById('contactTags');
+        if (tagsContainer) {
+            tagsContainer.innerHTML = ''; // Clear previous tags
+            if (chatTags.length === 0) {
+                tagsContainer.innerHTML = '<span class="text-muted">No tags</span>';
+            } else {
+                chatTags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.classList.add('badge', 'badge-count');
+                    tagElement.innerText = tag;
+                    tagsContainer.appendChild(tagElement);
+                });
+            }
+        }
+    }
+}
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const paperclipIcon = document.getElementById('paperclip');
+        const popupMenu = document.getElementById('popupMenu');
+        const audioInput = document.getElementById('audioInput');
+        const imageInput = document.getElementById('imageInput');
+        const videoInput = document.getElementById('videoInput');
+        const documentInput = document.getElementById('documentInput');
+        const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
+        const previewContent = document.getElementById('previewContent');
+        const sendMessageButton = document.getElementById('sendMessage');
+        let selectedMediaFile = null;
+        let selectedMediaType = '';
+
+        paperclipIcon.addEventListener('click', function (event) {
+            event.stopPropagation();
+            popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+        });
+
+        function showMediaPreview(content) {
+            previewContent.innerHTML = content;
+            mediaPreviewContainer.style.display = 'block';
+        }
+
+        document.getElementById('closePreview').addEventListener('click', function () {
+            mediaPreviewContainer.style.display = 'none';
+            selectedMediaFile = null;
+        });
+
+        document.getElementById('photoUpload').addEventListener('click', function () {
+            imageInput.click();
+        });
+        document.getElementById('audioUpload').addEventListener('click', function () {
+            audioInput.click();
+        });
+        document.getElementById('videoUpload').addEventListener('click', function () {
+            videoInput.click();
+        });
+
+        document.getElementById('documentUpload').addEventListener('click', function () {
+            documentInput.click();
+        });
+
+        imageInput.addEventListener('change', function () {
+            if (this.files.length > 0) {
+                selectedMediaFile = this.files[0];
+                selectedMediaType = 'image';
+                const file = this.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imgContent = `<img src="${e.target.result}" alt="Image Preview" style="max-width: 100%; height: auto;">`;
+                    showMediaPreview(imgContent);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+        audioInput.addEventListener('change', function () {
+    if (this.files.length > 0) {
+        selectedMediaFile = this.files[0];
+        selectedMediaType = 'audio';
+        const file = this.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const audioContent = `<audio controls style="max-width: 100%; height: auto;">
+                <source src="${e.target.result}" type="${file.type}">
+                Your browser does not support the audio element.
+            </audio>`;
+            showMediaPreview(audioContent);
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+        videoInput.addEventListener('change', function () {
+            if (this.files.length > 0) {
+                selectedMediaFile = this.files[0];
+                selectedMediaType = 'video';
+                const file = this.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const videoContent = `<video controls style="max-width: 100%; height: auto;">
+                        <source src="${e.target.result}" type="${file.type}">
+                        Your browser does not support the video tag.
+                    </video>`;
+                    showMediaPreview(videoContent);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        documentInput.addEventListener('change', function () {
+            if (this.files.length > 0) {
+                selectedMediaFile = this.files[0];
+                selectedMediaType = 'document';
+                const file = this.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const documentContent = file.type === "application/pdf" ?
+                        `<embed src="${e.target.result}" width="100%" height="auto" type="application/pdf">` :
+                        `<p>${file.name}</p>`;
+                    showMediaPreview(documentContent);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+// Pass PHP variables to JavaScript
+    const authAppId = @json($authAppId);
+    const authUserId = @json($authUserId);
+        // Send message button click handler
+        sendMessageButton.addEventListener('click', function () {
+            const messageInput = document.getElementById('messageInput');
+            const messageContent = messageInput.value.trim();
+
+            // Use the activeChatId dynamically
+            const contactId = activeChatId;
+
+            // Validate message or media before sending
+            if (!messageContent && !selectedMediaFile) {
+                alert("Please enter a message or select a media file.");
+                return;
             }
 
-            // Close media preview
-            document.getElementById('closePreview').addEventListener('click', function () {
-                mediaPreviewContainer.style.display = 'none';
-                selectedMediaFile = null; // Clear selected media
-            });
+            // Create FormData object to send message and media
+            const formData = new FormData();
+formData.append('message', messageContent);
+formData.append('contact_id', contactId);
 
-            // Trigger file input for Photos
-            document.getElementById('photoUpload').addEventListener('click', function () {
-                imageInput.click();
-            });
+// Append authAppId and authUserId to the formData
+formData.append('authAppId', authAppId);
+formData.append('authUserId', authUserId);
 
-            // Trigger file input for Videos
-            document.getElementById('videoUpload').addEventListener('click', function () {
-                videoInput.click();
-            });
+            
 
-            // Trigger file input for Documents
-            document.getElementById('documentUpload').addEventListener('click', function () {
-                documentInput.click();
-            });
+            // Append selected media if available
+            if (selectedMediaFile) {
+                formData.append('media', selectedMediaFile, selectedMediaFile.name);
+                formData.append('media_type', selectedMediaType); // Append media type (image, video, document)
+            }
 
-            // Preview image
-            imageInput.addEventListener('change', function () {
-                if (this.files.length > 0) {
-                    selectedMediaFile = this.files[0]; // Store the selected file
-                    selectedMediaType = 'image'; // Set media type
-                    const file = this.files[0];
-                    const reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        const imgContent = `<img src="${e.target.result}" alt="Image Preview" style="max-width: 100%; height: auto;">`;
-                        showMediaPreview(imgContent); // Show image
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Preview video
-            videoInput.addEventListener('change', function () {
-                if (this.files.length > 0) {
-                    selectedMediaFile = this.files[0]; // Store the selected file
-                    selectedMediaType = 'video'; // Set media type
-                    const file = this.files[0];
-                    const reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        const videoContent = `<video controls style="max-width: 100%; height: auto;">
-                                                <source src="${e.target.result}" type="${file.type}">
-                                                Your browser does not support the video tag.
-                                              </video>`;
-                        showMediaPreview(videoContent); // Show video
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Preview document
-            documentInput.addEventListener('change', function () {
-                if (this.files.length > 0) {
-                    selectedMediaFile = this.files[0]; // Store the selected file
-                    selectedMediaType = 'document'; // Set media type
-                    const file = this.files[0];
-                    const reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        let documentContent;
-                        if (file.type === "application/pdf") {
-                            documentContent = `<embed src="${e.target.result}" width="100%" height="auto" type="application/pdf">`;
-                        } else {
-                            documentContent = `<p>${file.name}</p>`;
-                        }
-                        showMediaPreview(documentContent); // Show document preview
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Send message button click handler
-sendMessageButton.addEventListener('click', function () {
-    const messageInput = document.getElementById('messageInput');
-    const messageContent = messageInput.value.trim();
-
-    // Use the activeChatId dynamically
-    const contactId = activeChatId;
-
-    // Log the contact ID being sent
-    console.log('Contact ID being sent to backend:', contactId);
-
-    // Validate message or media before sending
-    if (!messageContent && !selectedMediaFile) {
-        alert("Please enter a message or select a media file.");
-        return;
+            // Send the form data using Axios
+            axios.post('/api/send-message', formData, {
+    headers: {
+        'Content-Type': 'multipart/form-data'
     }
-
-    // Create FormData object to send message and media
-    const formData = new FormData();
-    formData.append('message', messageContent);
-
-    // Log the contact ID to the console
-    console.log('Contact ID being appended to FormData:', contactId);
-    formData.append('contact_id', contactId);
-
-    // Append selected media if available
-    if (selectedMediaFile) {
-        formData.append('media', selectedMediaFile, selectedMediaFile.name);
-        console.log('Media file appended:', selectedMediaFile);
+})
+.then(function (response) {
+    if (response.data.success) {
+        // Handle success
     } else {
-        console.log('No media file selected');
+        alert('Error: ' + (response.data.error || 'Unknown error'));
     }
-
-    // Log all FormData entries for debugging
-    console.log('FormData Entries:');
-    for (let pair of formData.entries()) {
-        if (pair[0] === 'media') {
-            console.log(`${pair[0]}:`, pair[1].name); // Log file name
-        } else {
-            console.log(`${pair[0]}:`, pair[1]);
-        }
+})
+.catch(function (error) {
+    if (error.response && error.response.data) {
+        console.error('Validation errors:', error.response.data.errors);
+        alert('Validation failed: ' + JSON.stringify(error.response.data.errors));
+    } else {
+        console.error('Request failed with status code 422:', error);
+        alert('There was an error sending your message. Please check the form fields or try again.');
     }
-
-    // Send the form data using Axios
-    axios.post('https://ictglobaltech.org.in/api/send-message', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
-    .then(function (response) {
-        console.log('Response from server:', response.data);
-        if (response.data.success) {
-            // Clear input and media selection on success
-            messageInput.value = '';
-            selectedMediaFile = null;
-            mediaPreviewContainer.style.display = 'none';
-            previewContent.innerHTML = '';
-        } else {
-            alert('Error: ' + response.data.error);
-        }
-    })
-    .catch(function (error) {
-        console.error('Error sending message:', error);
-        alert('An error occurred while sending the message.');
-    });
 });
 
 
 
-            // Close popup when clicking outside
-            document.addEventListener('click', function (event) {
-                if (!popupMenu.contains(event.target) && !paperclipIcon.contains(event.target)) {
-                    popupMenu.style.display = 'none';
-                }
-            });
         });
-    </script>
+
+        document.addEventListener('click', function (event) {
+            if (!popupMenu.contains(event.target) && !paperclipIcon.contains(event.target)) {
+                popupMenu.style.display = 'none';
+            }
+        });
+    });
+</script>
+<script>
+    function fetchNewMessages() {
+        axios.get('/api/load-messages', { params: { last_message_id: lastMessageId } })
+        .then(function (response) {
+            if (response.data.messages.length > 0) {
+                response.data.messages.forEach(function (message) {
+                    appendMessage(message);
+                    lastMessageId = message.id;
+                });
+            }
+        })
+        .catch(function (error) {
+            console.error('Error fetching new messages:', error);
+        });
+    }
+
+    // Append a message to the chatbox
+    function appendMessage(data) {
+        const messageDiv = document.createElement('div');
+        const isSenderCustomer = data.sender === 'customer';
+        messageDiv.classList.add(isSenderCustomer ? 'message-card-left' : 'message-card-right', 'message-card');
+
+        let messageContent = `<p>${data.message}</p>`;
+        if (data.media_url) {
+            if (data.media_type === 'image') {
+                messageContent += `<img src="${data.media_url}" alt="Media" style="max-width: 100%; height: auto;">`;
+            } else if (data.media_type === 'video') {
+                messageContent += `<video controls style="max-width: 100%; height: auto;">
+                    <source src="${data.media_url}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>`;
+            } else if (data.media_type === 'document') {
+                messageContent += `<embed src="${data.media_url}" width="100%" height="auto" type="application/pdf">`;
+            }
+        }
+
+        messageDiv.innerHTML = messageContent + `<small>${new Date(data.created_at).toLocaleTimeString()}</small>`;
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    setInterval(fetchNewMessages, 3000);
+</script>
+
 </div>
 
 
+</div>
 
-					<script>
+
+					<script defer>
 						// Define activeChatId globally
 						let activeChatId = null;
 
@@ -813,8 +1259,8 @@ sendMessageButton.addEventListener('click', function () {
 
 							// Check if the user is at the bottom of the chatbox
 							if (chatbox.scrollTop + chatbox.clientHeight >= chatbox.scrollHeight) {
-								scrollBtn.style.display = 'none'; // Hide the button
 							} else {
+								scrollBtn.style.display = 'none'; // Hide the button
 								scrollBtn.style.display = 'block'; // Show the button
 							}
 						}
@@ -850,65 +1296,10 @@ sendMessageButton.addEventListener('click', function () {
 <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 
-<script>
-	
-	//Function to activate a chat and display its content
+ 
 
-	function activateChat(chatId) {
-    activeChatId = chatId.replace('chat', '');
 
-    // Hide all chat content sections
-    document.querySelectorAll('.chatContent').forEach(content => content.style.display = 'none');
 
-    // Show the content of the active chat
-    const activeChatContent = document.getElementById(chatId + 'Content');
-    activeChatContent.style.display = 'block';
-
-    // Clear the message input
-    document.getElementById('messageInput').value = '';
-
-    // Enable the chat input
-    document.getElementById('messageInput').disabled = false;
-
-    // Hide the 'noChatSelected' div and show the 'rightSide' div
-    document.querySelector('.noChatSelected').style.display = 'none';
-    document.querySelector('.rightSide').style.display = 'block';
-
-    // Call the backend to mark messages as read
-    fetch(`/mark-as-read/${activeChatId}`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Mark the chat as read in the frontend
-            document.getElementById(chatId).classList.remove('unread');
-            const unreadCountElement = document.getElementById(chatId).querySelector('.message_p b');
-            if (unreadCountElement) {
-                unreadCountElement.remove();
-            }
-        }
-    })
-    .catch(error => console.error('Error:', error));
-
-    // Update the header with chat details
-    const chatName = document.getElementById(chatId).querySelector('.listHead h4').innerText;
-    const chatImage = document.getElementById(chatId).querySelector('.imgBox').cloneNode(true);
-
-    // Update right-side chat header
-    const userImgContainer = document.querySelector('.rightSide .header .userimg');
-    userImgContainer.innerHTML = ''; // Clear previous image
-    userImgContainer.appendChild(chatImage);
-
-    const userNameContainer = document.querySelector('.rightSide .header h6');
-    userNameContainer.innerHTML = chatName + '<br><small>online</small>';
-}
-
-</script>
 
 <script src="assets/js/core/jquery.3.2.1.min.js"></script>
 <script src="assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>

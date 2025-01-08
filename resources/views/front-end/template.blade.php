@@ -44,104 +44,110 @@
 							</div>
 							<div class="col-12">
 								<div class="card" style="border-radius: 15px;">
-	                                <div class="card-header ">
-	                                    <div class="d-flex align-items-center justify-content-between">
-	                                    	<div class="d-flex align-items-center">
-	                                    		<form class="navbar-left navbar-form nav-search mr-md-3" action="">
-			                                        <style>
-			                                            .search-container {
-			                                                border: .5px solid transparent;
-			                                                border-radius: 30px;
-			                                                transition: border-color 0.3s;
-			                                            }
-			                                            .search-container:hover,
-			                                            .search-container:focus-within {
-			                                                border-color: #25D366 !important;
-			                                            }
-														.badge-cus{
+									<div class="card-header">
+										<div class="d-flex align-items-center justify-content-between">
+											<div class="d-flex align-items-center">
+												<form class="navbar-left navbar-form nav-search mr-md-3" action="">
+													<style>
+														.search-container {
+															border: .5px solid transparent;
+															border-radius: 30px;
+															transition: border-color 0.3s;
+														}
+														.search-container:hover,
+														.search-container:focus-within {
+															border-color: #25D366 !important;
+														}
+														.badge-cus {
 															padding: 10px;
 														}
-			                                        </style>
-			                                        <div class="input-group search-container">
-			                                            <input type="text" placeholder="Search ..." class="form-control search-input">
-			                                            <div class="input-group-append">
-			                                                <span class="input-group-text">
-			                                                    <a href="" style="text-decoration: none;">
-			                                                        <i class="la la-search search-icon text-success"></i>
-			                                                    </a>
-			                                                </span>
-			                                            </div>
-			                                        </div>
-			                                    </form>
-												<button class="btn btn-outline-success my-1" style="border-radius: 30px;">
-													<i class="fa-solid fa-filter"></i> <b>Filter</b>
-												</button>
-	                                    	</div>
-		                                    
+													</style>
+													<div class="input-group search-container">
+														<input type="text" id="searchInput" placeholder="Search ..." class="form-control search-input">
+														<div class="input-group-append">
+															<span class="input-group-text">
+																<i class="la la-search search-icon text-success"></i>
+															</span>
+														</div>
+													</div>
+												</form>
+											</div>
 											<div class="align-items-center d-flex">
 												<a href="add-template" class="btn btn-outline-success">Add new Template <i class="fa-regular fa-newspaper"></i></a>
 											</div>
-	                                    </div>
-
-	                                </div>
-	                                <div class="card-body">
-	                                    <div class="table-responsive">
-	                                    	<table class="table table-hover">
-		                                        <thead>
-		                                            <tr class="bg-light">
-		                                                <th scope="col">#</th>
-		                                                <th scope="col">Template Name</th>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="table-responsive">
+											<table class="table table-hover" id="templateTable">
+												<thead>
+													<tr class="bg-light">
+														<th scope="col">#</th>
+														<th scope="col">Template Name</th>
 														<th scope="col">Category</th>
-		                                                <th scope="col">Language</th>
+														<th scope="col">Language</th>
 														<th scope="col">Status</th>
-		                                                <th scope="col" class="text-center">Action</th>
-		                                            </tr>
-		                                        </thead>
-		                                        <tbody>
+														<th scope="col" class="text-center">Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach ($templates as $template)
+														<tr>
+															<td>{{$loop->iteration}}</td>
+															<td>{{$template['name']}}</td>
+															<td>{{$template['category']}}</td>
+															<td>{{$template['language']}}</td>
+															<td>
+																<span class="badge
+																	@if($template['status'] === 'APPROVED')
+																		badge-success
+																	@elseif($template['status'] === 'REJECTED')
+																		badge-danger
+																	@else
+																		badge-warning
+																	@endif
+																">
+																	{{$template['status']}}
+																</span>
+															</td>
+															<td class="justify-content-center d-flex">
+																<a href="" class="text-info mx-2" data-toggle="modal" data-target="#viewTemplateModal{{$template['id']}}" title="View Broadcast Details">
+																	<i class="fa-solid fa-eye bg-light border rounded-circle p-2"></i>
+																</a>
+																<form method="post" action="{{ route('template.destroy', $template['id']) }}">
+																	@csrf
+																	@method('DELETE')
+																	<input type="hidden" name="template_name" value="{{ $template['name'] }}">
+																	<button class="text-danger cus-del-btn" style="border:none; background:transparent; cursor:pointer;" title="Delete" onclick="return confirm('Are you sure you want to delete this template?')">
+																		<i class="fa-solid fa-trash-can bg-light border rounded-circle p-2"></i>
+																	</button>
+																</form>
+															</td>
+														</tr>
+													@endforeach
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
 
-												@foreach ($templates as $template)
-		                                            <tr>
-		                                                <td>{{$loop->iteration}}</td>
-		                                                <td>{{$template['name']}}</td>
-		                                                <td>{{$template['category']}}</td>
-		                                                <td>{{$template['language']}}</td>
-														<td>
-															<span class="badge
-																@if($template['status'] === 'APPROVED')
-																	badge-success
-																@elseif($template['status'] === 'REJECTED')
-																	badge-danger
-																@else
-																	badge-warning
-																@endif
-															">
-																{{$template['status']}}
-															</span>
-														</td>
-		                                                <td class="justify-content-center d-flex">
-		                                                    <a href="" class="text-info mx-2" data-toggle="modal" data-target="#viewTemplateModal{{$template['id']}}" title="View Broadcast Details">
-		                                                        <i class="fa-solid fa-eye bg-light border rounded-circle p-2"></i>
-		                                                    </a>
-															<!-- <a href="" class="text-dark" data-toggle="modal" data-target=".updateBroadcast" title="Edit Broadcast">
-		                                                        <i class="fa-solid fa-pen bg-light border rounded-circle p-2"></i>
-		                                                    </a> -->
-															<form method="post" action="{{ route('template.destroy', $template['id']) }}">
-																@csrf
-																@method('DELETE')
-																<input type="hidden" name="template_name" value="{{ $template['name'] }}">
-																<button class="text-danger cus-del-btn" style="border:none; background:transparent; cursor:pointer;" title="Delete" onclick="return confirm('Are you sure you want to delete this template?')">
-			                                                        <i class="fa-solid fa-trash-can bg-light border rounded-circle p-2"></i>
-			                                                    </button>
-															</form>
-		                                                </td>
-		                                            </tr>
-												@endforeach
-    
-		                                        </tbody>
-		                                    </table>
-	                                    </div>
-	                                </div>
-	                            </div>
+								<!-- search -->
+								<script>
+									document.getElementById('searchInput').addEventListener('keyup', function() {
+										const searchTerm = this.value.toLowerCase();
+										const tableRows = document.querySelectorAll('#templateTable tbody tr');
+
+										tableRows.forEach(row => {
+											const rowData = row.textContent.toLowerCase();
+											if (rowData.includes(searchTerm)) {
+												row.style.display = ''; // Show the row
+											} else {
+												row.style.display = 'none'; // Hide the row
+											}
+										});
+									});
+								</script>
+
 							</div>
 						</div>
 					</div>
